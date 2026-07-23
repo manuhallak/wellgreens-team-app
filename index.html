@@ -34,6 +34,13 @@
   .actrow .aa{color:#2A2620;font-weight:600;flex:1}
   .actrow .at{color:#9C9184;white-space:nowrap;font-size:11px}
   .actempty{color:#9C9184;font-weight:600;padding:12px 0}
+  .lead-title{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#9C9184;margin:2px 0 8px}
+  .leadbox{margin-bottom:16px;padding-bottom:12px;border-bottom:3px solid #161311}
+  .leadrow{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .leadrow .lr{font-family:'Anton',sans-serif;font-size:15px;color:#9C9184;width:18px}
+  .leadrow .ln{font-weight:800;color:#234436;text-transform:uppercase;letter-spacing:.04em;font-size:14px;flex:1}
+  .leadrow .lc{font-family:'Anton',sans-serif;font-size:20px;color:#161311}
+  .leadrow:first-of-type .lc{color:#1E7A46}
   #actside{position:fixed;top:46px;right:0;bottom:0;width:330px;background:#F6F2EB;border-left:3px solid #161311;padding:20px 20px 40px;overflow:auto;z-index:800;display:none;font-family:'Jost',sans-serif}
   #actside h3{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;color:#234436;margin-bottom:12px;font-weight:400;position:sticky;top:0;background:#F6F2EB;padding-bottom:8px;border-bottom:2px solid #161311}
   @media(min-width:1180px){
@@ -697,7 +704,7 @@ function storeCell(data,key){
 }
 function bindStores(cont,data){
   cont.querySelectorAll(".scell").forEach(el=>el.addEventListener("click",()=>{
-    const k=el.dataset.k;data[k]=getStores(data,k).filter(c=>c!==el.dataset.code);logActivity("removed store visit",el.dataset.code+" · "+((PEOPLE.find(p=>p.id===state.calView)||{}).name||"")+" · "+k);save();renderCal();}));
+    const k=el.dataset.k;data[k]=getStores(data,k).filter(c=>c!==el.dataset.code);save();renderCal();}));
   cont.querySelectorAll(".saddsel").forEach(el=>el.addEventListener("change",()=>{
     if(!el.value)return;const k=el.dataset.k;const arr=getStores(data,k);
     if(arr.length<MAXSTORES&&!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",el.value+" · "+((PEOPLE.find(p=>p.id===state.calView)||{}).name||"")+" · "+el.dataset.k);}data[k]=arr;save();renderCal();}));
@@ -753,7 +760,7 @@ function renderBoard(){
     card.addEventListener("dragstart",e=>{e.dataTransfer.setData("text",c.id);card.classList.add("dragging")});
     card.addEventListener("dragend",()=>card.classList.remove("dragging"));
     card.querySelectorAll(".task").forEach(t=>t.addEventListener("click",()=>{
-      const k=t.dataset.key;state.checks[k]=!state.checks[k];logActivity(state.checks[k]?"checked rollout task":"unchecked rollout task",c.title);save();renderBoard();updateScore();
+      const k=t.dataset.key;state.checks[k]=!state.checks[k];if(state.checks[k])logActivity("completed a rollout task",c.title);save();renderBoard();updateScore();
       if(state.checks[k])toast("Marked complete");}));
   });
   updateColBars();
@@ -779,7 +786,7 @@ function renderTraining(){
     tl.appendChild(d);
     const more=d.querySelector(".tmore");
     if(more)more.addEventListener("click",()=>{state.trainOpen["t"+i]=!open;save();renderTraining();});
-    d.querySelector(".tcheck").addEventListener("click",()=>{state.training["t"+i]=!on;logActivity(!on?"completed training":"unmarked training",t.title);save();renderTraining();updateScore();
+    d.querySelector(".tcheck").addEventListener("click",()=>{state.training["t"+i]=!on;if(!on)logActivity("completed a training",t.title);save();renderTraining();updateScore();
       if(!on)toast("Training logged");});
   });
 }
@@ -805,7 +812,7 @@ function renderWeekly(){
   weeklyEl.innerHTML=WEEKLY.map((t,i)=>{const on=state.weekly[i];
     return `<div class="crow ${on?'on':''}" data-i="${i}"><span class="box">${CHK}</span><span>${t}</span></div>`;}).join("");
   weeklyEl.querySelectorAll(".crow").forEach(r=>r.addEventListener("click",()=>{
-    const i=r.dataset.i;state.weekly[i]=!state.weekly[i];logActivity(state.weekly[i]?"checked weekly task":"unchecked weekly task",WEEKLY[i]);save();renderWeekly();if(state.weekly[i])toast("Done");}));
+    const i=r.dataset.i;state.weekly[i]=!state.weekly[i];if(state.weekly[i])logActivity("completed a weekly task",WEEKLY[i]);save();renderWeekly();if(state.weekly[i])toast("Done");}));
 }
 
 /* ===== Daily new-business focus ===== */
@@ -922,7 +929,7 @@ function renderQuarter(){
     return `<div class="panel" style="--pc:${q.c}"><div class="ph">${q.n}</div>
       <div class="qmeta"><input type="date" class="qdate" data-q="${qi}" value="${due}"><span class="qstat ${st.c}">${st.t}</span></div>
       ${rows}<div class="qdone">${done}/${total} complete</div></div>`;}).join("");
-  qEl.querySelectorAll(".crow").forEach(r=>r.addEventListener("click",()=>{const k=r.dataset.k;state.quarter[k]=!state.quarter[k];logActivity(state.quarter[k]?"checked quarterly item":"unchecked quarterly item",((QS[k.split("_")[0]]||{}).n||"")+" · "+QITEMS[k.split("_")[1]]);save();renderQuarter();if(state.quarter[k])toast("Done");}));
+  qEl.querySelectorAll(".crow").forEach(r=>r.addEventListener("click",()=>{const k=r.dataset.k;state.quarter[k]=!state.quarter[k];if(state.quarter[k])logActivity("completed a quarterly item",((QS[k.split("_")[0]]||{}).n||"")+" · "+QITEMS[k.split("_")[1]]);save();renderQuarter();if(state.quarter[k])toast("Done");}));
   qEl.querySelectorAll(".qdate").forEach(el=>el.addEventListener("change",()=>{state.qdue[el.dataset.q]=el.value;save();renderQuarter();}));
 }
 
@@ -930,7 +937,7 @@ function renderFocus(){
   const pk=document.getElementById("focuspick");if(!pk)return;
   pk.innerHTML=PHASES.map(ph=>`<button class="fbtn${state.focusPhase===ph.id?' on':''}" data-id="${ph.id}" style="--pc:${ph.c}">${ph.title}</button>`).join("");
   pk.querySelectorAll(".fbtn").forEach(b=>b.addEventListener("click",()=>{
-    state.focusPhase=state.focusPhase===b.dataset.id?"":b.dataset.id;logActivity("set weekly focus",state.focusPhase?((PHASES.find(p=>p.id===state.focusPhase)||{}).title||""):"cleared");save();renderFocus();
+    state.focusPhase=state.focusPhase===b.dataset.id?"":b.dataset.id;if(state.focusPhase)logActivity("set the weekly focus",(PHASES.find(p=>p.id===state.focusPhase)||{}).title||"");save();renderFocus();
     if(state.focusPhase)toast("Focus set");}));
   const nw=document.getElementById("focusnotewrap");
   nw.innerHTML=`<div class="focusnote" contenteditable>${state.focusNotes||""}</div>`;
@@ -988,7 +995,6 @@ async function onAuthed(user){
   renderAll();
   subscribeRealtime();
   loadActivity();
-  logActivity("signed in","");
 }
 async function loadBoard(){
   try{
@@ -1022,12 +1028,22 @@ async function loadActivity(){
   if(!targets.length)return;
   targets.forEach(el=>el.innerHTML='<div class="actempty">Loading…</div>');
   try{
-    const {data}=await sb.from("activity").select("*").order("created_at",{ascending:false}).limit(80);
-    const html=(!data||!data.length)?'<div class="actempty">No activity yet.</div>':data.map(r=>{
-      const t=new Date(r.created_at);
-      const ts=t.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+t.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
-      return `<div class="actrow"><span class="aw">${r.user_name||"?"}</span><span class="aa">${r.action}${r.detail?" — "+r.detail:""}</span><span class="at">${ts}</span></div>`;
-    }).join("");
+    const {data}=await sb.from("activity").select("*").order("created_at",{ascending:false}).limit(200);
+    const now=new Date();const mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+    const counts={};
+    (data||[]).forEach(r=>{ if(new Date(r.created_at)>=mon){counts[r.user_name||"?"]=(counts[r.user_name||"?"]||0)+1;} });
+    const rank=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    const lead=rank.length
+      ? rank.map(([n,c],i)=>`<div class="leadrow"><span class="lr">${i+1}</span><span class="ln">${n}</span><span class="lc">${c}</span></div>`).join("")
+      : `<div class="actempty">Nothing completed yet this week.</div>`;
+    const feed=(!data||!data.length)
+      ? '<div class="actempty">No activity yet.</div>'
+      : data.slice(0,60).map(r=>{
+          const t=new Date(r.created_at);
+          const ts=t.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+t.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
+          return `<div class="actrow"><span class="aw">${r.user_name||"?"}</span><span class="aa">${r.action}${r.detail?" — "+r.detail:""}</span><span class="at">${ts}</span></div>`;
+        }).join("");
+    const html=`<div class="leadbox"><div class="lead-title">This Week · Productivity</div>${lead}</div><div class="lead-title">Recent</div>${feed}`;
     targets.forEach(el=>el.innerHTML=html);
   }catch(e){targets.forEach(el=>el.innerHTML='<div class="actempty">Could not load activity.</div>');}
 }
