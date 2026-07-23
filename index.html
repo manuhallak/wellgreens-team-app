@@ -34,6 +34,13 @@
   .actrow .aa{color:#2A2620;font-weight:600;flex:1}
   .actrow .at{color:#9C9184;white-space:nowrap;font-size:11px}
   .actempty{color:#9C9184;font-weight:600;padding:12px 0}
+  #actside{position:fixed;top:46px;right:0;bottom:0;width:330px;background:#F6F2EB;border-left:3px solid #161311;padding:20px 20px 40px;overflow:auto;z-index:800;display:none;font-family:'Jost',sans-serif}
+  #actside h3{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;color:#234436;margin-bottom:12px;font-weight:400;position:sticky;top:0;background:#F6F2EB;padding-bottom:8px;border-bottom:2px solid #161311}
+  @media(min-width:1180px){
+    body.authed{padding-right:330px}
+    body.authed #actside{display:block}
+    body.authed #authbar{right:330px}
+  }
 </style>
 <style>
   :root{
@@ -431,6 +438,10 @@ footer .logo{font-family:'Anton',sans-serif}
     <div id="actlist"></div>
   </div>
 </div>
+<aside id="actside">
+  <h3>Activity</h3>
+  <div id="actsidelist"></div>
+</aside>
 
 <!-- MASTHEAD -->
 <div class="masthead">
@@ -626,7 +637,9 @@ const TRAIN=[
   {wk:"Week 7",title:"Merchandising",desc:"Standards, resets, and the before/after discipline.",
    detail:`<div class="dlabel">The discipline</div><p>Before/after photos aren't busywork — they're proof the reset happened and the standard held.</p>`},
   {wk:"Week 9",title:"Customer De-escalation",desc:"Handle upset customers calmly — defuse, resolve, and protect the experience.",
-   detail:`<div class="dlabel">The analogy — the manager drawer</div><p>The manager drawer is a retention tool, not a loss. Comping a coffee is literally about five cents out of the company — but that nickel can save a customer worth thousands over their lifetime. Spend the nickel, keep the customer.</p><div class="dlabel">The script — hand them the wheel</div><p>Ask the customer directly: "What would you like me to do?" Nine times out of ten, what fixes it is smaller than what you were about to offer — and now it's their idea, not your battle.</p><div class="dlabel">A line staff can use</div><p>When holding a boundary, it's okay to be honest and human: "This will literally cost me my job." Then close warmly: "This is the only time I can do this — please understand." It lowers the temperature, earns a little grace, sets the boundary for next time, and reminds the customer there's a person in front of them.</p>`}
+   detail:`<div class="dlabel">The analogy — the manager drawer</div><p>The manager drawer is a retention tool, not a loss. Comping a coffee is literally about five cents out of the company — but that nickel can save a customer worth thousands over their lifetime. Spend the nickel, keep the customer.</p><div class="dlabel">The script — hand them the wheel</div><p>Ask the customer directly: "What would you like me to do?" Nine times out of ten, what fixes it is smaller than what you were about to offer — and now it's their idea, not your battle.</p><div class="dlabel">A line staff can use</div><p>When holding a boundary, it's okay to be honest and human: "This will literally cost me my job." Then close warmly: "This is the only time I can do this — please understand." It lowers the temperature, earns a little grace, sets the boundary for next time, and reminds the customer there's a person in front of them.</p>`},
+  {wk:"Week 11",title:"Teamwork & Delegation",desc:"Train your team to run every task in the store — delegate so it doesn't all sit on one person.",
+   detail:`<div class="dlabel">The goal — delegate</div><p>A store runs best when everyone can do everything. Cross-train the team on every task — open, close, register, merchandising, pickup — so no single person is a bottleneck, coverage is easy, and you can step back knowing it's handled.</p><div class="dlabel">How you know it worked</div><p>Pick any task, hand it to someone who "doesn't do that," and watch them complete it without you. If they can, you've built a team. If they can't, that's your next thing to teach.</p>`}
 ];
 const RANKS=[{n:"Associate",x:0},{n:"Keyholder",x:100},{n:"Supervisor",x:250},{n:"Store Lead",x:450},{n:"Flagship",x:700}];
 
@@ -974,6 +987,7 @@ async function onAuthed(user){
   await loadBoard();
   renderAll();
   subscribeRealtime();
+  loadActivity();
   logActivity("signed in","");
 }
 async function loadBoard(){
@@ -998,24 +1012,24 @@ function subscribeRealtime(){
     .on("postgres_changes",{event:"UPDATE",schema:"public",table:"board"},payload=>{
       if(payload.new&&payload.new.updated_by!==CLIENT_ID){state=payload.new.data||{};ensureDefaults();renderAll();}
     })
-    .on("postgres_changes",{event:"INSERT",schema:"public",table:"activity"},()=>{
-      if(document.getElementById("actmodal").classList.contains("show"))loadActivity();
-    })
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"activity"},()=>{loadActivity();})
     .subscribe();
 }
 function openActivity(){document.getElementById("actmodal").classList.add("show");loadActivity();}
 function closeActivity(){document.getElementById("actmodal").classList.remove("show");}
 async function loadActivity(){
-  const el=document.getElementById("actlist");el.innerHTML='<div class="actempty">Loading…</div>';
+  const targets=[document.getElementById("actlist"),document.getElementById("actsidelist")].filter(Boolean);
+  if(!targets.length)return;
+  targets.forEach(el=>el.innerHTML='<div class="actempty">Loading…</div>');
   try{
     const {data}=await sb.from("activity").select("*").order("created_at",{ascending:false}).limit(80);
-    if(!data||!data.length){el.innerHTML='<div class="actempty">No activity yet.</div>';return;}
-    el.innerHTML=data.map(r=>{
+    const html=(!data||!data.length)?'<div class="actempty">No activity yet.</div>':data.map(r=>{
       const t=new Date(r.created_at);
       const ts=t.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+t.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
       return `<div class="actrow"><span class="aw">${r.user_name||"?"}</span><span class="aa">${r.action}${r.detail?" — "+r.detail:""}</span><span class="at">${ts}</span></div>`;
     }).join("");
-  }catch(e){el.innerHTML='<div class="actempty">Could not load activity.</div>';}
+    targets.forEach(el=>el.innerHTML=html);
+  }catch(e){targets.forEach(el=>el.innerHTML='<div class="actempty">Could not load activity.</div>');}
 }
 boot();
 </script>
