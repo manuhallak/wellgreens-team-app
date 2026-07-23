@@ -995,6 +995,7 @@ async function onAuthed(user){
   renderAll();
   subscribeRealtime();
   loadActivity();
+  logActivity("signed in","");
 }
 async function loadBoard(){
   try{
@@ -1031,7 +1032,7 @@ async function loadActivity(){
     const {data}=await sb.from("activity").select("*").order("created_at",{ascending:false}).limit(200);
     const now=new Date();const mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7));
     const counts={};
-    (data||[]).forEach(r=>{ if(new Date(r.created_at)>=mon){counts[r.user_name||"?"]=(counts[r.user_name||"?"]||0)+1;} });
+    (data||[]).forEach(r=>{ if(new Date(r.created_at)>=mon && r.action!=="signed in"){counts[r.user_name||"?"]=(counts[r.user_name||"?"]||0)+1;} });
     const rank=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
     const lead=rank.length
       ? rank.map(([n,c],i)=>`<div class="leadrow"><span class="lr">${i+1}</span><span class="ln">${n}</span><span class="lc">${c}</span></div>`).join("")
