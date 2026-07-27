@@ -383,6 +383,8 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .scell{color:#fff;font-weight:800;font-size:12px;letter-spacing:.03em;padding:3px 7px;border:2px solid var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:5px;line-height:1.1}
 .scell .x{opacity:.75;font-weight:800}
 .scell:hover .x{opacity:1}
+.scell.ro{cursor:default}
+.scell b{opacity:.72;margin-right:4px;font-weight:800}
 .saddsel{border:2px dashed var(--taupe);background:var(--card);font-family:'Jost',sans-serif;font-weight:800;font-size:11px;padding:3px 5px;cursor:pointer;text-transform:uppercase;color:var(--taupe);-webkit-appearance:none;appearance:none}
 .chipwrap{display:flex;gap:4px;flex-wrap:wrap}
 .storechip{color:#fff;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 11px;border:2px solid var(--ink)}
@@ -724,7 +726,8 @@ function ensureDefaults(){
   state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};
   state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
-  if(!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
+  if(state.calView===undefined)state.calView="all";
+  else if(state.calView!=="all"&&!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
   const _n=new Date();
   if(state.calY===undefined)state.calY=_n.getFullYear();
   if(state.calM===undefined)state.calM=_n.getMonth();
@@ -839,10 +842,12 @@ function renderDaily(){
 /* ===== Calendar (monthly + weekly, store/regional views) ===== */
 function renderCal(){
   const tabs=document.getElementById("caltoggle");
-  tabs.innerHTML=PEOPLE.map(p=>`<button data-v="${p.id}" class="${p.id===state.calView?'on':''}">${p.name}</button>`).join("");
+  const TABS=[{id:"all",name:"All · Team"},...PEOPLE];
+  tabs.innerHTML=TABS.map(p=>`<button data-v="${p.id}" class="${p.id===state.calView?'on':''}">${p.name}</button>`).join("");
   tabs.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.calView=b.dataset.v;saveView();renderCal();}));
   renderLegend();
-  const data=state.cal[state.calView];
+  const team=state.calView==="all";
+  const data=team?null:state.cal[state.calView];
   const y=state.calY,m=state.calM;
   const MN=["January","February","March","April","May","June","July","August","September","October","November","December"];
   document.getElementById("mlabel").textContent=MN[m]+" "+y;
@@ -853,31 +858,41 @@ function renderCal(){
   for(let d=1;d<=days;d++){
     const key=`${y}-${pad(m+1)}-${pad(d)}`;
     const isT=now.getFullYear()===y&&now.getMonth()===m&&now.getDate()===d;
-    html+=`<div class="cell ${isT?'today':''}"><div class="dnum">${d}</div>${storeCell(data,key)}</div>`;
+    html+=`<div class="cell ${isT?'today':''}"><div class="dnum">${d}</div>${team?teamCell(key):storeCell(data,key)}</div>`;
   }
   const cg=document.getElementById("calgrid");cg.innerHTML=html;
-  bindStores(cg,data);
+  if(!team)bindStores(cg,data);
   renderWeek();renderSummary();renderMonthSummary();
 }
 function renderMonthSummary(){
   const el=document.getElementById("monthsummary");if(!el)return;
-  const data=state.cal[state.calView]||{};
-  const name=(PEOPLE.find(p=>p.id===state.calView)||{}).name||"";
+  const team=state.calView==="all";
+  const name=team?"All Managers":((PEOPLE.find(p=>p.id===state.calView)||{}).name||"");
   const y=state.calY,m=state.calM;
   const MNfull=["January","February","March","April","May","June","July","August","September","October","November","December"];
   const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   const WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
   const days=new Date(y,m+1,0).getDate();
   let items=[],total=0;
-  for(let d=1;d<=days;d++){const key=`${y}-${pad(m+1)}-${pad(d)}`;const codes=getStores(data,key);
-    if(codes.length){const dt=new Date(y,m,d);items.push({lbl:`${WD[dt.getDay()]} ${MN[m]} ${d}`,codes});total+=codes.length;}}
+  for(let d=1;d<=days;d++){const key=`${y}-${pad(m+1)}-${pad(d)}`;
+    let ci=[];
+    if(team){PEOPLE.forEach(p=>getStores(state.cal[p.id]||{},key).forEach(c=>ci.push({c,who:p.name[0]})));}
+    else{getStores(state.cal[state.calView]||{},key).forEach(c=>ci.push({c}));}
+    if(ci.length){const dt=new Date(y,m,d);items.push({lbl:`${WD[dt.getDay()]} ${MN[m]} ${d}`,ci});total+=ci.length;}}
   const rows=items.length
-    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.codes.map(c=>`<span class="storechip" style="background:${storeColor(c)}">${c}</span>`).join("")}</span></div>`).join("")
+    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.ci.map(o=>`<span class="storechip" style="background:${storeColor(o.c)}">${o.who?o.who+"·":""}${o.c}</span>`).join("")}</span></div>`).join("")
     : `<p class="sumempty">No visits this month yet.</p>`;
   el.innerHTML=`<div class="panel" style="--pc:var(--forest)"><div class="ph">${name} · ${MNfull[m]} ${y} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
 }
+function teamCell(key){
+  let chips="";
+  PEOPLE.forEach(p=>{getStores(state.cal[p.id]||{},key).forEach(code=>{
+    chips+=`<span class="scell ro" style="background:${storeColor(code)}"><b>${p.name[0]}</b>${code}</span>`;});});
+  return `<div class="scellwrap">${chips}</div>`;
+}
 function renderWeek(){
-  const data=state.cal[state.calView],now=new Date();
+  const team=state.calView==="all";
+  const data=team?null:state.cal[state.calView];const now=new Date();
   const mon=new Date(now);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   const DOW=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -886,10 +901,10 @@ function renderWeek(){
     const dt=new Date(mon);dt.setDate(mon.getDate()+i);
     const key=`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
     const isT=dt.toDateString()===now.toDateString();
-    html+=`<div class="wkcol ${isT?'today':''}"><div class="wkhd"><div class="wd">${DOW[i]}</div><div class="wdate serif">${dt.getDate()} ${MN[dt.getMonth()]}</div></div><div class="wkbody">${storeCell(data,key)}</div></div>`;
+    html+=`<div class="wkcol ${isT?'today':''}"><div class="wkhd"><div class="wd">${DOW[i]}</div><div class="wdate serif">${dt.getDate()} ${MN[dt.getMonth()]}</div></div><div class="wkbody">${team?teamCell(key):storeCell(data,key)}</div></div>`;
   }
   const wp=document.getElementById("wkplan");wp.innerHTML=html;
-  bindStores(wp,data);
+  if(!team)bindStores(wp,data);
 }
 function renderLegend(){
   const el=document.getElementById("storelegend");if(!el)return;
