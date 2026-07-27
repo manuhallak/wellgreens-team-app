@@ -604,7 +604,7 @@ footer .logo{font-family:'Anton',sans-serif}
   </section>
 
   <div class="controls">
-    <button class="btn" onclick="resetAll()">Reset Progress</button>
+    <button class="btn" onclick="resetAll()">⚠ Reset Entire Team (password)</button>
     <button class="btn" onclick="window.print()">Print / PDF</button>
     <span class="hint">Progress saves automatically</span>
   </div>
@@ -980,11 +980,17 @@ function renderFocus(){
 
 let tt;function toast(m){const e=document.getElementById("toast");e.textContent=m;e.classList.add("show");
   clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),1300);}
-function resetAll(){if(!confirm("Reset all progress?"))return;
+async function resetAll(){
+  const pw=prompt("⚠ TEAM-WIDE RESET\n\nThis wipes progress for the ENTIRE TEAM — every manager's calendar, all checklists, trainings, notes and focus. It affects everyone, not just your screen, and cannot be undone.\n\nType the password to confirm:");
+  if(pw==null)return;
+  if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"carlos",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{}};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
-  save();renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();toast("Reset");}
+  try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
+  try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
+  location.reload();
+}
 
 function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();}
 
