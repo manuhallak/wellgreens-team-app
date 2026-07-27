@@ -387,7 +387,10 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .scell b{opacity:.72;margin-right:4px;font-weight:800}
 .saddsel{border:2px dashed var(--taupe);background:var(--card);font-family:'Jost',sans-serif;font-weight:800;font-size:11px;padding:3px 5px;cursor:pointer;text-transform:uppercase;color:var(--taupe);-webkit-appearance:none;appearance:none}
 .chipwrap{display:flex;gap:4px;flex-wrap:wrap}
-.storechip{color:#fff;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 11px;border:2px solid var(--ink)}
+.storechip{color:#fff;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 11px;border:2px solid var(--ink);display:inline-block;text-decoration:none}
+a.storechip.gcal{cursor:pointer;position:relative}
+a.storechip.gcal:hover{outline:2px solid var(--ink);outline-offset:1px}
+a.storechip.gcal::after{content:"＋";margin-left:5px;font-weight:800;opacity:.85}
 
 /* training */
 .tstep{border-right:2px solid var(--ink);border-top:8px solid var(--tc,var(--forest))}
@@ -552,7 +555,7 @@ footer .logo{font-family:'Anton',sans-serif}
     <div class="wkplan" id="wkplan"></div>
     <div class="subhead">Everyone · This Week · Auto-Filled</div>
     <div id="calsummary" class="sumgrid"></div>
-    <div class="subhead">This Month · All Visits</div>
+    <div class="subhead">This Month · All Visits · tap a store to add to Google Calendar</div>
     <div id="monthsummary"></div>
   </section>
 
@@ -715,6 +718,13 @@ function bindStores(cont,data){
     if(arr.length<MAXSTORES&&!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",el.value+" · "+((PEOPLE.find(p=>p.id===state.calView)||{}).name||"")+" · "+el.dataset.k);}data[k]=arr;save();renderCal();}));
 }
 const pad=n=>String(n).padStart(2,"0");
+function gcalUrl(dateISO,code,who){
+  const d1=dateISO.replace(/-/g,"");
+  const dt=new Date(dateISO+"T00:00:00");dt.setDate(dt.getDate()+1);
+  const d2=`${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}`;
+  const title=`Store visit: ${code}${who?" ("+who+")":""}`;
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${d1}/${d2}&details=${encodeURIComponent("Wellgreens store visit")}`;
+}
 
 const LS="wellgreens_rollout_v2";
 let state={};
@@ -876,11 +886,11 @@ function renderMonthSummary(){
   let items=[],total=0;
   for(let d=1;d<=days;d++){const key=`${y}-${pad(m+1)}-${pad(d)}`;
     let ci=[];
-    if(team){PEOPLE.forEach(p=>getStores(state.cal[p.id]||{},key).forEach(c=>ci.push({c,who:p.name[0]})));}
-    else{getStores(state.cal[state.calView]||{},key).forEach(c=>ci.push({c}));}
-    if(ci.length){const dt=new Date(y,m,d);items.push({lbl:`${WD[dt.getDay()]} ${MN[m]} ${d}`,ci});total+=ci.length;}}
+    if(team){PEOPLE.forEach(p=>getStores(state.cal[p.id]||{},key).forEach(c=>ci.push({c,who:p.name[0],whoFull:p.name})));}
+    else{const nm=(PEOPLE.find(p=>p.id===state.calView)||{}).name||"";getStores(state.cal[state.calView]||{},key).forEach(c=>ci.push({c,whoFull:nm}));}
+    if(ci.length){const dt=new Date(y,m,d);items.push({lbl:`${WD[dt.getDay()]} ${MN[m]} ${d}`,ci,key});total+=ci.length;}}
   const rows=items.length
-    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.ci.map(o=>`<span class="storechip" style="background:${storeColor(o.c)}">${o.who?o.who+"·":""}${o.c}</span>`).join("")}</span></div>`).join("")
+    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.ci.map(o=>`<a class="storechip gcal" href="${gcalUrl(x.key,o.c,o.whoFull||o.who)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(o.c)}">${o.who?o.who+"·":""}${o.c}</a>`).join("")}</span></div>`).join("")
     : `<p class="sumempty">No visits this month yet.</p>`;
   el.innerHTML=`<div class="panel" style="--pc:var(--forest)"><div class="ph">${name} · ${MNfull[m]} ${y} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
 }
@@ -924,7 +934,7 @@ function renderSummary(){
     const items=wk.map(w=>({w,codes:getStores(data,w.key)})).filter(x=>x.codes.length);
     const total=items.reduce((n,x)=>n+x.codes.length,0);
     const rows=items.length
-      ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.w.lbl}</span><span class="chipwrap">${x.codes.map(c=>`<span class="storechip" style="background:${storeColor(c)}">${c}</span>`).join("")}</span></div>`).join("")
+      ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.w.lbl}</span><span class="chipwrap">${x.codes.map(c=>`<a class="storechip gcal" href="${gcalUrl(x.w.key,c,p.name)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(c)}">${c}</a>`).join("")}</span></div>`).join("")
       : `<p class="sumempty">Nothing planned yet.</p>`;
     return `<div class="panel${p.id===state.calView?" activep":""}" style="--pc:var(--forest)"><div class="ph">${p.name} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
   }).join("");
