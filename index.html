@@ -687,7 +687,7 @@ const STORES=[
   {code:"ML",c:"#1E7A46"},{code:"JB",c:"#C0392B"},{code:"PB",c:"#148F8A"},
   {code:"VS",c:"#E0930F"},{code:"EC",c:"#7A3B86"},{code:"LM",c:"#2166B0"},
   {code:"LG",c:"#E0631A"},{code:"UNI",c:"#8A5A2B"},{code:"KM",c:"#C13B86"},
-  {code:"CH",c:"#4A5568"},{code:"CV",c:"#4338A0"}
+  {code:"CH",c:"#4A5568"},{code:"CV",c:"#4338A0"},{code:"MV",c:"#0891B2"}
 ];
 const MAXSTORES=3;
 const storeColor=code=>{const s=STORES.find(x=>x.code===code);return s?s.c:"var(--taupe)";};
@@ -728,6 +728,7 @@ function ensureDefaults(){
 }
 ensureDefaults();
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}schedulePush();};
+const saveView=()=>{try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}};
 
 const board=document.getElementById("board");
 function renderBoard(){
@@ -836,7 +837,7 @@ function renderDaily(){
 function renderCal(){
   const tabs=document.getElementById("caltoggle");
   tabs.innerHTML=PEOPLE.map(p=>`<button data-v="${p.id}" class="${p.id===state.calView?'on':''}">${p.name}</button>`).join("");
-  tabs.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.calView=b.dataset.v;save();renderCal();}));
+  tabs.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{state.calView=b.dataset.v;saveView();renderCal();}));
   renderLegend();
   const data=state.cal[state.calView];
   const y=state.calY,m=state.calM;
@@ -910,7 +911,7 @@ function renderSummary(){
     return `<div class="panel${p.id===state.calView?" activep":""}" style="--pc:var(--forest)"><div class="ph">${p.name} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
   }).join("");
 }
-function calShift(n){state.calM+=n;if(state.calM>11){state.calM=0;state.calY++;}if(state.calM<0){state.calM=11;state.calY--;}save();renderCal();}
+function calShift(n){state.calM+=n;if(state.calM>11){state.calM=0;state.calY++;}if(state.calM<0){state.calM=11;state.calY--;}saveView();renderCal();}
 
 /* ===== Quarterly checklist ===== */
 const qEl=document.getElementById("qgrid");
@@ -1004,11 +1005,29 @@ async function loadBoard(){
   }catch(e){}
   ensureDefaults();
 }
+const VIEW_KEYS=["calView","calY","calM"];
+function sharedState(){const s={...state};VIEW_KEYS.forEach(k=>delete s[k]);return s;}
+function deepMerge(base,ov){
+  if(Array.isArray(ov))return ov.slice();
+  if(ov&&typeof ov==="object"){
+    const out=(base&&typeof base==="object"&&!Array.isArray(base))?{...base}:{};
+    for(const k in ov)out[k]=deepMerge(out[k],ov[k]);
+    return out;
+  }
+  return ov;
+}
 let pushT;
 function schedulePush(){clearTimeout(pushT);pushT=setTimeout(pushBoard,450);}
+let pushing=false;
 async function pushBoard(){
-  if(!CURRENT_USER)return;
-  try{await sb.from("board").update({data:state,updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1);}catch(e){}
+  if(!CURRENT_USER||pushing)return;
+  pushing=true;
+  try{
+    const {data:cur}=await sb.from("board").select("data").eq("id",1).single();
+    const merged=deepMerge((cur&&cur.data)||{},sharedState());
+    await sb.from("board").update({data:merged,updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1);
+  }catch(e){}
+  pushing=false;
 }
 async function logActivity(action,detail){
   if(!CURRENT_USER)return;
@@ -1017,7 +1036,12 @@ async function logActivity(action,detail){
 function subscribeRealtime(){
   sb.channel("board-sync")
     .on("postgres_changes",{event:"UPDATE",schema:"public",table:"board"},payload=>{
-      if(payload.new&&payload.new.updated_by!==CLIENT_ID){state=payload.new.data||{};ensureDefaults();renderAll();}
+      if(payload.new&&payload.new.updated_by!==CLIENT_ID){
+        const remote=payload.new.data||{};
+        const merged=deepMerge(remote,sharedState());
+        VIEW_KEYS.forEach(k=>merged[k]=state[k]);
+        state=merged;ensureDefaults();renderAll();
+      }
     })
     .on("postgres_changes",{event:"INSERT",schema:"public",table:"activity"},()=>{loadActivity();})
     .subscribe();
