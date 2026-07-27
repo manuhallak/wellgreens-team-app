@@ -24,6 +24,9 @@
   #authbar button{background:transparent;border:2px solid #F6F2EB;color:#F6F2EB;padding:6px 12px;font-family:'Jost',sans-serif;font-weight:800;font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
   #authbar button:hover{background:#F6F2EB;color:#161311}
   body.authed{padding-top:46px}
+  #updbar{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:970;background:#234436;color:#F6F2EB;border:2.5px solid #161311;box-shadow:5px 5px 0 rgba(0,0,0,.4);padding:12px 18px;display:flex;gap:14px;align-items:center;font-family:'Jost',sans-serif;font-weight:700;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+  #updbar.hidden{display:none}
+  #updbar button{background:#E3BB5E;color:#161311;border:2px solid #161311;padding:6px 14px;font-family:'Jost',sans-serif;font-weight:800;font-size:11px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
   #actmodal{position:fixed;inset:0;z-index:950;background:rgba(20,17,15,.55);display:none;align-items:flex-start;justify-content:center;padding:60px 20px;overflow:auto}
   #actmodal.show{display:flex}
   .actbox{background:#F6F2EB;border:3px solid #161311;box-shadow:8px 8px 0 rgba(0,0,0,.4);width:100%;max-width:640px;padding:24px 26px;font-family:'Jost',sans-serif}
@@ -443,6 +446,7 @@ footer .logo{font-family:'Anton',sans-serif}
   <button onclick="openActivity()">Activity</button>
   <button onclick="doLogout()">Sign Out</button>
 </div>
+<div id="updbar" class="hidden"><span>✨ New version available</span><button onclick="location.reload()">Refresh now</button></div>
 <div id="actmodal" onclick="if(event.target===this)closeActivity()">
   <div class="actbox">
     <span class="close" onclick="closeActivity()">×</span>
@@ -1101,6 +1105,26 @@ async function loadActivity(){
   }catch(e){targets.forEach(el=>el.innerHTML='<div class="actempty">Could not load activity.</div>');}
 }
 boot();
+
+/* ---- Auto-update: notice new deploys and refresh ---- */
+let BOOT_HASH=null, updShown=false;
+async function versionCheck(){
+  try{
+    const r=await fetch("/index.html?vc="+Date.now(),{cache:"no-store"});
+    const t=await r.text();
+    let h=5381;for(let i=0;i<t.length;i++){h=((h<<5)+h+t.charCodeAt(i))|0;}
+    if(BOOT_HASH===null){BOOT_HASH=h;return;}
+    if(h!==BOOT_HASH&&!updShown){updShown=true;onNewVersion();}
+  }catch(e){}
+}
+function onNewVersion(){
+  const el=document.getElementById("updbar");if(el)el.classList.remove("hidden");
+  setTimeout(()=>{const a=document.activeElement;
+    const editing=a&&(a.isContentEditable||a.tagName==="INPUT"||a.tagName==="TEXTAREA"||a.tagName==="SELECT");
+    if(!editing)location.reload();},12000);
+}
+setInterval(versionCheck,45000);
+versionCheck();
 </script>
 </body>
 </html>
