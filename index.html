@@ -391,6 +391,12 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .saddsel{border:2px dashed var(--taupe);background:var(--card);font-family:'Jost',sans-serif;font-weight:800;font-size:11px;padding:3px 5px;cursor:pointer;text-transform:uppercase;color:var(--taupe);-webkit-appearance:none;appearance:none}
 .chipwrap{display:flex;gap:4px;flex-wrap:wrap}
 .storechip{color:#fff;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 11px;border:2px solid var(--ink);display:inline-block;text-decoration:none}
+.strow{display:flex;gap:16px;align-items:center;padding:11px 0;border-bottom:2px solid var(--line2)}
+.strow:last-child{border-bottom:none}
+.strow .storechip{min-width:44px;text-align:center}
+.stwho{font-weight:700;color:var(--ink2);font-size:14px}
+.stgap{margin-top:16px;padding-top:14px;border-top:3px solid var(--ink);font-size:13px;font-weight:800;color:var(--ink2);display:flex;flex-wrap:wrap;gap:8px;align-items:center;text-transform:uppercase;letter-spacing:.04em}
+.storechip.dim{opacity:.4}
 a.storechip.gcal{cursor:pointer;position:relative}
 a.storechip.gcal:hover{outline:2px solid var(--ink);outline-offset:1px}
 a.storechip.gcal::after{content:"＋";margin-left:5px;font-weight:800;opacity:.85}
@@ -557,7 +563,9 @@ footer .logo{font-family:'Anton',sans-serif}
     <div class="calgrid" id="calgrid"></div>
     <div class="subhead">Weekly Focus · This Week</div>
     <div class="wkplan" id="wkplan"></div>
-    <div class="subhead">Everyone · This Week · Auto-Filled</div>
+    <div class="subhead">Stores Visited · This Week</div>
+    <div id="storesummary"></div>
+    <div class="subhead">By Person · This Week</div>
     <div id="calsummary" class="sumgrid"></div>
     <div class="subhead">This Month · All Visits · tap a store to add to Google Calendar</div>
     <div id="monthsummary"></div>
@@ -876,7 +884,24 @@ function renderCal(){
   }
   const cg=document.getElementById("calgrid");cg.innerHTML=html;
   if(!team)bindStores(cg,data);
-  renderWeek();renderSummary();renderMonthSummary();
+  renderWeek();renderSummary();renderMonthSummary();renderStoreSummary();
+}
+function renderStoreSummary(){
+  const el=document.getElementById("storesummary");if(!el)return;
+  const WD=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  const now=new Date();const mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7));
+  const wk=[];for(let i=0;i<7;i++){const dt=new Date(mon);dt.setDate(mon.getDate()+i);wk.push({key:`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`,wd:WD[i]});}
+  const byStore={};
+  PEOPLE.forEach(p=>{wk.forEach(w=>{getStores(state.cal[p.id]||{},w.key).forEach(code=>{(byStore[code]=byStore[code]||[]).push(`${w.wd} · ${p.name}`);});});});
+  const visited=STORES.filter(s=>byStore[s.code]);
+  const gaps=STORES.filter(s=>!byStore[s.code]);
+  const rows=visited.length
+    ? visited.map(s=>`<div class="strow"><span class="storechip" style="background:${s.c}">${s.code}</span><span class="stwho">${byStore[s.code].join("&nbsp; · &nbsp;")}</span></div>`).join("")
+    : `<p class="sumempty">No visits scheduled this week.</p>`;
+  const gapline=gaps.length
+    ? `<div class="stgap"><b>Not visited this week:</b> ${gaps.map(s=>`<span class="storechip dim" style="background:${s.c}">${s.code}</span>`).join("")}</div>`
+    : `<div class="stgap"><b>Every store is covered this week &#10003;</b></div>`;
+  el.innerHTML=`<div class="panel" style="--pc:var(--forest)"><div class="ph">Stores Visited · This Week · ${visited.length}/${STORES.length} covered</div>${rows}${gapline}</div>`;
 }
 function renderMonthSummary(){
   const el=document.getElementById("monthsummary");if(!el)return;
