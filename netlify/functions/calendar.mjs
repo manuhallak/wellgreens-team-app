@@ -8,7 +8,7 @@ function nextDay(iso){ const d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTC
 
 export default async function handler(){
   const stamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
-  let ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Wellgreens//Store Visits//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nX-WR-CALNAME:Store Visits\r\n";
+  let ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Wellgreens//Store Visits//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\nX-WR-CALNAME:Wellgreens - Store Visits\r\n";
   try{
     const res = await fetch(`${SB_URL}/rest/v1/board?id=eq.1&select=data`, { headers:{ apikey:SB_KEY, Authorization:"Bearer "+SB_KEY } });
     const rows = await res.json();
