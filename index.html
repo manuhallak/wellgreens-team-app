@@ -756,8 +756,7 @@ function ensureDefaults(){
   if(state.calView===undefined)state.calView="all";
   else if(state.calView!=="all"&&!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
   const _n=new Date();
-  if(state.calY===undefined)state.calY=_n.getFullYear();
-  if(state.calM===undefined)state.calM=_n.getMonth();
+  state.calY=_n.getFullYear();state.calM=_n.getMonth();
 }
 ensureDefaults();
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}schedulePush();};
@@ -1061,6 +1060,10 @@ async function onAuthed(user){
     CURRENT_NAME=(pf&&pf.name)||user.email;}catch(e){CURRENT_NAME=user.email;}
   document.getElementById("authwho").textContent=CURRENT_NAME;
   await loadBoard();
+  try{const em=(user.email||"").toLowerCase();
+    const EMAP={"manu@wellgreens.store":"manny","carlo@wellgreens.store":"carlos","julio@wellgreens.store":"julio","oscar@wellgreens.store":"oscar","marisol@wellgreens.store":"marisol"};
+    if(EMAP[em]){state.calView=EMAP[em];saveView();}
+  }catch(e){}
   renderAll();
   subscribeRealtime();
   loadActivity();
