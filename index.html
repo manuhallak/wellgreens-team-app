@@ -723,11 +723,16 @@ function storeCell(data,key){
   return `<div class="scellwrap">${chips}${add}</div>`;
 }
 function bindStores(cont,data){
+  const person=state.calView;
   cont.querySelectorAll(".scell").forEach(el=>el.addEventListener("click",()=>{
-    const k=el.dataset.k;data[k]=getStores(data,k).filter(c=>c!==el.dataset.code);save();renderCal();}));
+    const k=el.dataset.k;const arr=getStores(data,k).filter(c=>c!==el.dataset.code);data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
   cont.querySelectorAll(".saddsel").forEach(el=>el.addEventListener("change",()=>{
     if(!el.value)return;const k=el.dataset.k;const arr=getStores(data,k);
-    if(arr.length<MAXSTORES&&!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",el.value+" · "+((PEOPLE.find(p=>p.id===state.calView)||{}).name||"")+" · "+el.dataset.k);}data[k]=arr;save();renderCal();}));
+    if(arr.length<MAXSTORES&&!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",el.value+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
+}
+async function pushCell(person,date,codes){
+  if(!CURRENT_USER)return;
+  try{await sb.rpc("set_cal_cell",{p_person:person,p_date:date,p_codes:codes});}catch(e){}
 }
 const pad=n=>String(n).padStart(2,"0");
 function gcalUrl(dateISO,code,who){
