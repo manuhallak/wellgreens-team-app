@@ -709,17 +709,19 @@ const STORES=[
   {code:"LG",c:"#E0631A"},{code:"UNI",c:"#8A5A2B"},{code:"KM",c:"#C13B86"},
   {code:"CH",c:"#4A5568"},{code:"CV",c:"#4338A0"},{code:"MV",c:"#0891B2"}
 ];
-const MAXSTORES=3;
-const storeColor=code=>{const s=STORES.find(x=>x.code===code);return s?s.c:"var(--taupe)";};
-const getStores=(data,key)=>{const v=data[key];if(!v)return[];return Array.isArray(v)?v.slice(0,MAXSTORES):[v];};
+const baseCode=code=>String(code).replace(/-(AM|PM)$/i,"");
+const storePeriod=code=>{const m=String(code).match(/-(AM|PM)$/i);return m?m[1].toUpperCase():"";};
+const storeLabel=code=>{const p=storePeriod(code);return p?baseCode(code)+" "+p:baseCode(code);};
+const storeColor=code=>{const s=STORES.find(x=>x.code===baseCode(code));return s?s.c:"var(--taupe)";};
+const getStores=(data,key)=>{const v=data[key];if(!v)return[];return Array.isArray(v)?v:[v];};
 function storeCell(data,key){
   const arr=getStores(data,key);
-  const chips=arr.map(code=>`<span class="scell" data-k="${key}" data-code="${code}" style="background:${storeColor(code)}">${code}<span class="x">×</span></span>`).join("");
-  let add="";
-  if(arr.length<MAXSTORES){
-    const avail=STORES.filter(s=>!arr.includes(s.code));
-    add=`<select class="saddsel" data-k="${key}"><option value="">${arr.length?"+":"+ store"}</option>${avail.map(s=>`<option value="${s.code}">${s.code}</option>`).join("")}</select>`;
-  }
+  const chips=arr.map(code=>`<span class="scell" data-k="${key}" data-code="${code}" style="background:${storeColor(code)}">${storeLabel(code)}<span class="x">×</span></span>`).join("");
+  const opts=STORES.map(s=>{let o="";
+    if(!arr.includes(s.code+"-AM"))o+=`<option value="${s.code}-AM">${s.code} AM</option>`;
+    if(!arr.includes(s.code+"-PM"))o+=`<option value="${s.code}-PM">${s.code} PM</option>`;
+    return o;}).join("");
+  const add=`<select class="saddsel" data-k="${key}"><option value="">${arr.length?"+":"+ store"}</option>${opts}</select>`;
   return `<div class="scellwrap">${chips}${add}</div>`;
 }
 function bindStores(cont,data){
@@ -728,7 +730,7 @@ function bindStores(cont,data){
     const k=el.dataset.k;const arr=getStores(data,k).filter(c=>c!==el.dataset.code);data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
   cont.querySelectorAll(".saddsel").forEach(el=>el.addEventListener("change",()=>{
     if(!el.value)return;const k=el.dataset.k;const arr=getStores(data,k);
-    if(arr.length<MAXSTORES&&!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",el.value+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
+    if(!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",storeLabel(el.value)+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
 }
 async function pushCell(person,date,codes){
   if(!CURRENT_USER)return;
@@ -739,7 +741,7 @@ function gcalUrl(dateISO,code,who){
   const d1=dateISO.replace(/-/g,"");
   const dt=new Date(dateISO+"T00:00:00");dt.setDate(dt.getDate()+1);
   const d2=`${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}`;
-  const title=`Store visit: ${code}${who?" ("+who+")":""}`;
+  const title=`Store visit: ${storeLabel(code)}${who?" ("+who+")":""}`;
   return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${d1}/${d2}&details=${encodeURIComponent("Wellgreens store visit")}`;
 }
 
@@ -896,7 +898,7 @@ function renderStoreSummary(){
   const now=new Date();const mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   const wk=[];for(let i=0;i<7;i++){const dt=new Date(mon);dt.setDate(mon.getDate()+i);wk.push({key:`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`,wd:WD[i]});}
   const byStore={};
-  PEOPLE.forEach(p=>{wk.forEach(w=>{getStores(state.cal[p.id]||{},w.key).forEach(code=>{(byStore[code]=byStore[code]||[]).push(`${w.wd} · ${p.name}`);});});});
+  PEOPLE.forEach(p=>{wk.forEach(w=>{getStores(state.cal[p.id]||{},w.key).forEach(code=>{const b=baseCode(code),pr=storePeriod(code);(byStore[b]=byStore[b]||[]).push(`${w.wd}${pr?" "+pr:""} · ${p.name}`);});});});
   const visited=STORES.filter(s=>byStore[s.code]);
   const gaps=STORES.filter(s=>!byStore[s.code]);
   const rows=visited.length
@@ -923,14 +925,14 @@ function renderMonthSummary(){
     else{const nm=(PEOPLE.find(p=>p.id===state.calView)||{}).name||"";getStores(state.cal[state.calView]||{},key).forEach(c=>ci.push({c,whoFull:nm}));}
     if(ci.length){const dt=new Date(y,m,d);items.push({lbl:`${WD[dt.getDay()]} ${MN[m]} ${d}`,ci,key});total+=ci.length;}}
   const rows=items.length
-    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.ci.map(o=>`<a class="storechip gcal" href="${gcalUrl(x.key,o.c,o.whoFull||o.who)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(o.c)}">${o.who?o.who+"·":""}${o.c}</a>`).join("")}</span></div>`).join("")
+    ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.lbl}</span><span class="chipwrap">${x.ci.map(o=>`<a class="storechip gcal" href="${gcalUrl(x.key,o.c,o.whoFull||o.who)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(o.c)}">${o.who?o.who+"·":""}${storeLabel(o.c)}</a>`).join("")}</span></div>`).join("")
     : `<p class="sumempty">No visits this month yet.</p>`;
   el.innerHTML=`<div class="panel" style="--pc:var(--forest)"><div class="ph">${name} · ${MNfull[m]} ${y} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
 }
 function teamCell(key){
   let chips="";
   PEOPLE.forEach(p=>{getStores(state.cal[p.id]||{},key).forEach(code=>{
-    chips+=`<span class="scell ro" style="background:${storeColor(code)}"><b>${p.name[0]}</b>${code}</span>`;});});
+    chips+=`<span class="scell ro" style="background:${storeColor(code)}"><b>${p.name[0]}</b>${storeLabel(code)}</span>`;});});
   return `<div class="scellwrap">${chips}</div>`;
 }
 function renderWeek(){
@@ -967,7 +969,7 @@ function renderSummary(){
     const items=wk.map(w=>({w,codes:getStores(data,w.key)})).filter(x=>x.codes.length);
     const total=items.reduce((n,x)=>n+x.codes.length,0);
     const rows=items.length
-      ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.w.lbl}</span><span class="chipwrap">${x.codes.map(c=>`<a class="storechip gcal" href="${gcalUrl(x.w.key,c,p.name)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(c)}">${c}</a>`).join("")}</span></div>`).join("")
+      ? items.map(x=>`<div class="sumrow"><span class="sumdate">${x.w.lbl}</span><span class="chipwrap">${x.codes.map(c=>`<a class="storechip gcal" href="${gcalUrl(x.w.key,c,p.name)}" target="_blank" rel="noopener" title="Add to Google Calendar" style="background:${storeColor(c)}">${storeLabel(c)}</a>`).join("")}</span></div>`).join("")
       : `<p class="sumempty">Nothing planned yet.</p>`;
     return `<div class="panel${p.id===state.calView?" activep":""}" style="--pc:var(--forest)"><div class="ph">${p.name} · ${total} visit${total===1?"":"s"}</div>${rows}</div>`;
   }).join("");
