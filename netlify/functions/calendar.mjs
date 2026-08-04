@@ -5,6 +5,7 @@ const SB_KEY = "sb_publishable_lCdg75FSViIAyBbgmLZzag_tW-i0kQE";
 const PEOPLE = [["carlos","Carlo"],["julio","Julio"],["oscar","Oscar"],["manny","Manny"],["marisol","Marisol"]];
 const pad = n => String(n).padStart(2,"0");
 function nextDay(iso){ const d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+1); return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}`; }
+function label(code){ const m=String(code).match(/-(AM|PM)$/i); return m ? String(code).replace(/-(AM|PM)$/i,"")+" "+m[1].toUpperCase() : String(code); }
 
 export default async function handler(){
   const stamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
@@ -20,7 +21,7 @@ export default async function handler(){
         for(const code of codes){
           if(!code) continue;
           const d1 = date.replace(/-/g,"");
-          ics += `BEGIN:VEVENT\r\nUID:${id}-${date}-${code}@wellgreens\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${d1}\r\nDTEND;VALUE=DATE:${nextDay(date)}\r\nSUMMARY:${name} -> ${code}\r\nDESCRIPTION:Wellgreens store visit\r\nEND:VEVENT\r\n`;
+          ics += `BEGIN:VEVENT\r\nUID:${id}-${date}-${code}@wellgreens\r\nDTSTAMP:${stamp}\r\nDTSTART;VALUE=DATE:${d1}\r\nDTEND;VALUE=DATE:${nextDay(date)}\r\nSUMMARY:${name} -> ${label(code)}\r\nDESCRIPTION:Wellgreens store visit\r\nEND:VEVENT\r\n`;
         }
       }
     }
