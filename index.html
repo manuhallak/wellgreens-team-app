@@ -310,6 +310,16 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .kpi .lbl{color:var(--ink);font-weight:800}
 .kpi .val{font-family:'Anton',sans-serif;font-weight:400;font-size:46px;letter-spacing:.01em;color:var(--kc,#1E7A46)}
 .kpi .sub{font-weight:700;color:var(--kc,var(--ink))}
+/* cash log checklist under metrics */
+.cashlog{display:flex;align-items:center;gap:14px;margin-top:16px;padding:15px 20px;background:var(--card);border:2px solid var(--ink);border-left:9px solid var(--oxblood);border-radius:2px;cursor:pointer;flex-wrap:wrap;transition:.15s}
+.cashlog.done{border-left-color:#1E7A46;background:var(--paper)}
+.cashlog .cbx{width:24px;height:24px;border:2.5px solid var(--ink);border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.cashlog.done .cbx{background:#1E7A46;border-color:#1E7A46}
+.cashlog .cbx svg{width:14px;height:14px;opacity:0;transform:scale(.5);transition:.15s}
+.cashlog.done .cbx svg{opacity:1;transform:scale(1)}
+.cashlog .ctitle{font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
+.cashlog .cmeta{margin-left:auto;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--taupe)}
+.cashlog.done .cmeta{color:#1E7A46}
 
 /* board */
 .col-head{border:2.5px solid var(--ink);padding:16px 16px 14px;box-shadow:5px 5px 0 rgba(22,19,17,.9)}
@@ -511,6 +521,7 @@ footer .logo{font-family:'Anton',sans-serif}
       <div class="kpi bad"><div class="lbl">Aging Products · To Clear</div><div class="val serif">68</div><div class="sub">units · action needed</div></div>
       <div class="kpi bad"><div class="lbl">Discount Review · To Do</div><div class="val serif">12</div><div class="sub">missing since last week</div></div>
     </div>
+    <div id="cashlog" class="cashlog"></div>
     <p class="fineprint">Placeholder values — LUIS feeds live figures per store. Color is the status: <b style="color:#1E7A46">green</b> = on target, <b style="color:#C9930A">yellow</b> = watch, <b style="color:#C02626">red</b> = missed. Same numbers, one definition, pulled on demand by every manager.</p>
   </section>
 
@@ -754,7 +765,7 @@ function ensureDefaults(){
   if(!state.cards){state.cards={};CARDS.forEach(c=>state.cards[c.id]=c.col);}
   state.checks=state.checks||{};state.training=state.training||{};
   state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};
-  state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};
+  state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};
   state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
   if(state.calView===undefined)state.calView="all";
@@ -1018,14 +1029,28 @@ async function resetAll(){
   if(pw==null)return;
   if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{}};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
   try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
   try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
   location.reload();
 }
 
-function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();}
+function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();renderCashlog();}
+function fmtTime(iso){try{return new Date(iso).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});}catch(e){return"";}}
+function cashKey(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
+function renderCashlog(){
+  const el=document.getElementById("cashlog");if(!el)return;
+  const k=cashKey();const rec=(state.cashlog||{})[k];const done=!!rec;
+  el.className="cashlog"+(done?" done":"");
+  el.innerHTML=`<div class="cbx">${CHK}</div><div class="ctitle">Cash Log Reviewed Today</div><div class="cmeta">${done?("✓ "+(rec.by||"")+(rec.at?" · "+fmtTime(rec.at):"")):"Tap to confirm you checked your cash log"}</div>`;
+  el.onclick=()=>{
+    const cur=state.cashlog||{};const k2=cashKey();
+    if(cur[k2]){delete cur[k2];}
+    else{cur[k2]={by:CURRENT_NAME||"Manager",at:new Date().toISOString()};logActivity("reviewed cash log",k2);}
+    state.cashlog=cur;save();renderCashlog();
+  };
+}
 
 /* ===================== SUPABASE: AUTH + LIVE SYNC + ACTIVITY ===================== */
 const SUPABASE_URL="https://yswabuojaexpwdpoflrr.supabase.co";
