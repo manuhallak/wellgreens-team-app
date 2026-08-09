@@ -320,6 +320,33 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .cashlog .ctitle{font-family:'Anton',sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink)}
 .cashlog .cmeta{margin-left:auto;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--taupe)}
 .cashlog.done .cmeta{color:#1E7A46}
+/* 90-day plan page */
+.phasebar{background:var(--pc,var(--forest));color:#F6F2EB;border:2.5px solid var(--ink);border-bottom:6px solid var(--ochre);padding:13px 20px;margin:26px 0 16px;box-shadow:5px 5px 0 rgba(0,0,0,.16)}
+.phasebar .pbEy{display:block;font-size:11.5px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:#CBBFA8}
+.phasebar .pbT{display:block;font-family:'Anton',sans-serif;font-size:28px;text-transform:uppercase;letter-spacing:.02em;margin-top:3px;color:#F6F1E7}
+.pcard{display:flex;border:2.5px solid var(--ink);border-top:10px solid var(--pc,var(--forest));border-radius:2px;margin-bottom:14px;background:var(--card);box-shadow:5px 5px 0 rgba(0,0,0,.14);overflow:hidden}
+.pcard .pnum{flex-shrink:0;width:76px;background:var(--pc,var(--forest));color:#F6F2EB;font-family:'Anton',sans-serif;font-size:44px;display:flex;align-items:center;justify-content:center;line-height:1}
+.pcard .pnum.cpday{flex-direction:column;font-size:40px;width:96px}
+.pcard .pnum .cpd{font-size:11px;letter-spacing:.22em;color:#CBBFA8;margin-bottom:2px}
+.pcard .pbody{padding:16px 22px;flex:1;min-width:0}
+.pcard .ptitle{font-family:'Anton',sans-serif;font-size:23px;text-transform:uppercase;letter-spacing:.02em;color:var(--ink);line-height:1.12}
+.pcard .ptags{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 9px}
+.pcard .ptag{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;background:var(--pc,var(--forest));color:#fff}
+.pcard .ptag.lite{background:var(--line2);color:var(--ink2)}
+.pcard .pdesc{font-size:15px;color:var(--ink2);font-weight:400;line-height:1.5;margin-bottom:13px}
+.pcard .pdone{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:13.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);user-select:none}
+.pcard .pdone .box{width:23px;height:23px;border:2.5px solid var(--pc,var(--forest));border-radius:2px;display:flex;align-items:center;justify-content:center;transition:.15s}
+.pcard.done .pdone .box{background:var(--pc,var(--forest));border-color:var(--pc,var(--forest))}
+.pcard .pdone .box svg{width:12px;height:12px;opacity:0;transform:scale(.6);transition:.15s}
+.pcard.done .pdone .box svg{opacity:1;transform:scale(1)}
+.pcard.done .pdone{color:var(--pc,var(--forest))}
+.pchk{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--line2);cursor:pointer;font-size:15px;font-weight:700;color:var(--ink2);text-transform:uppercase;letter-spacing:.02em}
+.pchk:last-child{border-bottom:none}
+.pchk .box{width:21px;height:21px;border:2.5px solid var(--pc,var(--forest));border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s}
+.pchk.on .box{background:var(--pc,var(--forest));border-color:var(--pc,var(--forest))}
+.pchk .box svg{width:11px;height:11px;opacity:0;transition:.15s}
+.pchk.on .box svg{opacity:1}
+.pchk.on span:last-child{color:var(--pc,var(--forest));text-decoration:line-through;text-decoration-thickness:.6px}
 
 /* board */
 .col-head{border:2.5px solid var(--ink);padding:16px 16px 14px;box-shadow:5px 5px 0 rgba(22,19,17,.9)}
@@ -544,6 +571,15 @@ footer .logo{font-family:'Anton',sans-serif}
     <div class="board" id="board"></div>
   </section>
 
+  <!-- 90-DAY PLAN -->
+  <section>
+    <div class="shead">
+      <h2 class="serif">90-Day Operating Plan</h2>
+      <div class="note">Foundation → Autonomy · Tap to Complete</div>
+    </div>
+    <div id="plan90"></div>
+  </section>
+
   <!-- REGIONAL MANAGER -->
   <section>
     <div class="shead">
@@ -765,7 +801,7 @@ function ensureDefaults(){
   if(!state.cards){state.cards={};CARDS.forEach(c=>state.cards[c.id]=c.col);}
   state.checks=state.checks||{};state.training=state.training||{};
   state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};
-  state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};
+  state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};state.plan=state.plan||{};
   state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
   if(state.calView===undefined)state.calView="all";
@@ -861,6 +897,62 @@ function renderWeekly(){
     return `<div class="crow ${on?'on':''}" data-i="${i}"><span class="box">${CHK}</span><span>${t}</span></div>`;}).join("");
   weeklyEl.querySelectorAll(".crow").forEach(r=>r.addEventListener("click",()=>{
     const i=r.dataset.i;state.weekly[i]=!state.weekly[i];if(state.weekly[i])logActivity("completed a weekly task",WEEKLY[i]);save();renderWeekly();if(state.weekly[i])toast("Done");}));
+}
+
+/* ===== 90-DAY OPERATING PLAN (clickable, syncs) ===== */
+const PLAN_P1=[
+  {n:1,t:"Store checklists — build & roll out",tags:["Weeks 1–3 · Aug 3–23","Manny + Regionals"],done:"Every store runs the same daily checklist (open, close, floor); managers sign off daily; verified on store visits."},
+  {n:2,t:"Manager KPI dashboard v1",tags:["Weeks 1–4 · Live by Aug 30","Manny + LUIS"],done:"Store gross margin · top 5 & bottom 3 GM brands (of top 20) · overtime % · average cart · marketing $ — all on demand, reviewed weekly."},
+  {n:3,t:"Weekly focus — printed for all staff",tags:["Weekly from Wk 3","Manny + Regionals"],done:"A printed focus in every store each week; any staff member can state the current week's focus."},
+  {n:4,t:"In-store pickup — stand up the workflow",tags:["Weeks 4–6 · Aug 24–Sep 13","Manny + Regionals"],done:"Pickup station, signage and staff flow live in pilot stores; orders fulfilled accurately within target time; ready to scale."},
+  {n:5,t:"Price match (WhatsApp) — audit the process",tags:["Audit Wk 1 · Ongoing","Regionals"],done:"Requests logged on WhatsApp and honored; no customer lost over a price, deal, or misunderstanding; spot-checked on visits."},
+  {n:6,t:"Training cadence — every other week",tags:["Odd weeks 1–11 · 30 min","Manny leads"],done:"Six sessions delivered with teach-back — tracked in the Training Cadence section below."},
+  {n:7,t:"Store visits & coaching",tags:["All 90 days · ≥3 stores/day","Regionals + Manny"],done:"Julio, Carlo, Oscar & Marisol each visit ≥3 stores/day (logged on the calendar); Manny shadows to build ‘what to look for.’"},
+];
+const PLAN_P2=[
+  {n:8,t:"Aging products — live feed",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Live aging feed in the dashboard; managers action it weekly; ties into the 4-or-fewer aging process."},
+  {n:9,t:"Discount abuse — live / flagged view",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Flagged discounts visible; regionals review weekly and coach the offending behavior."},
+  {n:10,t:"Think & decide — make their own calls",tags:["Weeks 7–13","Manny"],done:"Managers resolve day-to-day issues without escalating; decisions are defensible."},
+  {n:11,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
+  {n:12,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
+];
+const PLAN_CP=[
+  {day:30,pc:"--forest",items:["Checklists live in all stores","KPI dashboard v1 live","Weekly focus printing","In-store pickup piloted","2 trainings delivered","Daily visit cadence running"]},
+  {day:60,pc:"--oxblood",items:["4 trainings delivered","Dashboard v2 build underway","Manny's shadow-visits logged","Price-match audited clean"]},
+  {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked"]},
+];
+function planCard(it,pc){
+  const id="p"+it.n;const on=!!state.plan[id];
+  return `<div class="pcard ${on?'done':''}" style="--pc:var(${pc})">
+    <div class="pnum">${it.n}</div>
+    <div class="pbody">
+      <div class="ptitle">${it.t}</div>
+      <div class="ptags">${it.tags.map((g,j)=>`<span class="ptag ${j?'lite':''}">${g}</span>`).join("")}</div>
+      <div class="pdesc">${it.done}</div>
+      <div class="pdone" data-id="${id}"><span class="box">${CHK}</span><span>${on?'Done':'Mark done'}</span></div>
+    </div></div>`;
+}
+function planCpCard(cp){
+  const rows=cp.items.map((t,idx)=>{const id="cp"+cp.day+"-"+idx;const on=!!state.plan[id];
+    return `<div class="pchk ${on?'on':''}" data-id="${id}"><span class="box">${CHK}</span><span>${t}</span></div>`;}).join("");
+  return `<div class="pcard" style="--pc:var(${cp.pc})">
+    <div class="pnum cpday"><span class="cpd">DAY</span>${cp.day}</div>
+    <div class="pbody">${rows}</div></div>`;
+}
+function renderPlan(){
+  const el=document.getElementById("plan90");if(!el)return;
+  let h="";
+  h+=`<div class="phasebar" style="--pc:var(--forest)"><span class="pbEy">Weeks 1–6 · Days 1–45 · Aug 3 – Sep 13</span><span class="pbT">Phase 1 — Foundation</span></div>`;
+  h+=PLAN_P1.map(it=>planCard(it,"--forest")).join("");
+  h+=`<div class="phasebar" style="--pc:var(--oxblood)"><span class="pbEy">Weeks 7–13 · Days 46–90 · Sep 14 – Nov 1</span><span class="pbT">Phase 2 — Autonomy &amp; Growth</span></div>`;
+  h+=PLAN_P2.map(it=>planCard(it,"--oxblood")).join("");
+  h+=`<div class="phasebar" style="--pc:var(--ink)"><span class="pbEy">Review progress · report up to Sam / Lunar</span><span class="pbT">Checkpoints · 30 / 60 / 90</span></div>`;
+  h+=PLAN_CP.map(planCpCard).join("");
+  el.innerHTML=h;
+  el.querySelectorAll(".pdone,.pchk").forEach(r=>r.addEventListener("click",()=>{
+    const id=r.dataset.id;state.plan[id]=!state.plan[id];
+    if(state.plan[id])logActivity("completed a plan item",id);
+    save();renderPlan();if(state.plan[id])toast("Done");}));
 }
 
 /* ===== Daily new-business focus ===== */
@@ -1029,14 +1121,14 @@ async function resetAll(){
   if(pw==null)return;
   if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{}};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
   try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
   try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
   location.reload();
 }
 
-function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();renderCashlog();}
+function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();renderCashlog();renderPlan();}
 function fmtTime(iso){try{return new Date(iso).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});}catch(e){return"";}}
 function cashKey(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
 function renderCashlog(){
