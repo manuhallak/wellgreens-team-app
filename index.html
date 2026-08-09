@@ -334,6 +334,7 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .pcard .ptag{font-size:11.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:4px 10px;background:var(--pc,var(--forest));color:#fff}
 .pcard .ptag.lite{background:var(--line2);color:var(--ink2)}
 .pcard .pdesc{font-size:15px;color:var(--ink2);font-weight:400;line-height:1.5;margin-bottom:13px}
+.pcard .pimg{display:block;width:100%;max-width:520px;height:auto;border:2.5px solid var(--pc,var(--forest));border-radius:2px;margin:0 0 13px}
 .pcard .pdone{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:13.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ink2);user-select:none}
 .pcard .pdone .box{width:23px;height:23px;border:2.5px solid var(--pc,var(--forest));border-radius:2px;display:flex;align-items:center;justify-content:center;transition:.15s}
 .pcard.done .pdone .box{background:var(--pc,var(--forest));border-color:var(--pc,var(--forest))}
@@ -728,6 +729,7 @@ const WEEKLY=[
   "Feedback from the greeter — collect it and act on it",
   "Discount abuse review — flag unusual overrides, comps, and employee discounts",
   "Watch overtime % by store — coach anyone over target",
+  "Confirm floater coverage & assignments for the week — fill gaps without overtime",
   "Coach one store manager on a specific KPI",
   "Confirm merchandising standards held — photo proof",
   "Run the downtime checklist — keep everyone busy during slow periods",
@@ -909,14 +911,15 @@ const PLAN_P1=[
   {n:6,t:"Training cadence — every other week",tags:["Odd weeks 1–11 · 30 min","Manny leads"],done:"Six sessions delivered with teach-back — tracked in the Training Cadence section below."},
   {n:7,t:"Store visits & coaching",tags:["All 90 days · ≥3 stores/day","Regionals + Manny"],done:"Julio, Carlo, Oscar & Marisol each visit ≥3 stores/day (logged on the calendar); Manny shadows to build ‘what to look for.’"},
   {n:8,t:"Schedule monitoring — with Carlo",tags:["Weekly · Ongoing","Manny + Carlo"],done:"Review store schedules with Carlo every week — coverage, overtime %, and labor vs. traffic; fix gaps before they cost hours."},
+  {n:9,t:"Floater role — cross-store coverage",tags:["Weeks 2–5","Manny + Carlo"],done:"Designate and train a floater who can cover any position across stores; use them to fill gaps, PTO, and rushes without paying overtime."},
 ];
 const PLAN_P2=[
-  {n:9,t:"Aging products — live feed",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Live aging feed in the dashboard; managers action it weekly; ties into the 4-or-fewer aging process."},
-  {n:10,t:"Discount abuse — live / flagged view",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Flagged discounts visible; regionals review weekly and coach the offending behavior."},
-  {n:11,t:"Think & decide — make their own calls",tags:["Weeks 7–13","Manny"],done:"Managers resolve day-to-day issues without escalating; decisions are defensible."},
-  {n:12,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
-  {n:13,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
-  {n:14,t:"First-10 visit card — physical punch card",tags:["Weeks 9–13 · Pilot","Regionals + Manny"],done:"Every new customer gets a physical punch card for their first 10 visits, with built-in 2nd-visit and 3rd-visit deals to pull them back — aimed straight at the 75% who never return. Tracked to repeat-customer rate."},
+  {n:10,t:"Aging products — live feed",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Live aging feed in the dashboard; managers action it weekly; ties into the 4-or-fewer aging process."},
+  {n:11,t:"Discount abuse — live / flagged view",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Flagged discounts visible; regionals review weekly and coach the offending behavior."},
+  {n:12,t:"Think & decide — make their own calls",tags:["Weeks 7–13","Manny"],done:"Managers resolve day-to-day issues without escalating; decisions are defensible."},
+  {n:13,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
+  {n:14,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
+  {n:15,t:"First-10 visit card — physical punch card",tags:["Weeks 9–13 · Pilot","Regionals + Manny"],img:"punchcard.png",done:"A physical punch card for a new customer’s first 10 visits — 1st: join the High Society loyalty program · 2nd: $10 off next order · 3rd: free grinder · 5th: free stash bag · 10th: free insulated tumbler; every visit stacks points. Aimed at the 75% who never return; tracked to repeat-customer rate."},
 ];
 const PLAN_CP=[
   {day:30,pc:"--forest",items:["Checklists live in all stores","KPI dashboard v1 live","Weekly focus printing","In-store pickup piloted","Schedule reviews with Carlo running","2 trainings delivered","Daily visit cadence running"]},
@@ -931,6 +934,7 @@ function planCard(it,pc){
       <div class="ptitle">${it.t}</div>
       <div class="ptags">${it.tags.map((g,j)=>`<span class="ptag ${j?'lite':''}">${g}</span>`).join("")}</div>
       <div class="pdesc">${it.done}</div>
+      ${it.img?`<img class="pimg" src="${it.img}" alt="Punch card example" loading="lazy">`:""}
       <div class="pdone" data-id="${id}"><span class="box">${CHK}</span><span>${on?'Done':'Mark done'}</span></div>
     </div></div>`;
 }
