@@ -908,18 +908,20 @@ const PLAN_P1=[
   {n:5,t:"Price match (WhatsApp) — audit the process",tags:["Audit Wk 1 · Ongoing","Regionals"],done:"Requests logged on WhatsApp and honored; no customer lost over a price, deal, or misunderstanding; spot-checked on visits."},
   {n:6,t:"Training cadence — every other week",tags:["Odd weeks 1–11 · 30 min","Manny leads"],done:"Six sessions delivered with teach-back — tracked in the Training Cadence section below."},
   {n:7,t:"Store visits & coaching",tags:["All 90 days · ≥3 stores/day","Regionals + Manny"],done:"Julio, Carlo, Oscar & Marisol each visit ≥3 stores/day (logged on the calendar); Manny shadows to build ‘what to look for.’"},
+  {n:8,t:"Schedule monitoring — with Carlo",tags:["Weekly · Ongoing","Manny + Carlo"],done:"Review store schedules with Carlo every week — coverage, overtime %, and labor vs. traffic; fix gaps before they cost hours."},
 ];
 const PLAN_P2=[
-  {n:8,t:"Aging products — live feed",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Live aging feed in the dashboard; managers action it weekly; ties into the 4-or-fewer aging process."},
-  {n:9,t:"Discount abuse — live / flagged view",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Flagged discounts visible; regionals review weekly and coach the offending behavior."},
-  {n:10,t:"Think & decide — make their own calls",tags:["Weeks 7–13","Manny"],done:"Managers resolve day-to-day issues without escalating; decisions are defensible."},
-  {n:11,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
-  {n:12,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
+  {n:9,t:"Aging products — live feed",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Live aging feed in the dashboard; managers action it weekly; ties into the 4-or-fewer aging process."},
+  {n:10,t:"Discount abuse — live / flagged view",tags:["Build Wks 7–10 · Live by Oct 5","Manny + Data"],done:"Flagged discounts visible; regionals review weekly and coach the offending behavior."},
+  {n:11,t:"Think & decide — make their own calls",tags:["Weeks 7–13","Manny"],done:"Managers resolve day-to-day issues without escalating; decisions are defensible."},
+  {n:12,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
+  {n:13,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
+  {n:14,t:"First-10 visit card — physical punch card",tags:["Weeks 9–13 · Pilot","Regionals + Manny"],done:"Every new customer gets a physical punch card for their first 10 visits, with built-in 2nd-visit and 3rd-visit deals to pull them back — aimed straight at the 75% who never return. Tracked to repeat-customer rate."},
 ];
 const PLAN_CP=[
-  {day:30,pc:"--forest",items:["Checklists live in all stores","KPI dashboard v1 live","Weekly focus printing","In-store pickup piloted","2 trainings delivered","Daily visit cadence running"]},
+  {day:30,pc:"--forest",items:["Checklists live in all stores","KPI dashboard v1 live","Weekly focus printing","In-store pickup piloted","Schedule reviews with Carlo running","2 trainings delivered","Daily visit cadence running"]},
   {day:60,pc:"--oxblood",items:["4 trainings delivered","Dashboard v2 build underway","Manny's shadow-visits logged","Price-match audited clean"]},
-  {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked"]},
+  {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked","First-10 visit punch card piloted"]},
 ];
 function planCard(it,pc){
   const id="p"+it.n;const on=!!state.plan[id];
