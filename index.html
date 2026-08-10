@@ -778,18 +778,32 @@ function storeCell(data,key){
   const add=`<select class="saddsel" data-k="${key}"><option value="">${arr.length?"+":"+ store"}</option>${opts}</select>`;
   return `<div class="scellwrap">${chips}<span class="saddrow">${per}${add}</span></div>`;
 }
+let calEditing=false, pendingCalRender=false;
+function endCalEdit(){setTimeout(()=>{calEditing=false;if(pendingCalRender){pendingCalRender=false;refreshCalFromServer();}},80);}
+async function refreshCalFromServer(){
+  if(calEditing)return; // still editing — try again later
+  try{const {data}=await sb.from("board").select("data").eq("id",1).single();
+    if(data&&data.data&&data.data.cal){state.cal=data.data.cal;PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});renderCal();}
+  }catch(e){}
+}
 function bindStores(cont,data){
   const person=state.calView;
   cont.querySelectorAll(".scell").forEach(el=>el.addEventListener("click",()=>{
     const k=el.dataset.k;const arr=getStores(data,k).filter(c=>c!==el.dataset.code);data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
   cont.querySelectorAll(".perbtn").forEach(b=>b.addEventListener("click",e=>{
-    e.stopPropagation();const row=b.closest(".saddrow");if(!row)return;
+    e.stopPropagation();calEditing=true;const row=b.closest(".saddrow");if(!row)return;
     row.querySelectorAll(".perbtn").forEach(x=>x.classList.remove("on"));b.classList.add("on");}));
-  cont.querySelectorAll(".saddsel").forEach(el=>el.addEventListener("change",()=>{
-    if(!el.value)return;const k=el.dataset.k;const arr=getStores(data,k);
-    const row=el.closest(".saddrow");const pb=row&&row.querySelector(".perbtn.on");const per=pb?pb.dataset.p:"AM";
-    const code=el.value+"-"+per;
-    if(!arr.includes(code)){arr.push(code);logActivity("scheduled store visit",storeLabel(code)+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
+  cont.querySelectorAll(".saddsel").forEach(el=>{
+    el.addEventListener("focus",()=>{calEditing=true;});
+    el.addEventListener("blur",endCalEdit);
+    el.addEventListener("change",()=>{
+      if(!el.value){endCalEdit();return;}
+      const k=el.dataset.k;const arr=getStores(data,k);
+      const row=el.closest(".saddrow");const pb=row&&row.querySelector(".perbtn.on");const per=pb?pb.dataset.p:"AM";
+      const code=el.value+"-"+per;
+      if(!arr.includes(code)){arr.push(code);logActivity("scheduled store visit",storeLabel(code)+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}
+      data[k]=arr;saveView();pushCell(person,k,arr);calEditing=false;pendingCalRender=false;renderCal();});
+  });
 }
 async function pushCell(person,date,codes){
   if(!CURRENT_USER)return;
@@ -817,7 +831,8 @@ function ensureDefaults(){
   if(state.calView===undefined)state.calView="all";
   else if(state.calView!=="all"&&!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
   const _n=new Date();
-  state.calY=_n.getFullYear();state.calM=_n.getMonth();
+  if(state.calY===undefined)state.calY=_n.getFullYear();
+  if(state.calM===undefined)state.calM=_n.getMonth();
 }
 ensureDefaults();
 const save=()=>{try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}schedulePush();};
@@ -1200,6 +1215,7 @@ async function onAuthed(user){
     const EMAP={"manu@wellgreens.store":"manny","carlo@wellgreens.store":"carlos","julio@wellgreens.store":"julio","oscar@wellgreens.store":"oscar","marisol@wellgreens.store":"marisol"};
     if(EMAP[em]){state.calView=EMAP[em];saveView();}
   }catch(e){}
+  {const _n=new Date();state.calY=_n.getFullYear();state.calM=_n.getMonth();} // open on current month at login only
   renderAll();
   subscribeRealtime();
   loadActivity();
@@ -1252,7 +1268,17 @@ function subscribeRealtime(){
         const merged=deepMerge(remote,sharedState());
         if("cal" in remote)merged.cal=remote.cal; // calendar is always taken fresh from the server
         VIEW_KEYS.forEach(k=>merged[k]=state[k]);
-        state=merged;ensureDefaults();renderAll();
+        const editing = calEditing || (document.activeElement&&document.activeElement.classList&&document.activeElement.classList.contains("saddsel"));
+        if(editing){
+          // Someone else saved while THIS user is mid-edit. Update everything EXCEPT the calendar,
+          // and keep the exact calendar DOM they're interacting with — never yank it out from under them.
+          const keepCal=state.cal;
+          state=merged;state.cal=keepCal;ensureDefaults();
+          renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderQuarter();renderFocus();renderCashlog();renderPlan();
+          pendingCalRender=true;
+        } else {
+          state=merged;ensureDefaults();renderAll();
+        }
       }
     })
     .on("postgres_changes",{event:"INSERT",schema:"public",table:"activity"},()=>{loadActivity();})
