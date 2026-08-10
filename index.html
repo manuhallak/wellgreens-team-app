@@ -427,6 +427,11 @@ body{font-family:'Archivo',sans-serif;font-weight:600;font-size:16px;background:
 .scell.ro{cursor:default}
 .scell b{opacity:.72;margin-right:4px;font-weight:800}
 .saddsel{border:2px dashed var(--taupe);background:var(--card);font-family:'Jost',sans-serif;font-weight:800;font-size:11px;padding:3px 5px;cursor:pointer;text-transform:uppercase;color:var(--taupe);-webkit-appearance:none;appearance:none}
+.saddrow{display:inline-flex;align-items:center;gap:4px;flex-wrap:wrap;vertical-align:middle}
+.permini{display:inline-flex;border:2px solid var(--ink);border-radius:2px;overflow:hidden}
+.permini .perbtn{background:var(--card);border:none;border-right:2px solid var(--ink);font-family:'Jost',sans-serif;font-weight:800;font-size:9px;letter-spacing:.03em;padding:3px 5px;cursor:pointer;color:var(--taupe);text-transform:uppercase;line-height:1}
+.permini .perbtn:last-child{border-right:none}
+.permini .perbtn.on{background:var(--forest);color:#F6F2EB}
 .chipwrap{display:flex;gap:4px;flex-wrap:wrap}
 .storechip{color:#fff;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 11px;border:2px solid var(--ink);display:inline-block;text-decoration:none}
 .strow{display:flex;gap:16px;align-items:center;padding:11px 0;border-bottom:2px solid var(--line2)}
@@ -760,28 +765,31 @@ const STORES=[
   {code:"LG",c:"#E0631A"},{code:"UNI",c:"#8A5A2B"},{code:"KM",c:"#C13B86"},
   {code:"CH",c:"#4A5568"},{code:"CV",c:"#4338A0"},{code:"MV",c:"#0891B2"}
 ];
-const baseCode=code=>String(code).replace(/-(AM|PM)$/i,"");
-const storePeriod=code=>{const m=String(code).match(/-(AM|PM)$/i);return m?m[1].toUpperCase():"";};
+const baseCode=code=>String(code).replace(/-(AM|MID|PM)$/i,"");
+const storePeriod=code=>{const m=String(code).match(/-(AM|MID|PM)$/i);return m?m[1].toUpperCase():"";};
 const storeLabel=code=>{const p=storePeriod(code);return p?baseCode(code)+" "+p:baseCode(code);};
 const storeColor=code=>{const s=STORES.find(x=>x.code===baseCode(code));return s?s.c:"var(--taupe)";};
 const getStores=(data,key)=>{const v=data[key];if(!v)return[];return Array.isArray(v)?v:[v];};
 function storeCell(data,key){
   const arr=getStores(data,key);
   const chips=arr.map(code=>`<span class="scell" data-k="${key}" data-code="${code}" style="background:${storeColor(code)}">${storeLabel(code)}<span class="x">×</span></span>`).join("");
-  const opts=STORES.map(s=>{let o="";
-    if(!arr.includes(s.code+"-AM"))o+=`<option value="${s.code}-AM">${s.code} AM</option>`;
-    if(!arr.includes(s.code+"-PM"))o+=`<option value="${s.code}-PM">${s.code} PM</option>`;
-    return o;}).join("");
+  const per=`<span class="permini" data-k="${key}">${["AM","MID","PM"].map((p,i)=>`<button type="button" class="perbtn${i===0?' on':''}" data-p="${p}">${p}</button>`).join("")}</span>`;
+  const opts=STORES.map(s=>`<option value="${s.code}">${s.code}</option>`).join("");
   const add=`<select class="saddsel" data-k="${key}"><option value="">${arr.length?"+":"+ store"}</option>${opts}</select>`;
-  return `<div class="scellwrap">${chips}${add}</div>`;
+  return `<div class="scellwrap">${chips}<span class="saddrow">${per}${add}</span></div>`;
 }
 function bindStores(cont,data){
   const person=state.calView;
   cont.querySelectorAll(".scell").forEach(el=>el.addEventListener("click",()=>{
     const k=el.dataset.k;const arr=getStores(data,k).filter(c=>c!==el.dataset.code);data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
+  cont.querySelectorAll(".perbtn").forEach(b=>b.addEventListener("click",e=>{
+    e.stopPropagation();const row=b.closest(".saddrow");if(!row)return;
+    row.querySelectorAll(".perbtn").forEach(x=>x.classList.remove("on"));b.classList.add("on");}));
   cont.querySelectorAll(".saddsel").forEach(el=>el.addEventListener("change",()=>{
     if(!el.value)return;const k=el.dataset.k;const arr=getStores(data,k);
-    if(!arr.includes(el.value)){arr.push(el.value);logActivity("scheduled store visit",storeLabel(el.value)+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
+    const row=el.closest(".saddrow");const pb=row&&row.querySelector(".perbtn.on");const per=pb?pb.dataset.p:"AM";
+    const code=el.value+"-"+per;
+    if(!arr.includes(code)){arr.push(code);logActivity("scheduled store visit",storeLabel(code)+" · "+((PEOPLE.find(p=>p.id===person)||{}).name||"")+" · "+k);}data[k]=arr;saveView();pushCell(person,k,arr);renderCal();}));
 }
 async function pushCell(person,date,codes){
   if(!CURRENT_USER)return;
