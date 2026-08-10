@@ -5,7 +5,7 @@ const SB_KEY = "sb_publishable_lCdg75FSViIAyBbgmLZzag_tW-i0kQE";
 const PEOPLE = [["carlos","Carlo"],["julio","Julio"],["oscar","Oscar"],["manny","Manny"],["marisol","Marisol"]];
 const pad = n => String(n).padStart(2,"0");
 function nextDay(iso){ const d=new Date(iso+"T00:00:00Z"); d.setUTCDate(d.getUTCDate()+1); return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}`; }
-function label(code){ const m=String(code).match(/-(AM|PM)$/i); return m ? String(code).replace(/-(AM|PM)$/i,"")+" "+m[1].toUpperCase() : String(code); }
+function label(code){ const m=String(code).match(/-(AM|MID|PM)$/i); return m ? String(code).replace(/-(AM|MID|PM)$/i,"")+" "+m[1].toUpperCase() : String(code); }
 
 export default async function handler(){
   const stamp = new Date().toISOString().replace(/[-:]/g,"").split(".")[0]+"Z";
