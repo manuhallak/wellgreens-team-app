@@ -944,11 +944,12 @@ const PLAN_P2=[
   {n:14,t:"Run the budget — ideas tied to a KPI",tags:["Weeks 8–13","Manny + Regionals"],done:"Share the monthly budget; each manager brings ≥1 KPI-tied initiative; nothing greenlit without a metric behind it."},
   {n:15,t:"Flyer pass-out — store manager owns it",tags:["Weeks 9–13 · Min 25 doors","Store Manager"],done:"Each store manager runs flyer pass-out around their store — minimum 25 doors per store, tracked automatically; measured vs. foot traffic / average cart."},
   {n:16,t:"First-10 visit card — physical punch card",tags:["Weeks 9–13 · Pilot","Regionals + Manny"],img:"punchcard.png",done:"A physical punch card for a new customer’s first 10 visits — 1st: join the High Society loyalty program · 2nd: $10 off next order · 3rd: free grinder · 5th: free stash bag · 10th: free insulated tumbler; every visit stacks points. Aimed at the 75% who never return; tracked to repeat-customer rate."},
+  {n:17,t:"Refer-a-friend campaign",tags:["Weeks 9–13 · Pilot","Regionals + Manny"],done:"Launch a refer-a-friend program — existing customers refer new ones, with a reward on both sides (referrer and referred). Tracked to new-customer count and repeat rate; pairs with the punch card to grow the base."},
 ];
 const PLAN_CP=[
   {day:30,pc:"--forest",items:["Checklists live in all stores","KPI dashboard v1 live","Weekly focus printing","In-store pickup piloted","Schedule reviews with Carlo running","2 trainings delivered","Daily visit cadence running"]},
   {day:60,pc:"--oxblood",items:["4 trainings delivered","Dashboard v2 build underway","Manny's shadow-visits logged","Price-match audited clean"]},
-  {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked","First-10 visit punch card piloted"]},
+  {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked","First-10 visit punch card piloted","Refer-a-friend campaign piloted"]},
 ];
 function planCard(it,pc){
   const id="p"+it.n;const on=!!state.plan[id];
