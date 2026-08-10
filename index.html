@@ -1213,7 +1213,10 @@ async function loadBoard(){
   ensureDefaults();
 }
 const VIEW_KEYS=["calView","calY","calM"];
-function sharedState(){const s={...state};VIEW_KEYS.forEach(k=>delete s[k]);return s;}
+/* NOTE: 'cal' is intentionally excluded here. The calendar is written ONLY by the
+   atomic per-cell RPC (set_cal_cell) so simultaneous edits by different people can
+   never overwrite each other. Full-board writes must never touch cal. */
+function sharedState(){const s={...state};VIEW_KEYS.forEach(k=>delete s[k]);delete s.cal;return s;}
 function deepMerge(base,ov){
   if(Array.isArray(ov))return ov.slice();
   if(ov&&typeof ov==="object"){
@@ -1232,6 +1235,7 @@ async function pushBoard(){
   try{
     const {data:cur}=await sb.from("board").select("data").eq("id",1).single();
     const merged=deepMerge((cur&&cur.data)||{},sharedState());
+    if(cur&&cur.data&&("cal" in cur.data))merged.cal=cur.data.cal; // never let a full-board write modify the calendar
     await sb.from("board").update({data:merged,updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1);
   }catch(e){}
   pushing=false;
@@ -1246,6 +1250,7 @@ function subscribeRealtime(){
       if(payload.new&&payload.new.updated_by!==CLIENT_ID){
         const remote=payload.new.data||{};
         const merged=deepMerge(remote,sharedState());
+        if("cal" in remote)merged.cal=remote.cal; // calendar is always taken fresh from the server
         VIEW_KEYS.forEach(k=>merged[k]=state[k]);
         state=merged;ensureDefaults();renderAll();
       }
