@@ -534,6 +534,16 @@ footer .logo{font-family:'Anton',sans-serif}
     </div>
   </section>
 
+  <!-- WEEKLY FOCUS -->
+  <section>
+    <div class="shead">
+      <h2 class="serif">This Week's Focus</h2>
+      <div class="note">Pick a Phase · Add Notes</div>
+    </div>
+    <div class="focuspick" id="focuspick"></div>
+    <div id="focusnotewrap"></div>
+  </section>
+
   <!-- KPI -->
   <section>
     <div class="shead">
@@ -556,16 +566,6 @@ footer .logo{font-family:'Anton',sans-serif}
     </div>
     <div id="cashlog" class="cashlog"></div>
     <p class="fineprint">Placeholder values — LUIS feeds live figures per store. Color is the status: <b style="color:#1E7A46">green</b> = on target, <b style="color:#C9930A">yellow</b> = watch, <b style="color:#C02626">red</b> = missed. Same numbers, one definition, pulled on demand by every manager.</p>
-  </section>
-
-  <!-- WEEKLY FOCUS -->
-  <section>
-    <div class="shead">
-      <h2 class="serif">This Week's Focus</h2>
-      <div class="note">Pick a Phase · Add Notes</div>
-    </div>
-    <div class="focuspick" id="focuspick"></div>
-    <div id="focusnotewrap"></div>
   </section>
 
   <!-- BOARD -->
@@ -1033,12 +1033,14 @@ function renderStoreSummary(){
   const WD=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   const now=new Date();const mon=new Date(now);mon.setHours(0,0,0,0);mon.setDate(now.getDate()-((now.getDay()+6)%7));
   const wk=[];for(let i=0;i<7;i++){const dt=new Date(mon);dt.setDate(mon.getDate()+i);wk.push({key:`${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`,wd:WD[i]});}
+  const PORD={AM:0,MID:1,PM:2,"":0};
   const byStore={};
-  PEOPLE.forEach(p=>{wk.forEach(w=>{getStores(state.cal[p.id]||{},w.key).forEach(code=>{const b=baseCode(code),pr=storePeriod(code);(byStore[b]=byStore[b]||[]).push(`${w.wd}${pr?" "+pr:""} · ${p.name}`);});});});
+  PEOPLE.forEach(p=>{wk.forEach((w,di)=>{getStores(state.cal[p.id]||{},w.key).forEach(code=>{const b=baseCode(code),pr=storePeriod(code);(byStore[b]=byStore[b]||[]).push({di,po:PORD[pr]||0,txt:`${w.wd}${pr?" "+pr:""} · ${p.name}`});});});});
+  Object.keys(byStore).forEach(k=>byStore[k].sort((a,b)=>a.di-b.di||a.po-b.po)); // order by day of week, then AM·MID·PM
   const visited=STORES.filter(s=>byStore[s.code]);
   const gaps=STORES.filter(s=>!byStore[s.code]);
   const rows=visited.length
-    ? visited.map(s=>`<div class="strow"><span class="storechip" style="background:${s.c}">${s.code}</span><span class="stwho">${byStore[s.code].join("&nbsp; · &nbsp;")}</span></div>`).join("")
+    ? visited.map(s=>`<div class="strow"><span class="storechip" style="background:${s.c}">${s.code}</span><span class="stwho">${byStore[s.code].map(o=>o.txt).join("&nbsp; · &nbsp;")}</span></div>`).join("")
     : `<p class="sumempty">No visits scheduled this week.</p>`;
   const gapline=gaps.length
     ? `<div class="stgap"><b>Not visited this week:</b> ${gaps.map(s=>`<span class="storechip dim" style="background:${s.c}">${s.code}</span>`).join("")}</div>`
