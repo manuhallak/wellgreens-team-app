@@ -597,7 +597,7 @@ footer .logo{font-family:'Anton',sans-serif}
       <div id="weekly"></div>
     </div>
     <div class="subhead">Gain New Business · Daily Focus</div>
-    <div class="dfocus" id="dfocus"></div>
+    <div class="dfocus" id="dfocus"></div><div class="subhead">Regional Manager · Daily Focus</div><div class="dfocus" id="rdfocus"></div>
   </section>
 
   <!-- CALENDAR -->
@@ -747,6 +747,7 @@ const DAILY=[
   {d:"Thu",def:"Referral ask at every checkout"},
   {d:"Fri",def:"Review the week's wins — double down on what worked"}
 ];
+const RDAILY=[{d:"Mon",def:"Payrolls"},{d:"Tue",def:"Pricing"},{d:"Wed",def:""},{d:"Thu",def:""},{d:"Fri",def:""}];
 const QITEMS=[
   "Full competitor price audit",
   "Deep clean + complete merchandising reset",
@@ -825,7 +826,7 @@ function ensureDefaults(){
   if(!state||typeof state!=="object")state={};
   if(!state.cards){state.cards={};CARDS.forEach(c=>state.cards[c.id]=c.col);}
   state.checks=state.checks||{};state.training=state.training||{};
-  state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};
+  state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};state.rdailyTxt=state.rdailyTxt||{};state.rdailyChk=state.rdailyChk||{};
   state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};state.plan=state.plan||{};
   state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
@@ -1117,6 +1118,21 @@ function calShift(n){state.calM+=n;if(state.calM>11){state.calM=0;state.calY++;}
 
 /* ===== Quarterly checklist ===== */
 const qEl=document.getElementById("qgrid");
+
+const rdfEl=document.getElementById("rdfocus");
+function renderRDaily(){
+  if(!rdfEl)return;
+  var today=new Date().getDay();
+  rdfEl.innerHTML=RDAILY.map(function(d,i){
+    var on=state.rdailyChk[i]?"on":"";
+    var isT=today===i+1?"today":"";
+    var txt=state.rdailyTxt[i]!==undefined?state.rdailyTxt[i]:d.def;
+    return '<div class="day '+on+' '+isT+'" style="--dc:'+DC[i]+'"><div class="dname">'+d.d+'</div><div class="dtext" contenteditable data-i="'+i+'">'+txt+'</div><div class="dcheck" data-i="'+i+'"><span class="box">'+CHK+'</span> Done today</div></div>';
+  }).join("");
+  rdfEl.querySelectorAll(".dtext").forEach(function(el){el.addEventListener("input",function(){state.rdailyTxt[el.dataset.i]=el.textContent;save();});});
+  rdfEl.querySelectorAll(".dcheck").forEach(function(el){el.addEventListener("click",function(){var i=el.dataset.i;state.rdailyChk[i]=!state.rdailyChk[i];save();renderRDaily();});});
+}
+
 function renderQuarter(){
   const yr=new Date().getFullYear();
   qEl.innerHTML=QS.map((q,qi)=>{
@@ -1155,14 +1171,14 @@ async function resetAll(){
   if(pw==null)return;
   if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{},rdailyTxt:{},rdailyChk:{}};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
   try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
   try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
   location.reload();
 }
 
-function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderCal();renderQuarter();renderFocus();renderCashlog();renderPlan();}
+function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderRDaily();renderCal();renderQuarter();renderFocus();renderCashlog();renderPlan();}
 function fmtTime(iso){try{return new Date(iso).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});}catch(e){return"";}}
 function cashKey(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
 function renderCashlog(){
