@@ -542,6 +542,8 @@ footer .logo{font-family:'Anton',sans-serif}
     </div>
     <div class="focuspick" id="focuspick"></div>
     <div id="focusnotewrap"></div>
+    <div class="subhead">Floater Coverage · Checklist</div>
+    <div class="panel" style="--pc:var(--plum)"><div id="fchecklist"></div></div>
   </section>
 
   <!-- KPI -->
@@ -689,6 +691,8 @@ const PHASES=[
   {id:"p3",phase:"Month 3–4",title:"In-Store Pickup",win:"A better pickup experience",c:"var(--teal)"},
   {id:"done",phase:"Shipped",title:"Complete",win:"Delivered & verified",c:"var(--ochre)"}
 ];
+const FOCUSOPTS=[...PHASES,{id:"floater",phase:"Ongoing",title:"Floater Role",win:"Cover gaps without overtime",c:"var(--plum)"}];
+const FCHK=["Floater assigned for the week","Coverage gaps filled","Floater cross-trained on the store","Overtime kept in check"];
 const PC=Object.fromEntries(PHASES.map(p=>[p.id,p.c]));
 const CARDS=[
   {id:"c1",col:"p1",title:"Launch mobile app",pts:50,tag:"App",
@@ -830,7 +834,7 @@ function ensureDefaults(){
   state.checks=state.checks||{};state.training=state.training||{};
   state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};state.rdailyTxt=state.rdailyTxt||{};state.rdailyChk=state.rdailyChk||{};
   state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};state.plan=state.plan||{};
-  state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};
+  state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};state.fchk=state.fchk||{};
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
   if(state.calView===undefined)state.calView="all";
   else if(state.calView!=="all"&&!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
@@ -1156,14 +1160,20 @@ function renderQuarter(){
 
 function renderFocus(){
   const pk=document.getElementById("focuspick");if(!pk)return;
-  pk.innerHTML=PHASES.map(ph=>`<button class="fbtn${state.focusPhase===ph.id?' on':''}" data-id="${ph.id}" style="--pc:${ph.c}">${ph.title}</button>`).join("");
+  pk.innerHTML=FOCUSOPTS.map(ph=>`<button class="fbtn${state.focusPhase===ph.id?' on':''}" data-id="${ph.id}" style="--pc:${ph.c}">${ph.title}</button>`).join("");
   pk.querySelectorAll(".fbtn").forEach(b=>b.addEventListener("click",()=>{
-    state.focusPhase=state.focusPhase===b.dataset.id?"":b.dataset.id;if(state.focusPhase)logActivity("set the weekly focus",(PHASES.find(p=>p.id===state.focusPhase)||{}).title||"");save();renderFocus();
+    state.focusPhase=state.focusPhase===b.dataset.id?"":b.dataset.id;if(state.focusPhase)logActivity("set the weekly focus",(FOCUSOPTS.find(p=>p.id===state.focusPhase)||{}).title||"");save();renderFocus();
     if(state.focusPhase)toast("Focus set");}));
   const nw=document.getElementById("focusnotewrap");
   nw.innerHTML=`<div class="focusnote" contenteditable>${state.focusNotes||""}</div>`;
   const note=nw.querySelector(".focusnote");
   note.addEventListener("input",()=>{state.focusNotes=note.textContent;save();});
+  renderFChk();
+}
+function renderFChk(){
+  var el=document.getElementById("fchecklist");if(!el)return;
+  el.innerHTML=FCHK.map(function(t,i){return '<div class="crow '+(state.fchk[i]?'on':'')+'" data-i="'+i+'"><span class="box">'+CHK+'</span><span>'+t+'</span></div>';}).join("");
+  el.querySelectorAll(".crow").forEach(function(r){r.addEventListener("click",function(){var i=r.dataset.i;state.fchk[i]=!state.fchk[i];if(state.fchk[i])logActivity("checked floater coverage",FCHK[i]);save();renderFChk();if(state.fchk[i])toast("Done");});});
 }
 
 let tt;function toast(m){const e=document.getElementById("toast");e.textContent=m;e.classList.add("show");
@@ -1173,7 +1183,7 @@ async function resetAll(){
   if(pw==null)return;
   if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{},rdailyTxt:{},rdailyChk:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{},rdailyTxt:{},rdailyChk:{},fchk:{}};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
   try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
   try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
