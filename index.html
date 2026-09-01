@@ -996,21 +996,19 @@ const PLAN_CP=[
 ];
 /* ---- PLAN 2 · Nov 1, 2026 – Jan 29, 2027 ---- */
 const PLAN2_A=[
-  {n:1,t:"Inventory dashboard — live cycle counts",tags:["Weeks 1–3 · Nov 2–22","Manny + Inventory Mgr"],done:"Stand up the live inventory dashboard: cycle counts complete vs. due, count accuracy, aging & expiring, integration audit and zeros progress — one source every store pulls on demand."},
-  {n:2,t:"Cycle count cadence — every store on schedule",tags:["Weeks 1–4","Inventory Mgr + Regionals"],done:"Set the recurring count schedule per store, define the accuracy target, and make counts a non-negotiable weekly task with sign-off."},
-  {n:3,t:"Integration audit — systems in sync",tags:["Weeks 2–6","Manny + Inventory Mgr"],done:"Audit the POS ↔ compliance/traceability integration store by store; document every mismatch, fix the root cause, and re-audit until each store is clean."},
-  {n:4,t:"Zeros clean-up — work the 0-qty list",tags:["Weeks 2–6 · Ongoing","Inventory Mgr"],done:"Work the zero-quantity discrepancy list down: resolve, write off, or correct each one; track progress weekly until the list is at zero."},
-  {n:5,t:"Aging & expiring — clear the shelf",tags:["Weeks 3–6","Regionals + Store Mgrs"],done:"Run the aging process on any item with 4 or fewer units, pull near-expiry product, and discount or return before it becomes shrink."}
+  {n:1,t:"Inventory foundation — dashboard, counts & clean-up",tags:["Weeks 1–6 · Nov 2 – Dec 13","Manny + Inventory Mgr"],done:"One workstream, five moving parts: stand up the live inventory dashboard (counts, accuracy, aging, integration audit, zeros) · set the cycle count cadence and accuracy target per store · audit the POS ↔ compliance integration store by store until each is clean · work the zeros list down to zero · clear aging (4 or fewer) and near-expiry product before it becomes shrink."},
+  {n:2,t:"Counter-top displays — Sunny",tags:["Weeks 1–4","Manny + Sunny"],done:"Lock the design with Sunny, approve the proof, produce, and install counter-top displays in every store — with one placement standard so every counter looks the same."},
+  {n:3,t:"Shelf talkers & displays — Seattle Design Lab",tags:["Weeks 2–6","Manny + Seattle Design Lab"],done:"Execute the shelf talker and display program with Seattle Design Lab: finalize artwork, print, ship to stores, and install to the merchandising standard — before/after photos as proof."},
 ];
 const PLAN2_B=[
-  {n:6,t:"AI company — scope & execute",tags:["Weeks 7–13","Manny"],done:"Select the AI partner and put them to work on a defined use case (forecasting, counts, or customer). Run a scoped pilot, tie it to one measurable KPI, and only scale once the number moves."},
-  {n:7,t:"Automate the counts — less manual work",tags:["Weeks 8–13","Manny + Inventory Mgr"],done:"Reduce manual counting: scan-based counts, auto-flagged variances, and alerts pushed to managers instead of chased down."},
-  {n:8,t:"Inventory KPIs in every manager review",tags:["Weeks 7–13","Manny + Regionals"],done:"Count accuracy, shrink, aging and zeros become standing items in the weekly manager review — same definition, pulled on demand."}
+  {n:4,t:"AI company — scope & execute",tags:["Weeks 7–13","Manny"],done:"Select the AI partner and put them to work on a defined use case (forecasting, counts, or customer). Run a scoped pilot, tie it to one measurable KPI, and only scale once the number moves."},
+  {n:5,t:"Automate the counts — less manual work",tags:["Weeks 8–13","Manny + Inventory Mgr"],done:"Reduce manual counting: scan-based counts, auto-flagged variances, and alerts pushed to managers instead of chased down."},
+  {n:6,t:"Inventory KPIs in every manager review",tags:["Weeks 7–13","Manny + Regionals"],done:"Count accuracy, shrink, aging and zeros become standing items in the weekly manager review — same definition, pulled on demand."},
 ];
 const PLAN2_CP=[
-  {day:30,pc:"--forest",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined"]},
-  {day:60,pc:"--oxblood",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","AI partner selected & pilot scoped"]},
-  {day:90,pc:"--oxblood",items:["Every store clean on integration audit","Zeros list at zero","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
+  {day:30,pc:"--forest",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Sunny counter-top display design approved"]},
+  {day:60,pc:"--oxblood",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","AI partner selected & pilot scoped"]},
+  {day:90,pc:"--oxblood",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]},
 ];
 const PLANS={
   p1:{tab:"Plan 1 · Aug – Nov", sk:"plan", cpLbl:"Checkpoints · 30 / 60 / 90",
