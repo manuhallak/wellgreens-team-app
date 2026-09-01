@@ -572,6 +572,28 @@ footer .logo{font-family:'Anton',sans-serif}
     <p class="fineprint">Placeholder values — LUIS feeds live figures per store. Color is the status: <b style="color:#1E7A46">green</b> = on target, <b style="color:#C9930A">yellow</b> = watch, <b style="color:#C02626">red</b> = missed. Same numbers, one definition, pulled on demand by every manager.</p>
   </section>
 
+  <!-- INVENTORY DASHBOARD -->
+  <section>
+    <div class="shead">
+      <h2 class="serif">Inventory Dashboard</h2>
+      <div class="note">Live · Cycle Counts · Every Store</div>
+    </div>
+    <div class="luis"><span class="dot"></span> Powered by <b>LUIS</b> — counts, aging and sync in one place</div>
+    <div class="kpigrid">
+      <div class="kpi warn"><div class="lbl">Cycle Counts · This Week</div><div class="val serif">8/12</div><div class="sub">stores counted · 4 due</div></div>
+      <div class="kpi warn"><div class="lbl">Count Accuracy</div><div class="val serif">97.4%</div><div class="sub">target ≥ 98% · close</div></div>
+      <div class="kpi bad"><div class="lbl">Oldest Count</div><div class="val serif">16d</div><div class="sub">LM · overdue</div></div>
+      <div class="kpi bad"><div class="lbl">Aging Units · To Clear</div><div class="val serif">68</div><div class="sub">units · 4 or fewer on hand</div></div>
+      <div class="kpi warn"><div class="lbl">Expiring · 30 Days</div><div class="val serif">24</div><div class="sub">units · pull or discount</div></div>
+      <div class="kpi warn"><div class="lbl">Integration Audit</div><div class="val serif">9/12</div><div class="sub">stores clean · 3 mismatches</div></div>
+      <div class="kpi bad"><div class="lbl">Zeros · To Resolve</div><div class="val serif">41</div><div class="sub">↓ 12 this week · in progress</div></div>
+      <div class="kpi good"><div class="lbl">Zeros Cleared</div><div class="val serif">63%</div><div class="sub">of opening list · on track</div></div>
+    </div>
+    <div class="subhead">Inventory Tasks · This Week</div>
+    <div class="panel" style="--pc:var(--teal)"><div id="invchk"></div></div>
+    <p class="fineprint">Placeholder values — LUIS feeds live figures per store. <b>Cycle counts</b> drive accuracy; <b>integration audit</b> is POS vs. compliance sync; <b>zeros</b> is the 0-quantity discrepancy list worked down to zero.</p>
+  </section>
+
   <!-- BOARD -->
   <section>
     <div class="shead">
@@ -585,8 +607,10 @@ footer .logo{font-family:'Anton',sans-serif}
   <section>
     <div class="shead">
       <h2 class="serif">90-Day Operating Plan</h2>
+      <div class="note">Two Plans · Click To Switch</div>
       <div class="note">Foundation → Autonomy · Tap to Complete</div>
     </div>
+    <div class="caltoggle" id="plantabs"></div>
     <div id="plan90"></div>
   </section>
 
@@ -693,6 +717,15 @@ const PHASES=[
 ];
 const FOCUSOPTS=[...PHASES,{id:"floater",phase:"Ongoing",title:"Floater Role",win:"Cover gaps without overtime",c:"var(--plum)"}];
 const FCHK=["Floater assigned for the week","Coverage gaps filled","Floater cross-trained on the store","Overtime kept in check"];
+const INVCHK=[
+  "Run cycle counts — every store on schedule",
+  "Investigate variances over threshold — find the root cause",
+  "Work the zeros list — resolve 0-quantity discrepancies",
+  "Integration audit — POS vs. compliance system, store by store",
+  "Clear aging units — 4 or fewer on hand",
+  "Pull expired / near-expiry product",
+  "Report count accuracy to the manager review"
+];
 const PC=Object.fromEntries(PHASES.map(p=>[p.id,p.c]));
 const CARDS=[
   {id:"c1",col:"p1",title:"Launch mobile app",pts:50,tag:"App",
@@ -835,6 +868,8 @@ function ensureDefaults(){
   state.weekly=state.weekly||{};state.dailyTxt=state.dailyTxt||{};state.dailyChk=state.dailyChk||{};state.rdailyTxt=state.rdailyTxt||{};state.rdailyChk=state.rdailyChk||{};
   state.quarter=state.quarter||{};state.trainOpen=state.trainOpen||{};state.cashlog=state.cashlog||{};state.plan=state.plan||{};
   state.focusPhase=state.focusPhase||"";state.focusNotes=state.focusNotes||"";state.qdue=state.qdue||{};state.fchk=state.fchk||{};
+  state.plan2=state.plan2||{};state.invchk=state.invchk||{};
+  if(state.planView!=="p1"&&state.planView!=="p2")state.planView="p1";
   state.cal=state.cal||{};PEOPLE.forEach(p=>state.cal[p.id]=state.cal[p.id]||{});
   if(state.calView===undefined)state.calView="all";
   else if(state.calView!=="all"&&!PEOPLE.some(p=>p.id===state.calView))state.calView="carlos";
@@ -959,8 +994,38 @@ const PLAN_CP=[
   {day:60,pc:"--oxblood",items:["4 trainings delivered","Dashboard v2 build underway","Manny's shadow-visits logged","Price-match audited clean"]},
   {day:90,pc:"--oxblood",items:["All 6 trainings delivered","Dashboard v2 (aging + discount abuse) live","Managers running KPI-tied ideas off the budget","Flyer pass-out live — 25+ doors/store, tracked","First-10 visit punch card piloted","Refer-a-friend campaign piloted"]},
 ];
-function planCard(it,pc){
-  const id="p"+it.n;const on=!!state.plan[id];
+/* ---- PLAN 2 · Nov 1, 2026 – Jan 29, 2027 ---- */
+const PLAN2_A=[
+  {n:1,t:"Inventory dashboard — live cycle counts",tags:["Weeks 1–3 · Nov 2–22","Manny + Inventory Mgr"],done:"Stand up the live inventory dashboard: cycle counts complete vs. due, count accuracy, aging & expiring, integration audit and zeros progress — one source every store pulls on demand."},
+  {n:2,t:"Cycle count cadence — every store on schedule",tags:["Weeks 1–4","Inventory Mgr + Regionals"],done:"Set the recurring count schedule per store, define the accuracy target, and make counts a non-negotiable weekly task with sign-off."},
+  {n:3,t:"Integration audit — systems in sync",tags:["Weeks 2–6","Manny + Inventory Mgr"],done:"Audit the POS ↔ compliance/traceability integration store by store; document every mismatch, fix the root cause, and re-audit until each store is clean."},
+  {n:4,t:"Zeros clean-up — work the 0-qty list",tags:["Weeks 2–6 · Ongoing","Inventory Mgr"],done:"Work the zero-quantity discrepancy list down: resolve, write off, or correct each one; track progress weekly until the list is at zero."},
+  {n:5,t:"Aging & expiring — clear the shelf",tags:["Weeks 3–6","Regionals + Store Mgrs"],done:"Run the aging process on any item with 4 or fewer units, pull near-expiry product, and discount or return before it becomes shrink."}
+];
+const PLAN2_B=[
+  {n:6,t:"AI company — scope & execute",tags:["Weeks 7–13","Manny"],done:"Select the AI partner and put them to work on a defined use case (forecasting, counts, or customer). Run a scoped pilot, tie it to one measurable KPI, and only scale once the number moves."},
+  {n:7,t:"Automate the counts — less manual work",tags:["Weeks 8–13","Manny + Inventory Mgr"],done:"Reduce manual counting: scan-based counts, auto-flagged variances, and alerts pushed to managers instead of chased down."},
+  {n:8,t:"Inventory KPIs in every manager review",tags:["Weeks 7–13","Manny + Regionals"],done:"Count accuracy, shrink, aging and zeros become standing items in the weekly manager review — same definition, pulled on demand."}
+];
+const PLAN2_CP=[
+  {day:30,pc:"--forest",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined"]},
+  {day:60,pc:"--oxblood",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","AI partner selected & pilot scoped"]},
+  {day:90,pc:"--oxblood",items:["Every store clean on integration audit","Zeros list at zero","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
+];
+const PLANS={
+  p1:{tab:"Plan 1 · Aug – Nov", sk:"plan", cpLbl:"Checkpoints · 30 / 60 / 90",
+      groups:[
+        {pc:"--forest",  eyebrow:"Weeks 1–6 · Days 1–45 · Aug 3 – Sep 13",  title:"Phase 1 — Foundation", items:function(){return PLAN_P1;}},
+        {pc:"--oxblood", eyebrow:"Weeks 7–13 · Days 46–90 · Sep 14 – Nov 1", title:"Phase 2 — Autonomy &amp; Growth", items:function(){return PLAN_P2;}}
+      ], cps:function(){return PLAN_CP;}},
+  p2:{tab:"Plan 2 · Nov – Jan", sk:"plan2", cpLbl:"Checkpoints · 30 / 60 / 90",
+      groups:[
+        {pc:"--forest",  eyebrow:"Weeks 1–6 · Nov 2 – Dec 13, 2026",  title:"Phase 1 — Inventory Foundation", items:function(){return PLAN2_A;}},
+        {pc:"--oxblood", eyebrow:"Weeks 7–13 · Dec 14 – Jan 29, 2027", title:"Phase 2 — Scale &amp; Automate", items:function(){return PLAN2_B;}}
+      ], cps:function(){return PLAN2_CP;}}
+};
+function planCard(it,pc,sk){
+  const id="p"+it.n;const on=!!(state[sk]||{})[id];
   return `<div class="pcard ${on?'done':''}" style="--pc:var(${pc})">
     <div class="pnum">${it.n}</div>
     <div class="pbody">
@@ -971,27 +1036,36 @@ function planCard(it,pc){
       <div class="pdone" data-id="${id}"><span class="box">${CHK}</span><span>${on?'Done':'Mark done'}</span></div>
     </div></div>`;
 }
-function planCpCard(cp){
-  const rows=cp.items.map((t,idx)=>{const id="cp"+cp.day+"-"+idx;const on=!!state.plan[id];
+function planCpCard(cp,sk){
+  const rows=cp.items.map((t,idx)=>{const id="cp"+cp.day+"-"+idx;const on=!!(state[sk]||{})[id];
     return `<div class="pchk ${on?'on':''}" data-id="${id}"><span class="box">${CHK}</span><span>${t}</span></div>`;}).join("");
   return `<div class="pcard" style="--pc:var(${cp.pc})">
     <div class="pnum cpday"><span class="cpd">DAY</span>${cp.day}</div>
     <div class="pbody">${rows}</div></div>`;
 }
 function renderPlan(){
-  const el=document.getElementById("plan90");if(!el)return;
-  let h="";
-  h+=`<div class="phasebar" style="--pc:var(--forest)"><span class="pbEy">Weeks 1–6 · Days 1–45 · Aug 3 – Sep 13</span><span class="pbT">Phase 1 — Foundation</span></div>`;
-  h+=PLAN_P1.map(it=>planCard(it,"--forest")).join("");
-  h+=`<div class="phasebar" style="--pc:var(--oxblood)"><span class="pbEy">Weeks 7–13 · Days 46–90 · Sep 14 – Nov 1</span><span class="pbT">Phase 2 — Autonomy &amp; Growth</span></div>`;
-  h+=PLAN_P2.map(it=>planCard(it,"--oxblood")).join("");
-  h+=`<div class="phasebar" style="--pc:var(--ink)"><span class="pbEy">Review progress · report up to Sam / Lunar</span><span class="pbT">Checkpoints · 30 / 60 / 90</span></div>`;
-  h+=PLAN_CP.map(planCpCard).join("");
+  var el=document.getElementById("plan90");if(!el)return;
+  var pv=(state.planView==="p2")?"p2":"p1";
+  var tabs=document.getElementById("plantabs");
+  if(tabs){
+    tabs.innerHTML=Object.keys(PLANS).map(function(k){return '<button data-p="'+k+'" class="'+(k===pv?'on':'')+'">'+PLANS[k].tab+'</button>';}).join("");
+    tabs.querySelectorAll("button").forEach(function(b){b.addEventListener("click",function(){state.planView=b.dataset.p;saveView();renderPlan();});});
+  }
+  var cfg=PLANS[pv], sk=cfg.sk;
+  state[sk]=state[sk]||{};
+  var h="";
+  cfg.groups.forEach(function(g){
+    h+='<div class="phasebar" style="--pc:var('+g.pc+')"><span class="pbEy">'+g.eyebrow+'</span><span class="pbT">'+g.title+'</span></div>';
+    h+=g.items().map(function(it){return planCard(it,g.pc,sk);}).join("");
+  });
+  h+='<div class="phasebar" style="--pc:var(--ink)"><span class="pbEy">Review progress · report up to Sam / Lunar</span><span class="pbT">'+cfg.cpLbl+'</span></div>';
+  h+=cfg.cps().map(function(cp){return planCpCard(cp,sk);}).join("");
   el.innerHTML=h;
-  el.querySelectorAll(".pdone,.pchk").forEach(r=>r.addEventListener("click",()=>{
-    const id=r.dataset.id;state.plan[id]=!state.plan[id];
-    if(state.plan[id])logActivity("completed a plan item",id);
-    save();renderPlan();if(state.plan[id])toast("Done");}));
+  el.querySelectorAll(".pdone,.pchk").forEach(function(r){r.addEventListener("click",function(){
+    var id=r.dataset.id;var st=state[sk]=state[sk]||{};
+    st[id]=!st[id];
+    if(st[id])logActivity("completed a plan item",(pv==="p2"?"Plan 2 · ":"Plan 1 · ")+id);
+    save();renderPlan();if(st[id])toast("Done");});});
 }
 
 /* ===== Daily new-business focus ===== */
@@ -1170,6 +1244,11 @@ function renderFocus(){
   note.addEventListener("input",()=>{state.focusNotes=note.textContent;save();});
   renderFChk();
 }
+function renderInvChk(){
+  var el=document.getElementById("invchk");if(!el)return;
+  el.innerHTML=INVCHK.map(function(t,i){return '<div class="crow '+(state.invchk[i]?'on':'')+'" data-i="'+i+'"><span class="box">'+CHK+'</span><span>'+t+'</span></div>';}).join("");
+  el.querySelectorAll(".crow").forEach(function(r){r.addEventListener("click",function(){var i=r.dataset.i;state.invchk[i]=!state.invchk[i];if(state.invchk[i])logActivity("completed an inventory task",INVCHK[i]);save();renderInvChk();if(state.invchk[i])toast("Done");});});
+}
 function renderFChk(){
   var el=document.getElementById("fchecklist");if(!el)return;
   el.innerHTML=FCHK.map(function(t,i){return '<div class="crow '+(state.fchk[i]?'on':'')+'" data-i="'+i+'"><span class="box">'+CHK+'</span><span>'+t+'</span></div>';}).join("");
@@ -1183,14 +1262,14 @@ async function resetAll(){
   if(pw==null)return;
   if(pw!=="wellgreens"){alert("Wrong password — nothing was reset.");return;}
   const n=new Date();
-  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{},rdailyTxt:{},rdailyChk:{},fchk:{}};
+  state={cards:{},checks:{},training:{},trainOpen:{},weekly:{},dailyTxt:{},dailyChk:{},quarter:{},cal:blankCal(),calView:"all",calY:n.getFullYear(),calM:n.getMonth(),focusPhase:"",focusNotes:"",qdue:{},cashlog:{},plan:{},rdailyTxt:{},rdailyChk:{},fchk:{},plan2:{},invchk:{},planView:"p1"};
   CARDS.forEach(c=>state.cards[c.id]=c.col);
   try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}
   try{ if(CURRENT_USER) await sb.from("board").update({data:sharedState(),updated_at:new Date().toISOString(),updated_by:CLIENT_ID}).eq("id",1); }catch(e){}
   location.reload();
 }
 
-function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderRDaily();renderCal();renderQuarter();renderFocus();renderCashlog();renderPlan();}
+function renderAll(){renderBoard();renderTraining();updateScore();renderWeekly();renderDaily();renderRDaily();renderCal();renderQuarter();renderFocus();renderCashlog();renderPlan();renderInvChk();}
 function fmtTime(iso){try{return new Date(iso).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});}catch(e){return"";}}
 function cashKey(){const n=new Date();return `${n.getFullYear()}-${pad(n.getMonth()+1)}-${pad(n.getDate())}`;}
 function renderCashlog(){
@@ -1260,7 +1339,7 @@ async function loadBoard(){
   }catch(e){}
   ensureDefaults();
 }
-const VIEW_KEYS=["calView","calY","calM"];
+const VIEW_KEYS=["calView","calY","calM","planView"];
 /* NOTE: 'cal' is intentionally excluded here. The calendar is written ONLY by the
    atomic per-cell RPC (set_cal_cell) so simultaneous edits by different people can
    never overwrite each other. Full-board writes must never touch cal. */
