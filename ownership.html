@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wellgreens — 90-Day Plans · Ownership & Pipeline</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{color-scheme:light;
  --forest:#234436; --oxblood:#6E2A2E; --teal:#1C4A4A; --ochre:#B07A22; --gold:#E3BB5E;
@@ -17,24 +18,32 @@ body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:
 .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#CBBFA8;font-weight:700}
 .mast h1{font-size:34px;font-weight:800;letter-spacing:-.01em;margin:8px 0 4px;color:#F6F1E7}
 .mast .sub{font-size:14px;color:#CBBFA8;font-weight:600}
-.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px;align-items:center}
 .links a{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.35);
  color:#F6F1E7;text-decoration:none;font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:3px}
 .links a:hover{background:#fff;color:var(--forest)}
 .links a .tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+.livebadge{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:800;letter-spacing:.12em;
+ text-transform:uppercase;color:#CBBFA8;padding:8px 4px}
+.dot{width:8px;height:8px;border-radius:50%;background:#8A8078;display:inline-block}
+.dot.ok{background:#5FD08A;box-shadow:0 0 0 3px rgba(95,208,138,.22)}
+.dot.bad{background:#E8746A}
 h2{font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--forest);
  margin:34px 0 12px;padding-bottom:8px;border-bottom:2.5px solid var(--forest)}
 h2 small{float:right;font-size:11px;letter-spacing:.08em;color:var(--taupe);font-weight:700;text-transform:none;padding-top:4px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
 .c{background:var(--card);border:1.5px solid var(--line);border-top:6px solid var(--pc,var(--forest));border-radius:4px;padding:15px 16px}
 .c .lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800}
 .c .big{font-size:30px;font-weight:800;color:var(--pc,var(--forest));line-height:1.1;margin:7px 0 3px}
 .c .note{font-size:12.5px;color:var(--ink2);font-weight:600}
 .bar{height:7px;background:#EDE6DA;border-radius:4px;overflow:hidden;margin-top:10px}
-.bar i{display:block;height:100%;background:var(--pc,var(--forest))}
+.bar i{display:block;height:100%;background:var(--pc,var(--forest));transition:width .35s}
+.dates{font-size:12px;color:var(--taupe);font-weight:700;margin-top:10px;letter-spacing:.03em}
 .flag{background:#FFF6F4;border:1.5px solid #E8C4BE;border-left:6px solid var(--red);border-radius:4px;padding:13px 16px;margin-top:12px}
 .flag b{color:var(--red);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
 .flag ul{margin:7px 0 0 18px;font-size:13.5px}
+.flag.clear{background:#F1F9F4;border-color:#BEDDC9;border-left-color:var(--green)}
+.flag.clear b{color:var(--green)}
 table{width:100%;border-collapse:collapse;background:var(--card);border:1.5px solid var(--line);border-radius:4px;overflow:hidden}
 th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:10px 11px;font-weight:800}
 td{padding:9px 11px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
@@ -80,8 +89,9 @@ select.s-none{background:#F3EFE7;color:var(--taupe)}
 .cprow.on span:last-child{color:var(--taupe);text-decoration:line-through}
 .legend{font-size:12px;color:var(--taupe);margin-top:10px;font-weight:600}
 .saveinfo{position:fixed;right:16px;bottom:16px;background:var(--forest);color:#F6F1E7;font-size:11.5px;font-weight:700;
- padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;letter-spacing:.05em}
+ padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;letter-spacing:.05em;z-index:9}
 .saveinfo.on{opacity:1}
+.saveinfo.err{background:var(--red)}
 .foot{margin-top:34px;padding-top:14px;border-top:1.5px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
 </style>
 </head>
@@ -91,43 +101,18 @@ select.s-none{background:#F3EFE7;color:var(--taupe)}
   <div class="mast">
     <div class="eyebrow">Wellgreens Dispensary · Operations</div>
     <h1>90-Day Plans — Ownership &amp; Pipeline</h1>
-    <div class="sub">Plan 1 · Aug 3 – Nov 1, 2026 &nbsp;·&nbsp; Plan 2 · Nov 1, 2026 – Jan 29, 2027 &nbsp;·&nbsp; Status as of Sep 10, 2026 (Day 38 of 90)</div>
+    <div class="sub">Plan 1 · Aug 3 – Nov 1, 2026 &nbsp;·&nbsp; Plan 2 · Nov 1, 2026 – Jan 29, 2027</div>
     <div class="links">
       <a href="https://wellgreens-team.netlify.app/" target="_blank" rel="noopener">Team Dashboard <span class="tag">live</span></a>
       <a href="https://forix.io/wg-manager-kpi-1488fe4454e8/" target="_blank" rel="noopener">Manager KPI Dashboard <span class="tag">updated weekly</span></a>
+      <span class="livebadge"><span class="dot" id="dot"></span><span id="dotlbl">Connecting…</span></span>
     </div>
   </div>
 
-  <h2>Plan 1 — Where It Stands <small>pulled from the live board</small></h2>
-  <div class="cards">
-    <div class="c" style="--pc:var(--green)">
-      <div class="lbl">Day 30 · ~Sep 1</div><div class="big">5/7</div>
-      <div class="note">2 items still open — past due</div><div class="bar"><i style="width:71%"></i></div>
-    </div>
-    <div class="c" style="--pc:var(--green)">
-      <div class="lbl">Day 60 · ~Oct 1</div><div class="big">4/4</div>
-      <div class="note">Complete — 3 weeks early</div><div class="bar"><i style="width:100%"></i></div>
-    </div>
-    <div class="c" style="--pc:var(--taupe)">
-      <div class="lbl">Day 90 · ~Nov 1</div><div class="big">0/6</div>
-      <div class="note">Phase 2 work — not yet due</div><div class="bar"><i style="width:0%"></i></div>
-    </div>
-  </div>
-
-  <div class="flag">
-    <b>Two Day-30 items are past due</b>
-    <ul>
-      <li><b>In-store pickup piloted</b> — owner: Manny + Regionals (was due ~Sep 1)</li>
-      <li><b>Schedule reviews with Carlo running</b> — owner: Manny + Carlo (was due ~Sep 1)</li>
-    </ul>
-  </div>
-
-  <div class="flag" style="border-left-color:var(--ochre);background:#FFFBF0;border-color:#E8D9B4">
-    <b style="color:#8A6508">Worth knowing</b>
-    <ul>
-      <li>Statuses below are <b>inferred from your checkpoint ticks</b> on the live board. Correct any that are off — every status, owner and note on this page is editable.</li>
-    </ul>
-  </div>
+  <h2>Plan 1 — Where It Stands <small>updates live as statuses change</small></h2>
+  <div class="cards" id="sum1"></div>
+  <div class="dates">Day 30 · ~Sep 1 &nbsp;·&nbsp; Day 60 · ~Oct 1 &nbsp;·&nbsp; Day 90 · ~Nov 1, 2026</div>
+  <div id="flag1"></div>
 
   <h2>Plan 1 — Ownership <small>click any status, owner or note to edit</small></h2>
   <table id="t1">
@@ -136,7 +121,11 @@ select.s-none{background:#F3EFE7;color:var(--taupe)}
   </table>
   <div class="legend">Owner roll-up — <b>Manny</b> is on 16 of 17. <b>Regionals</b> (Julio · Carlo · Oscar · Marisol): 8. <b>Carlo</b> specifically: 3 (schedule monitoring, floater, promotion training). <b>LUIS / Data</b>: 3. <b>Store Managers</b>: 1.</div>
 
-  <h2>Plan 2 — Pipeline <small>Nov 1, 2026 – Jan 29, 2027</small></h2>
+  <h2>Plan 2 — Where It Stands <small>Nov 1, 2026 – Jan 29, 2027</small></h2>
+  <div class="cards" id="sum2"></div>
+  <div id="flag2"></div>
+
+  <h2>Plan 2 — Pipeline <small>click any status, owner or note to edit</small></h2>
   <div class="pipe" id="pipe"></div>
   <div class="legend">Phase 1 sets the foundation and lands the holiday-season work; Phase 2 scales and automates once the base is clean.</div>
 
@@ -144,13 +133,17 @@ select.s-none{background:#F3EFE7;color:var(--taupe)}
   <div class="cps" id="cp2"></div>
 
   <div class="foot">
-    Editable — status dropdowns and any underlined text save automatically in this browser.
-    Data pulled from the live team board on Sep 10, 2026.
+    Shared and live — every status, owner, note and tick saves to the team board and everyone sees the same numbers.
+    The summary cards above recalculate the moment a status changes.
   </div>
 </div>
 <div class="saveinfo" id="si">Saved</div>
 
 <script>
+var SB_URL="https://yswabuojaexpwdpoflrr.supabase.co";
+var SB_KEY="sb_publishable_lCdg75FSViIAyBbgmLZzag_tW-i0kQE";
+var sb=window.supabase?window.supabase.createClient(SB_URL,SB_KEY):null;
+
 var P1=[
  {n:1,t:"Store checklists — build & roll out",o:"Manny + Regionals",w:"Wks 1–3 · Aug 3–23",s:"done",note:"Marked complete on the board"},
  {n:2,t:"Manager KPI dashboard v1",o:"Manny + LUIS",w:"Wks 1–4 · by Aug 30",s:"done",note:"Day 30: dashboard v1 live"},
@@ -180,88 +173,194 @@ var P2=[
  {ph:1,n:3,t:"Shelf talkers & displays — Seattle Design Lab",o:"Manny + Seattle Design Lab",w:"Wks 2–6",s:"none",
   d:"Vendor execution — pairs with the counter-tops so the whole store reads as one look.",
   k:["Finalize artwork","Print","Ship to stores","Install to the merchandising standard","Before/after photos as proof"]},
- {ph:1,n:4,t:"Gift cards — live before the holidays",o:"Manny + Regionals",w:"Wks 1–4 · LIVE BY NOV 29",s:"none",
+ {ph:1,n:4,t:"Everyday deals — one display system, every store",o:"Manny + Regionals",w:"Wks 2–6",s:"none",
+  d:"Right now the 2-for deals are missing in a lot of stores, so the customer never sees what they qualify for. Fix the display system, not just the signage.",
+  k:["Build the master everyday-deals list — 2-for, bundles, daily specials — one source of truth","Audit all 11 stores: which deals are posted, which are missing, which are wrong","Set one display standard: same signage, same placement, same wording everywhere","Roll it into the shelf-talker and counter-top print run so nothing is hand-written","Add \"everyday deals posted and correct\" to the store visit checklist","Re-audit monthly — a deal that isn't displayed isn't a deal"]},
+ {ph:1,n:5,t:"Gift cards — live before the holidays",o:"Manny + Regionals",w:"Wks 1–4 · LIVE BY NOV 29",s:"none",
   d:"Hard deadline — must be on the counter before Black Friday, not in January.",
   k:["Finalize design and order the cards","POS setup: activation, redemption, balance check","Train every register to offer them","Merchandise at the counter with the new displays","Track activations, average load, redemption rate"]},
- {ph:1,n:5,t:"Cash track & trace — rebuild the cash log",o:"Manny + Regionals",w:"Wks 2–6",s:"none",
+ {ph:1,n:6,t:"Cash track & trace — rebuild the cash log",o:"Manny + Regionals",w:"Wks 2–6",s:"none",
   d:"Follow every dollar end to end, with a named person and timestamp at every handoff.",
   k:["Chain of custody: opening count → mid-shift drops → closing count → safe → deposit/pickup","Rebuild the cash log to match that chain","Variance threshold that triggers a same-day investigation","Spot-checked on every store visit"]},
- {ph:2,n:6,t:"AI company — scope & execute",o:"Manny",w:"Wks 7–13",s:"none",
+ {ph:2,n:7,t:"Compare & save campaign",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
+  d:"Show the customer the math — our price against the market on the SKUs they actually buy. Runs after the everyday deals are displayed correctly, or the message won't hold up in store.",
+  k:["Pick the compare basket — top movers where we clearly win on price","Pull competitor pricing to back up every claim, and date it","Design the compare-and-save signage with Seattle Design Lab","Launch in-store first, then push to social and text","Train budtenders on the one-line pitch","Measure units moved and basket size on the compared SKUs"]},
+ {ph:2,n:8,t:"AI company — scope & execute",o:"Manny",w:"Wks 7–13",s:"none",
   d:"Pick the partner and put them to work on one defined use case — not a general engagement.",
   k:["Select the AI partner","Define the use case: forecasting, counts, or customer","Run a scoped pilot","Tie it to one measurable KPI","Only scale once that number moves"]},
- {ph:2,n:7,t:"Automate the counts — less manual work",o:"Manny + Inventory Mgr",w:"Wks 8–13",s:"none",
+ {ph:2,n:9,t:"Automate the counts — less manual work",o:"Manny + Inventory Mgr",w:"Wks 8–13",s:"none",
   d:"Take the manual labour out of the foundation built in Phase 1.",
   k:["Scan-based counts","Auto-flagged variances","Alerts pushed to managers instead of chased down"]},
- {ph:2,n:8,t:"Inventory KPIs in every manager review",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
+ {ph:2,n:10,t:"Inventory KPIs in every manager review",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
   d:"Make the numbers routine so the gains hold after the 90 days.",
   k:["Count accuracy, shrink, aging and zeros as standing agenda items","One definition across stores","Pulled on demand, not prepared"]}
 ];
 var CP2=[
- {day:30,when:"~ Dec 1",pc:"var(--forest)",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Sunny counter-top display design approved","Gift cards live at every register","Cash log rebuilt & rolled out"]},
- {day:60,when:"~ Dec 31",pc:"var(--oxblood)",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","Holiday gift card sales tracked weekly","Cash chain of custody logged at every handoff","AI partner selected & pilot scoped"]},
- {day:90,when:"~ Jan 29",pc:"var(--oxblood)",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","Gift card redemption & breakage reviewed","Cash variances investigated same-day · system audited clean","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
+ {day:30,when:"~ Dec 1",pc:"var(--forest)",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Everyday deals master list built · all 11 stores audited","Sunny counter-top display design approved","Gift cards live at every register","Cash log rebuilt & rolled out"]},
+ {day:60,when:"~ Dec 31",pc:"var(--oxblood)",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","Everyday deals posted to standard in every store","Compare & save basket picked · competitor pricing pulled","Holiday gift card sales tracked weekly","Cash chain of custody logged at every handoff","AI partner selected & pilot scoped"]},
+ {day:90,when:"~ Jan 29",pc:"var(--oxblood)",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","Everyday deals re-audited · monthly cadence running","Compare & save campaign live and measured","Gift card redemption & breakage reviewed","Cash variances investigated same-day · system audited clean","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
 ];
-var KEY="wg-plan-ownership-v1";
+
+/* ---------- shared state ---------- */
 var saved={};
-try{saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){saved={};}
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
-  var si=document.getElementById("si");si.classList.add("on");clearTimeout(window._t);window._t=setTimeout(function(){si.classList.remove("on");},900);}
-function g(k,d){return (saved[k]!==undefined&&saved[k]!=="")?saved[k]:d;}
+var LKEY="wg-plan-ownership-v1";
+try{saved=JSON.parse(localStorage.getItem(LKEY)||"{}")||{};}catch(e){saved={};}
+
+function flash(msg,err){
+  var si=document.getElementById("si");
+  si.textContent=msg||"Saved";
+  si.className="saveinfo on"+(err?" err":"");
+  clearTimeout(window._t);window._t=setTimeout(function(){si.className="saveinfo";},1200);
+}
+function setDot(state,label){
+  var d=document.getElementById("dot"),l=document.getElementById("dotlbl");
+  d.className="dot"+(state?" "+state:""); l.textContent=label;
+}
+function cacheLocal(){try{localStorage.setItem(LKEY,JSON.stringify(saved));}catch(e){}}
+function g(k,d){return (saved[k]!==undefined&&saved[k]!==null&&saved[k]!=="")?saved[k]:d;}
+
+function put(k,v){
+  saved[k]=v; cacheLocal(); renderSummaries();
+  if(!sb){flash("Saved on this device only",true);return;}
+  sb.rpc("set_own_key",{p_key:String(k),p_val:String(v)}).then(function(r){
+    if(r&&r.error){flash("Not saved — check connection",true);} else {flash("Saved to the team board");}
+  },function(){flash("Not saved — check connection",true);});
+}
+
+/* ---------- summaries ---------- */
 var OPTS=[["done","Done"],["prog","In progress"],["behind","Behind"],["none","Not started"]];
+
+function tally(arr,pfx){
+  var t={done:0,prog:0,behind:0,none:0};
+  for(var i=0;i<arr.length;i++){
+    var s=g(pfx+arr[i].n,arr[i].s);
+    if(t[s]===undefined)s="none";
+    t[s]++;
+  }
+  return t;
+}
+function card(pc,lbl,big,note,barpct){
+  var h='<div class="c" style="--pc:'+pc+'"><div class="lbl">'+lbl+'</div><div class="big">'+big+'</div><div class="note">'+note+'</div>';
+  if(barpct!==null&&barpct!==undefined){h+='<div class="bar"><i style="width:'+barpct+'%"></i></div>';}
+  return h+'</div>';
+}
+function sumBlock(arr,pfx,elId){
+  var n=arr.length, t=tally(arr,pfx);
+  var p=Math.round(((t.done+t.prog*0.5)/n)*100);
+  var h="";
+  h+=card("var(--forest)","Overall",p+"%",t.done+" done · "+t.prog+" underway",p);
+  h+=card("var(--green)","Done",t.done+"/"+n,t.done===n?"All clear":"Signed off",Math.round(t.done/n*100));
+  h+=card("var(--amber)","In progress",String(t.prog),"Moving now",null);
+  h+=card(t.behind?"var(--red)":"var(--taupe)","Behind",String(t.behind),t.behind?"Needs attention":"Nothing behind",null);
+  h+=card("var(--taupe)","Not started",String(t.none),"Not picked up yet",null);
+  document.getElementById(elId).innerHTML=h;
+}
+function flagBlock(arr,pfx,elId,okMsg){
+  var b=[];
+  for(var i=0;i<arr.length;i++){ if(g(pfx+arr[i].n,arr[i].s)==="behind") b.push(arr[i]); }
+  var el=document.getElementById(elId);
+  if(!b.length){ el.innerHTML='<div class="flag clear"><b>Nothing behind</b><ul><li>'+okMsg+'</li></ul></div>'; return; }
+  var li="";
+  for(var j=0;j<b.length;j++){
+    li+='<li><b>'+b[j].t+'</b> — owner: '+g((pfx==="s1-"?"o1-":"o2-")+b[j].n,b[j].o)+' · '+b[j].w+'</li>';
+  }
+  el.innerHTML='<div class="flag"><b>'+b.length+' item'+(b.length>1?"s":"")+' marked behind</b><ul>'+li+'</ul></div>';
+}
+function renderSummaries(){
+  sumBlock(P1,"s1-","sum1");
+  sumBlock(P2,"s2-","sum2");
+  flagBlock(P1,"s1-","flag1","Every Plan 1 workstream is done, underway or not yet due.");
+  flagBlock(P2,"s2-","flag2","Plan 2 starts Nov 1 — nothing is behind yet.");
+}
+
+/* ---------- rendering ---------- */
 function sel(key,val){
   var h='<select class="s-'+val+'" data-k="'+key+'">';
   for(var i=0;i<OPTS.length;i++){h+='<option value="'+OPTS[i][0]+'"'+(OPTS[i][0]===val?" selected":"")+'>'+OPTS[i][1]+'</option>';}
   return h+'</select>';
 }
-var tb=document.querySelector("#t1 tbody"),rows="";
-for(var i=0;i<P1.length;i++){var r=P1[i];
-  rows+='<tr><td class="n">'+r.n+'</td><td class="t">'+r.t+'</td>'+
-   '<td><span contenteditable data-k="o1-'+r.n+'">'+g("o1-"+r.n,r.o)+'</span></td>'+
-   '<td class="when">'+r.w+'</td>'+
-   '<td>'+sel("s1-"+r.n,g("s1-"+r.n,r.s))+'</td>'+
-   '<td><span contenteditable data-k="n1-'+r.n+'">'+g("n1-"+r.n,r.note)+'</span></td></tr>';
-}
-tb.innerHTML=rows;
-
-var stages=[
- {ph:1,title:"Phase 1 — Foundation & Holiday Push",sd:"Weeks 1–6 · Nov 2 – Dec 13",pc:"var(--forest)"},
- {ph:2,title:"Phase 2 — Scale & Automate",sd:"Weeks 7–13 · Dec 14 – Jan 29",pc:"var(--oxblood)"}
-];
-var pipeHtml="";
-for(var s=0;s<stages.length;s++){var st=stages[s];
-  pipeHtml+='<div class="stage" style="--pc:'+st.pc+'"><div class="sh"><div class="sd">'+st.sd+'</div><div class="st">'+st.title+'</div></div><div class="body">';
-  for(var j=0;j<P2.length;j++){var it=P2[j]; if(it.ph!==st.ph)continue;
-    var ks="";for(var q=0;q<it.k.length;q++){ks+='<li>'+it.k[q]+'</li>';}
-    pipeHtml+='<div class="item"><div class="it">'+it.n+'. '+it.t+'</div><div class="im">'+it.w+'</div>'+
-      '<div class="row">'+sel("s2-"+it.n,g("s2-"+it.n,it.s))+'<span class="own" contenteditable data-k="o2-'+it.n+'">'+g("o2-"+it.n,it.o)+'</span></div>'+
-      '<div class="desc">'+it.d+'</div>'+
-      '<ul class="klist">'+ks+'</ul>'+
-      '<div class="note-line" contenteditable data-k="n2-'+it.n+'">'+g("n2-"+it.n,"Add a note…")+'</div></div>';
+function renderTable(){
+  var tb=document.querySelector("#t1 tbody"),rows="";
+  for(var i=0;i<P1.length;i++){var r=P1[i];
+    rows+='<tr><td class="n">'+r.n+'</td><td class="t">'+r.t+'</td>'+
+     '<td><span contenteditable data-k="o1-'+r.n+'">'+g("o1-"+r.n,r.o)+'</span></td>'+
+     '<td class="when">'+r.w+'</td>'+
+     '<td>'+sel("s1-"+r.n,g("s1-"+r.n,r.s))+'</td>'+
+     '<td><span contenteditable data-k="n1-'+r.n+'">'+g("n1-"+r.n,r.note)+'</span></td></tr>';
   }
-  pipeHtml+='</div></div>';
+  tb.innerHTML=rows;
 }
-document.getElementById("pipe").innerHTML=pipeHtml;
-
-var cpHtml="";
-for(var c=0;c<CP2.length;c++){var cp=CP2[c];var li="";
-  for(var z=0;z<cp.items.length;z++){var ck="c2-"+cp.day+"-"+z;var on=g(ck,"")==="1";
-    li+='<div class="cprow'+(on?" on":"")+'" data-k="'+ck+'"><span class="bx"></span><span>'+cp.items[z]+'</span></div>';}
-  cpHtml+='<div class="cpcard" style="--pc:'+cp.pc+'"><div class="cph"><span class="cpd">Day '+cp.day+'</span><span class="cpw">'+cp.when+'</span></div><div class="cpb">'+li+'</div></div>';
+function renderPipe(){
+  var stages=[
+   {ph:1,title:"Phase 1 — Foundation & Holiday Push",sd:"Weeks 1–6 · Nov 2 – Dec 13",pc:"var(--forest)"},
+   {ph:2,title:"Phase 2 — Scale & Automate",sd:"Weeks 7–13 · Dec 14 – Jan 29",pc:"var(--oxblood)"}
+  ];
+  var pipeHtml="";
+  for(var s=0;s<stages.length;s++){var st=stages[s];
+    pipeHtml+='<div class="stage" style="--pc:'+st.pc+'"><div class="sh"><div class="sd">'+st.sd+'</div><div class="st">'+st.title+'</div></div><div class="body">';
+    for(var j=0;j<P2.length;j++){var it=P2[j]; if(it.ph!==st.ph)continue;
+      var ks="";for(var q=0;q<it.k.length;q++){ks+='<li>'+it.k[q]+'</li>';}
+      pipeHtml+='<div class="item"><div class="it">'+it.n+'. '+it.t+'</div><div class="im">'+it.w+'</div>'+
+        '<div class="row">'+sel("s2-"+it.n,g("s2-"+it.n,it.s))+'<span class="own" contenteditable data-k="o2-'+it.n+'">'+g("o2-"+it.n,it.o)+'</span></div>'+
+        '<div class="desc">'+it.d+'</div>'+
+        '<ul class="klist">'+ks+'</ul>'+
+        '<div class="note-line" contenteditable data-k="n2-'+it.n+'">'+g("n2-"+it.n,"Add a note…")+'</div></div>';
+    }
+    pipeHtml+='</div></div>';
+  }
+  document.getElementById("pipe").innerHTML=pipeHtml;
 }
-document.getElementById("cp2").innerHTML=cpHtml;
-document.addEventListener("click",function(e){
-  var r=e.target.closest?e.target.closest(".cprow"):null; if(!r)return;
-  var on=r.classList.toggle("on"); saved[r.dataset.k]=on?"1":""; persist();
-});
+function renderCps(){
+  var cpHtml="";
+  for(var c=0;c<CP2.length;c++){var cp=CP2[c];var li="";
+    for(var z=0;z<cp.items.length;z++){var ck="c2-"+cp.day+"-"+z;var on=g(ck,"")==="1";
+      li+='<div class="cprow'+(on?" on":"")+'" data-k="'+ck+'"><span class="bx"></span><span>'+cp.items[z]+'</span></div>';}
+    cpHtml+='<div class="cpcard" style="--pc:'+cp.pc+'"><div class="cph"><span class="cpd">Day '+cp.day+'</span><span class="cpw">'+cp.when+'</span></div><div class="cpb">'+li+'</div></div>';
+  }
+  document.getElementById("cp2").innerHTML=cpHtml;
+}
+function renderAll(){renderSummaries();renderTable();renderPipe();renderCps();}
 
+/* ---------- events ---------- */
 document.addEventListener("change",function(e){
   var el=e.target; if(el.tagName!=="SELECT")return;
-  el.className="s-"+el.value; saved[el.dataset.k]=el.value; persist();
+  el.className="s-"+el.value; put(el.dataset.k,el.value);
 });
 document.addEventListener("blur",function(e){
   var el=e.target; if(!el.dataset||!el.hasAttribute||!el.hasAttribute("contenteditable"))return;
-  saved[el.dataset.k]=el.textContent.trim(); persist();
+  var v=el.textContent.trim(); if(saved[el.dataset.k]===v)return;
+  put(el.dataset.k,v);
 },true);
+document.addEventListener("click",function(e){
+  var r=e.target.closest?e.target.closest(".cprow"):null; if(!r)return;
+  var on=r.classList.toggle("on"); put(r.dataset.k,on?"1":"0");
+});
+
+/* ---------- live sync ---------- */
+function editing(){
+  var a=document.activeElement;
+  return !!(a&&a.hasAttribute&&a.hasAttribute("contenteditable"));
+}
+function applyRemote(own){
+  if(!own)return;
+  saved=own; cacheLocal();
+  if(editing()){renderSummaries();return;}
+  renderAll();
+}
+function boot(){
+  if(!sb){setDot("bad","Offline — this device only");renderAll();return;}
+  renderAll();
+  sb.from("board").select("data").eq("id",1).single().then(function(res){
+    if(res&&res.data&&res.data.data&&res.data.data.own){saved=res.data.data.own;cacheLocal();renderAll();}
+    setDot("ok","Live · shared with the team");
+  },function(){setDot("bad","Can't reach the board");});
+  try{
+    sb.channel("own-live").on("postgres_changes",{event:"UPDATE",schema:"public",table:"board"},function(p){
+      if(p&&p.new&&p.new.data&&p.new.data.own)applyRemote(p.new.data.own);
+    }).subscribe();
+  }catch(e){}
+}
+boot();
 </script>
 </body>
 </html>
