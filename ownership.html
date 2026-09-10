@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — 90-Day Plans · Ownership & Pipeline</title>
+<style>
+:root{color-scheme:light;
+ --forest:#234436; --oxblood:#6E2A2E; --teal:#1C4A4A; --ochre:#B07A22; --gold:#E3BB5E;
+ --ink:#161311; --ink2:#2A2620; --taupe:#6B6358; --line:#D8CEBF; --cream:#FBF6EB; --card:#FFF;
+ --green:#1E7A46; --amber:#C9930A; --red:#C02626;
+ --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:1.5;padding:28px 22px 60px}
+.wrap{max-width:1120px;margin:0 auto}
+.mast{background:var(--forest);color:#F6F1E7;border-bottom:7px solid var(--ochre);border-radius:4px;padding:26px 28px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#CBBFA8;font-weight:700}
+.mast h1{font-size:34px;font-weight:800;letter-spacing:-.01em;margin:8px 0 4px;color:#F6F1E7}
+.mast .sub{font-size:14px;color:#CBBFA8;font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.links a{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.35);
+ color:#F6F1E7;text-decoration:none;font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:3px}
+.links a:hover{background:#fff;color:var(--forest)}
+.links a .tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.8}
+h2{font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--forest);
+ margin:34px 0 12px;padding-bottom:8px;border-bottom:2.5px solid var(--forest)}
+h2 small{float:right;font-size:11px;letter-spacing:.08em;color:var(--taupe);font-weight:700;text-transform:none;padding-top:4px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.c{background:var(--card);border:1.5px solid var(--line);border-top:6px solid var(--pc,var(--forest));border-radius:4px;padding:15px 16px}
+.c .lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800}
+.c .big{font-size:30px;font-weight:800;color:var(--pc,var(--forest));line-height:1.1;margin:7px 0 3px}
+.c .note{font-size:12.5px;color:var(--ink2);font-weight:600}
+.bar{height:7px;background:#EDE6DA;border-radius:4px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;background:var(--pc,var(--forest))}
+.flag{background:#FFF6F4;border:1.5px solid #E8C4BE;border-left:6px solid var(--red);border-radius:4px;padding:13px 16px;margin-top:12px}
+.flag b{color:var(--red);font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+.flag ul{margin:7px 0 0 18px;font-size:13.5px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1.5px solid var(--line);border-radius:4px;overflow:hidden}
+th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:10px 11px;font-weight:800}
+td{padding:9px 11px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
+tr:nth-child(even) td{background:#FCFAF5}
+td.n{font-weight:800;color:var(--taupe);width:34px}
+td.t{font-weight:700;color:var(--ink)}
+td.when{font-size:12px;color:var(--taupe);white-space:nowrap;font-weight:600}
+select{font-family:var(--f);font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+ border:1.5px solid var(--line);border-radius:3px;padding:4px 6px;background:#fff;color:var(--ink2);cursor:pointer}
+select.s-done{background:#E7F4EC;border-color:var(--green);color:var(--green)}
+select.s-prog{background:#FDF4E0;border-color:var(--amber);color:#8A6508}
+select.s-behind{background:#FCEDEA;border-color:var(--red);color:var(--red)}
+select.s-none{background:#F3EFE7;color:var(--taupe)}
+[contenteditable]{outline:none;border-bottom:1px dashed transparent;min-width:60px;display:inline-block}
+[contenteditable]:hover{border-bottom-color:var(--line)}
+[contenteditable]:focus{background:#FFFBEF;border-bottom-color:var(--ochre)}
+.pipe{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.stage{background:var(--card);border:1.5px solid var(--line);border-radius:4px;overflow:hidden}
+.stage .sh{background:var(--pc);color:#F6F1E7;padding:11px 14px}
+.stage .sh .st{font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.stage .sh .sd{font-size:11px;color:#CBBFA8;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.stage .body{padding:11px}
+.item{border:1.5px solid var(--line);border-left:5px solid var(--pc);border-radius:3px;padding:10px 12px;margin-bottom:9px;background:#FDFBF7}
+.item:last-child{margin-bottom:0}
+.item .it{font-size:13.5px;font-weight:800;color:var(--ink)}
+.item .im{font-size:11.5px;color:var(--taupe);font-weight:700;margin:4px 0 7px}
+.item .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item .own{font-size:11.5px;font-weight:700;color:var(--ink2);background:#F1EBDE;padding:3px 8px;border-radius:3px}
+.item .desc{font-size:12.5px;color:var(--ink2);margin-top:8px;line-height:1.45}
+.item .klist{margin:7px 0 0 17px;padding:0}
+.item .klist li{font-size:12.5px;color:var(--ink2);margin-bottom:3px;line-height:1.4}
+.note-line{font-size:12.5px;color:var(--taupe);margin-top:8px;font-style:italic;border-top:1px dashed var(--line);padding-top:6px}
+.cps{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:12px}
+.cpcard{background:var(--card);border:1.5px solid var(--line);border-top:6px solid var(--pc);border-radius:4px;overflow:hidden}
+.cph{background:var(--pc);color:#F6F1E7;padding:9px 13px;display:flex;justify-content:space-between;align-items:baseline}
+.cph .cpd{font-size:15px;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+.cph .cpw{font-size:11px;font-weight:700;color:#CBBFA8;letter-spacing:.08em}
+.cpb{padding:9px 13px}
+.cprow{display:flex;gap:9px;align-items:flex-start;padding:6px 0;font-size:12.5px;font-weight:600;cursor:pointer;border-bottom:1px solid #F0EAE0}
+.cprow:last-child{border-bottom:none}
+.cprow .bx{width:14px;height:14px;border:2px solid var(--pc);border-radius:2px;flex-shrink:0;margin-top:2px}
+.cprow.on .bx{background:var(--pc)}
+.cprow.on span:last-child{color:var(--taupe);text-decoration:line-through}
+.legend{font-size:12px;color:var(--taupe);margin-top:10px;font-weight:600}
+.saveinfo{position:fixed;right:16px;bottom:16px;background:var(--forest);color:#F6F1E7;font-size:11.5px;font-weight:700;
+ padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;letter-spacing:.05em}
+.saveinfo.on{opacity:1}
+.foot{margin-top:34px;padding-top:14px;border-top:1.5px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Wellgreens Dispensary · Operations</div>
+    <h1>90-Day Plans — Ownership &amp; Pipeline</h1>
+    <div class="sub">Plan 1 · Aug 3 – Nov 1, 2026 &nbsp;·&nbsp; Plan 2 · Nov 1, 2026 – Jan 29, 2027 &nbsp;·&nbsp; Status as of Sep 10, 2026 (Day 38 of 90)</div>
+    <div class="links">
+      <a href="https://wellgreens-team.netlify.app/" target="_blank" rel="noopener">Team Dashboard <span class="tag">live</span></a>
+      <a href="https://forix.io/wg-manager-kpi-1488fe4454e8/" target="_blank" rel="noopener">Manager KPI Dashboard <span class="tag">updated weekly</span></a>
+    </div>
+  </div>
+
+  <h2>Plan 1 — Where It Stands <small>pulled from the live board</small></h2>
+  <div class="cards">
+    <div class="c" style="--pc:var(--green)">
+      <div class="lbl">Day 30 · ~Sep 1</div><div class="big">5/7</div>
+      <div class="note">2 items still open — past due</div><div class="bar"><i style="width:71%"></i></div>
+    </div>
+    <div class="c" style="--pc:var(--green)">
+      <div class="lbl">Day 60 · ~Oct 1</div><div class="big">4/4</div>
+      <div class="note">Complete — 3 weeks early</div><div class="bar"><i style="width:100%"></i></div>
+    </div>
+    <div class="c" style="--pc:var(--taupe)">
+      <div class="lbl">Day 90 · ~Nov 1</div><div class="big">0/6</div>
+      <div class="note">Phase 2 work — not yet due</div><div class="bar"><i style="width:0%"></i></div>
+    </div>
+  </div>
+
+  <div class="flag">
+    <b>Two Day-30 items are past due</b>
+    <ul>
+      <li><b>In-store pickup piloted</b> — owner: Manny + Regionals (was due ~Sep 1)</li>
+      <li><b>Schedule reviews with Carlo running</b> — owner: Manny + Carlo (was due ~Sep 1)</li>
+    </ul>
+  </div>
+
+  <div class="flag" style="border-left-color:var(--ochre);background:#FFFBF0;border-color:#E8D9B4">
+    <b style="color:#8A6508">Worth knowing</b>
+    <ul>
+      <li>Statuses below are <b>inferred from your checkpoint ticks</b> on the live board. Correct any that are off — every status, owner and note on this page is editable.</li>
+    </ul>
+  </div>
+
+  <h2>Plan 1 — Ownership <small>click any status, owner or note to edit</small></h2>
+  <table id="t1">
+    <thead><tr><th>#</th><th>Workstream</th><th>Owner</th><th>Timing</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="legend">Owner roll-up — <b>Manny</b> is on 16 of 17. <b>Regionals</b> (Julio · Carlo · Oscar · Marisol): 8. <b>Carlo</b> specifically: 3 (schedule monitoring, floater, promotion training). <b>LUIS / Data</b>: 3. <b>Store Managers</b>: 1.</div>
+
+  <h2>Plan 2 — Pipeline <small>Nov 1, 2026 – Jan 29, 2027</small></h2>
+  <div class="pipe" id="pipe"></div>
+  <div class="legend">Phase 1 sets the foundation and lands the holiday-season work; Phase 2 scales and automates once the base is clean.</div>
+
+  <h2>Plan 2 — Checkpoints <small>click any line to tick it off</small></h2>
+  <div class="cps" id="cp2"></div>
+
+  <div class="foot">
+    Editable — status dropdowns and any underlined text save automatically in this browser.
+    Data pulled from the live team board on Sep 10, 2026.
+  </div>
+</div>
+<div class="saveinfo" id="si">Saved</div>
+
+<script>
+var P1=[
+ {n:1,t:"Store checklists — build & roll out",o:"Manny + Regionals",w:"Wks 1–3 · Aug 3–23",s:"done",note:"Marked complete on the board"},
+ {n:2,t:"Manager KPI dashboard v1",o:"Manny + LUIS",w:"Wks 1–4 · by Aug 30",s:"done",note:"Day 30: dashboard v1 live"},
+ {n:3,t:"Weekly focus — printed for all staff",o:"Manny + Regionals",w:"Weekly from Wk 3",s:"done",note:"Day 30: weekly focus printing"},
+ {n:4,t:"In-store pickup — plan & execute",o:"Manny + Regionals",w:"Wks 4–6 · Aug 24–Sep 13",s:"behind",note:"Day 30 item still open — past due"},
+ {n:5,t:"Price match (WhatsApp) — audit",o:"Regionals",w:"Audit Wk 1 · ongoing",s:"done",note:"Day 60: audited clean"},
+ {n:6,t:"Training cadence — every other week",o:"Manny leads",w:"Odd wks 1–11 · 30 min",s:"prog",note:"4 of 6 sessions delivered"},
+ {n:7,t:"Store visits & coaching",o:"Regionals + Manny",w:"All 90 days · ≥3/day",s:"prog",note:"Cadence running; shadow visits logged"},
+ {n:8,t:"Schedule monitoring — with Carlo",o:"Manny + Carlo",w:"Weekly · ongoing",s:"behind",note:"Day 30 item still open — past due"},
+ {n:9,t:"Floater role — cross-store coverage",o:"Manny + Carlo",w:"Wks 2–5",s:"none",note:"No signal on the board yet"},
+ {n:10,t:"Manager promotion training — path & owner",o:"Manny + Carlo",w:"Wks 3–6",s:"none",note:"Trainer still to be named"},
+ {n:11,t:"Aging products — live feed",o:"Manny + Data",w:"Wks 7–10 · by Oct 5",s:"prog",note:"Day 60: dashboard v2 underway"},
+ {n:12,t:"Discount abuse — flagged view",o:"Manny + Data",w:"Wks 7–10 · by Oct 5",s:"prog",note:"Day 60: dashboard v2 underway"},
+ {n:13,t:"Think & decide — their own calls",o:"Manny",w:"Wks 7–13",s:"none",note:"Phase 2 — not yet due"},
+ {n:14,t:"Run the budget — ideas tied to a KPI",o:"Manny + Regionals",w:"Wks 8–13",s:"none",note:"Phase 2 — not yet due"},
+ {n:15,t:"Flyer pass-out — 25+ doors",o:"Store Manager",w:"Wks 9–13",s:"none",note:"Phase 2 — not yet due"},
+ {n:16,t:"First-10 visit punch card",o:"Regionals + Manny",w:"Wks 9–13 · pilot",s:"none",note:"Phase 2 — not yet due"},
+ {n:17,t:"Refer-a-friend campaign",o:"Regionals + Manny",w:"Wks 9–13 · pilot",s:"none",note:"Phase 2 — not yet due"}
+];
+var P2=[
+ {ph:1,n:1,t:"Inventory foundation — dashboard, counts & clean-up",o:"Manny + Inventory Mgr",w:"Wks 1–6 · Nov 2 – Dec 13",s:"none",
+  d:"One workstream, five moving parts — this is the base everything else in Plan 2 sits on.",
+  k:["Live inventory dashboard: counts, accuracy, aging, integration audit, zeros","Cycle count cadence + accuracy target set per store, with sign-off","POS ↔ compliance integration audited store by store until each is clean","Zeros list (0-qty discrepancies) worked down to zero","Aging (4 or fewer) and near-expiry pulled before it becomes shrink"]},
+ {ph:1,n:2,t:"Counter-top displays — Sunny",o:"Manny + Sunny",w:"Wks 1–4",s:"none",
+  d:"Vendor execution — needs Sunny's committed dates to be real.",
+  k:["Lock design with Sunny","Approve the proof","Produce","Install in every store to one placement standard"]},
+ {ph:1,n:3,t:"Shelf talkers & displays — Seattle Design Lab",o:"Manny + Seattle Design Lab",w:"Wks 2–6",s:"none",
+  d:"Vendor execution — pairs with the counter-tops so the whole store reads as one look.",
+  k:["Finalize artwork","Print","Ship to stores","Install to the merchandising standard","Before/after photos as proof"]},
+ {ph:1,n:4,t:"Gift cards — live before the holidays",o:"Manny + Regionals",w:"Wks 1–4 · LIVE BY NOV 29",s:"none",
+  d:"Hard deadline — must be on the counter before Black Friday, not in January.",
+  k:["Finalize design and order the cards","POS setup: activation, redemption, balance check","Train every register to offer them","Merchandise at the counter with the new displays","Track activations, average load, redemption rate"]},
+ {ph:1,n:5,t:"Cash track & trace — rebuild the cash log",o:"Manny + Regionals",w:"Wks 2–6",s:"none",
+  d:"Follow every dollar end to end, with a named person and timestamp at every handoff.",
+  k:["Chain of custody: opening count → mid-shift drops → closing count → safe → deposit/pickup","Rebuild the cash log to match that chain","Variance threshold that triggers a same-day investigation","Spot-checked on every store visit"]},
+ {ph:2,n:6,t:"AI company — scope & execute",o:"Manny",w:"Wks 7–13",s:"none",
+  d:"Pick the partner and put them to work on one defined use case — not a general engagement.",
+  k:["Select the AI partner","Define the use case: forecasting, counts, or customer","Run a scoped pilot","Tie it to one measurable KPI","Only scale once that number moves"]},
+ {ph:2,n:7,t:"Automate the counts — less manual work",o:"Manny + Inventory Mgr",w:"Wks 8–13",s:"none",
+  d:"Take the manual labour out of the foundation built in Phase 1.",
+  k:["Scan-based counts","Auto-flagged variances","Alerts pushed to managers instead of chased down"]},
+ {ph:2,n:8,t:"Inventory KPIs in every manager review",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
+  d:"Make the numbers routine so the gains hold after the 90 days.",
+  k:["Count accuracy, shrink, aging and zeros as standing agenda items","One definition across stores","Pulled on demand, not prepared"]}
+];
+var CP2=[
+ {day:30,when:"~ Dec 1",pc:"var(--forest)",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Sunny counter-top display design approved","Gift cards live at every register","Cash log rebuilt & rolled out"]},
+ {day:60,when:"~ Dec 31",pc:"var(--oxblood)",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","Holiday gift card sales tracked weekly","Cash chain of custody logged at every handoff","AI partner selected & pilot scoped"]},
+ {day:90,when:"~ Jan 29",pc:"var(--oxblood)",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","Gift card redemption & breakage reviewed","Cash variances investigated same-day · system audited clean","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
+];
+var KEY="wg-plan-ownership-v1";
+var saved={};
+try{saved=JSON.parse(localStorage.getItem(KEY)||"{}")||{};}catch(e){saved={};}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}
+  var si=document.getElementById("si");si.classList.add("on");clearTimeout(window._t);window._t=setTimeout(function(){si.classList.remove("on");},900);}
+function g(k,d){return (saved[k]!==undefined&&saved[k]!=="")?saved[k]:d;}
+var OPTS=[["done","Done"],["prog","In progress"],["behind","Behind"],["none","Not started"]];
+function sel(key,val){
+  var h='<select class="s-'+val+'" data-k="'+key+'">';
+  for(var i=0;i<OPTS.length;i++){h+='<option value="'+OPTS[i][0]+'"'+(OPTS[i][0]===val?" selected":"")+'>'+OPTS[i][1]+'</option>';}
+  return h+'</select>';
+}
+var tb=document.querySelector("#t1 tbody"),rows="";
+for(var i=0;i<P1.length;i++){var r=P1[i];
+  rows+='<tr><td class="n">'+r.n+'</td><td class="t">'+r.t+'</td>'+
+   '<td><span contenteditable data-k="o1-'+r.n+'">'+g("o1-"+r.n,r.o)+'</span></td>'+
+   '<td class="when">'+r.w+'</td>'+
+   '<td>'+sel("s1-"+r.n,g("s1-"+r.n,r.s))+'</td>'+
+   '<td><span contenteditable data-k="n1-'+r.n+'">'+g("n1-"+r.n,r.note)+'</span></td></tr>';
+}
+tb.innerHTML=rows;
+
+var stages=[
+ {ph:1,title:"Phase 1 — Foundation & Holiday Push",sd:"Weeks 1–6 · Nov 2 – Dec 13",pc:"var(--forest)"},
+ {ph:2,title:"Phase 2 — Scale & Automate",sd:"Weeks 7–13 · Dec 14 – Jan 29",pc:"var(--oxblood)"}
+];
+var pipeHtml="";
+for(var s=0;s<stages.length;s++){var st=stages[s];
+  pipeHtml+='<div class="stage" style="--pc:'+st.pc+'"><div class="sh"><div class="sd">'+st.sd+'</div><div class="st">'+st.title+'</div></div><div class="body">';
+  for(var j=0;j<P2.length;j++){var it=P2[j]; if(it.ph!==st.ph)continue;
+    var ks="";for(var q=0;q<it.k.length;q++){ks+='<li>'+it.k[q]+'</li>';}
+    pipeHtml+='<div class="item"><div class="it">'+it.n+'. '+it.t+'</div><div class="im">'+it.w+'</div>'+
+      '<div class="row">'+sel("s2-"+it.n,g("s2-"+it.n,it.s))+'<span class="own" contenteditable data-k="o2-'+it.n+'">'+g("o2-"+it.n,it.o)+'</span></div>'+
+      '<div class="desc">'+it.d+'</div>'+
+      '<ul class="klist">'+ks+'</ul>'+
+      '<div class="note-line" contenteditable data-k="n2-'+it.n+'">'+g("n2-"+it.n,"Add a note…")+'</div></div>';
+  }
+  pipeHtml+='</div></div>';
+}
+document.getElementById("pipe").innerHTML=pipeHtml;
+
+var cpHtml="";
+for(var c=0;c<CP2.length;c++){var cp=CP2[c];var li="";
+  for(var z=0;z<cp.items.length;z++){var ck="c2-"+cp.day+"-"+z;var on=g(ck,"")==="1";
+    li+='<div class="cprow'+(on?" on":"")+'" data-k="'+ck+'"><span class="bx"></span><span>'+cp.items[z]+'</span></div>';}
+  cpHtml+='<div class="cpcard" style="--pc:'+cp.pc+'"><div class="cph"><span class="cpd">Day '+cp.day+'</span><span class="cpw">'+cp.when+'</span></div><div class="cpb">'+li+'</div></div>';
+}
+document.getElementById("cp2").innerHTML=cpHtml;
+document.addEventListener("click",function(e){
+  var r=e.target.closest?e.target.closest(".cprow"):null; if(!r)return;
+  var on=r.classList.toggle("on"); saved[r.dataset.k]=on?"1":""; persist();
+});
+
+document.addEventListener("change",function(e){
+  var el=e.target; if(el.tagName!=="SELECT")return;
+  el.className="s-"+el.value; saved[el.dataset.k]=el.value; persist();
+});
+document.addEventListener("blur",function(e){
+  var el=e.target; if(!el.dataset||!el.hasAttribute||!el.hasAttribute("contenteditable"))return;
+  saved[el.dataset.k]=el.textContent.trim(); persist();
+},true);
+</script>
+</body>
+</html>
