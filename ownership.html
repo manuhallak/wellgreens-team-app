@@ -361,6 +361,8 @@ function boot(){
   }catch(e){}
 }
 boot();
+/* a stray mouse wheel must never change a status */
+document.addEventListener("wheel",function(e){var t=e.target;if(t&&t.tagName==="SELECT"){t.blur();}},{passive:true,capture:true});
 </script>
 </body>
 </html>
