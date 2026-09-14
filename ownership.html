@@ -182,23 +182,29 @@ var P2=[
  {ph:1,n:6,t:"Cash track & trace — rebuild the cash log",o:"Manny + Regionals",w:"Wks 2–6",s:"none",
   d:"Follow every dollar end to end, with a named person and timestamp at every handoff.",
   k:["Chain of custody: opening count → mid-shift drops → closing count → safe → deposit/pickup","Rebuild the cash log to match that chain","Variance threshold that triggers a same-day investigation","Spot-checked on every store visit"]},
- {ph:2,n:7,t:"Compare & save campaign",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
+ {ph:1,n:7,t:"Staff attendance on the manager dashboard",o:"Manny + Carlo + LUIS",w:"Wks 3–8",s:"none",
+  d:"Managers can't hold a team to a schedule they can't see performance against. Put attendance next to the sales KPIs so it's one conversation, not two.",
+  k:["Agree the definitions: on time, late clock-in, early clock-out, call-out, no-call/no-show","Feed clock-in / clock-out data into the manager dashboard","Scheduled vs actual hours — per employee, per store, per week","Late and no-show counts rolled up to a store attendance rate","Auto-flag repeat patterns so it isn't a memory exercise","Standing item in the weekly manager review, next to the sales KPIs","Same data as schedule monitoring with Carlo — one source, not two"]},
+ {ph:1,n:8,t:"Edge API — direct feed into the manager dashboard",o:"Manny + LUIS",w:"Wks 3–8",s:"none",
+  d:"Stop hand-pulling numbers. Connect Edge straight into the manager dashboard so it refreshes itself.",
+  k:["Get API access and confirm which endpoints Edge exposes","Map the fields we actually need: sales, transactions, discounts, hours / attendance, inventory","Build the scheduled pull so the dashboard updates without anyone touching it","Validate against a known day before anyone relies on the numbers","Alert when a feed stops — a silently stale dashboard is worse than no dashboard","Document who owns the connection and what to do when it breaks"]},
+ {ph:2,n:9,t:"Compare & save campaign",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
   d:"Show the customer the math — our price against the market on the SKUs they actually buy. Runs after the everyday deals are displayed correctly, or the message won't hold up in store.",
   k:["Pick the compare basket — top movers where we clearly win on price","Pull competitor pricing to back up every claim, and date it","Design the compare-and-save signage with Seattle Design Lab","Launch in-store first, then push to social and text","Train budtenders on the one-line pitch","Measure units moved and basket size on the compared SKUs"]},
- {ph:2,n:8,t:"AI company — scope & execute",o:"Manny",w:"Wks 7–13",s:"none",
+ {ph:2,n:10,t:"AI company — scope & execute",o:"Manny",w:"Wks 7–13",s:"none",
   d:"Pick the partner and put them to work on one defined use case — not a general engagement.",
   k:["Select the AI partner","Define the use case: forecasting, counts, or customer","Run a scoped pilot","Tie it to one measurable KPI","Only scale once that number moves"]},
- {ph:2,n:9,t:"Automate the counts — less manual work",o:"Manny + Inventory Mgr",w:"Wks 8–13",s:"none",
+ {ph:2,n:11,t:"Automate the counts — less manual work",o:"Manny + Inventory Mgr",w:"Wks 8–13",s:"none",
   d:"Take the manual labour out of the foundation built in Phase 1.",
   k:["Scan-based counts","Auto-flagged variances","Alerts pushed to managers instead of chased down"]},
- {ph:2,n:10,t:"Inventory KPIs in every manager review",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
+ {ph:2,n:12,t:"Inventory KPIs in every manager review",o:"Manny + Regionals",w:"Wks 7–13",s:"none",
   d:"Make the numbers routine so the gains hold after the 90 days.",
   k:["Count accuracy, shrink, aging and zeros as standing agenda items","One definition across stores","Pulled on demand, not prepared"]}
 ];
 var CP2=[
- {day:30,when:"~ Dec 1",pc:"var(--forest)",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Everyday deals master list built · all 11 stores audited","Sunny counter-top display design approved","Gift cards live at every register","Cash log rebuilt & rolled out"]},
- {day:60,when:"~ Dec 31",pc:"var(--oxblood)",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","Everyday deals posted to standard in every store","Compare & save basket picked · competitor pricing pulled","Holiday gift card sales tracked weekly","Cash chain of custody logged at every handoff","AI partner selected & pilot scoped"]},
- {day:90,when:"~ Jan 29",pc:"var(--oxblood)",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","Everyday deals re-audited · monthly cadence running","Compare & save campaign live and measured","Gift card redemption & breakage reviewed","Cash variances investigated same-day · system audited clean","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
+ {day:30,when:"~ Dec 1",pc:"var(--forest)",items:["Inventory dashboard live","Cycle count schedule running in every store","Integration audit started","Zeros list baselined","Everyday deals master list built · all 11 stores audited","Sunny counter-top display design approved","Gift cards live at every register","Cash log rebuilt & rolled out","Attendance definitions agreed · clock data feeding the dashboard","Edge API access confirmed · fields mapped"]},
+ {day:60,when:"~ Dec 31",pc:"var(--oxblood)",items:["Count accuracy at target","Integration mismatches resolved","Zeros list materially down","Counter-top displays installed in every store","Shelf talkers printed & shipped","Everyday deals posted to standard in every store","Compare & save basket picked · competitor pricing pulled","Holiday gift card sales tracked weekly","Cash chain of custody logged at every handoff","Attendance live on the manager dashboard · reviewed weekly","Edge feed live · dashboard refreshing on its own","AI partner selected & pilot scoped"]},
+ {day:90,when:"~ Jan 29",pc:"var(--oxblood)",items:["Every store clean on integration audit","Zeros list at zero","Shelf talkers & displays installed to standard","Everyday deals re-audited · monthly cadence running","Compare & save campaign live and measured","Gift card redemption & breakage reviewed","Cash variances investigated same-day · system audited clean","Attendance rate trending the right way store by store","Edge feed monitored · no manual pulls left","AI pilot tied to a KPI and measured","Inventory KPIs standing in manager reviews"]}
 ];
 
 /* ---------- shared state ---------- */
