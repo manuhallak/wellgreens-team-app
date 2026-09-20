@@ -1452,5 +1452,92 @@ function onNewVersion(){
 setInterval(versionCheck,45000);
 versionCheck();
 </script>
+
+<!-- Forgot-password flow. Runs after the main script so it can enhance the login card
+     without reaching into boot(). Nobody should need the Supabase dashboard to reset. -->
+<script>
+(function(){
+  var REC=((location.hash||"")+(location.search||"")).indexOf("type=recovery")>-1;
+  var card=document.querySelector("#authgate .authcard");
+  if(!card)return;
+  var st=document.createElement("style");
+  st.textContent="#authlogin.hidden,#authreset.hidden{display:none}"+
+    ".authlink{margin-top:15px;font-size:13px;font-weight:700}"+
+    ".authlink a{color:#234436;text-decoration:underline;cursor:pointer}"+
+    ".authlink a:hover{color:#6E2A2E}"+
+    ".authnote{font-size:12.5px;font-weight:600;color:#6B6358;margin-bottom:14px;line-height:1.45;text-align:left}";
+  document.head.appendChild(st);
+
+  var h2=card.querySelector("h2");
+  var em=document.getElementById("authemail");
+  var pw=document.getElementById("authpass");
+  var bt=document.getElementById("authbtn");
+  var er=document.getElementById("autherr");
+  if(!em||!pw||!bt||!er)return;
+
+  var login=document.createElement("div"); login.id="authlogin";
+  card.insertBefore(login,em);
+  login.appendChild(em); login.appendChild(pw); login.appendChild(bt);
+  var lk=document.createElement("div"); lk.className="authlink";
+  lk.innerHTML='<a id="forgotlink">Forgot password?</a>';
+  login.appendChild(lk);
+
+  var reset=document.createElement("div"); reset.id="authreset"; reset.className="hidden";
+  reset.innerHTML='<div class="authnote">Pick a new password. At least 8 characters.</div>'+
+    '<input id="newpass1" type="password" placeholder="New password" autocomplete="new-password">'+
+    '<input id="newpass2" type="password" placeholder="Confirm new password" autocomplete="new-password">'+
+    '<button id="setpassbtn">Set New Password</button>';
+  card.insertBefore(reset,er);
+
+  function msg(t,bad){er.style.color=bad?"#AC2A2A":"#234436";er.textContent=t;}
+  function showReset(){login.classList.add("hidden");reset.classList.remove("hidden");if(h2)h2.textContent="New Password";msg("");}
+  function showLogin(){reset.classList.add("hidden");login.classList.remove("hidden");if(h2)h2.textContent="Team Login";}
+  function gate(){
+    var g=document.getElementById("authgate"); if(g)g.classList.remove("hidden");
+    var b=document.getElementById("authbar"); if(b)b.classList.add("hidden");
+    document.body.classList.remove("authed");
+  }
+
+  window.doForgot=async function(){
+    var e=(em.value||"").trim();
+    if(!e){msg("Type your email above first, then tap Forgot password.",true);return;}
+    msg("Sending reset link…");
+    try{
+      var r=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});
+      if(r&&r.error){msg(r.error.message,true);return;}
+      msg("Sent. Check "+e+" for the reset link.");
+    }catch(x){msg("Could not send the reset link. Try again.",true);}
+  };
+  window.doSetPass=async function(){
+    var a=document.getElementById("newpass1").value;
+    var b=document.getElementById("newpass2").value;
+    if(a.length<8){msg("Use at least 8 characters.",true);return;}
+    if(a!==b){msg("The two passwords don't match.",true);return;}
+    msg("Saving…");
+    try{
+      var r=await sb.auth.updateUser({password:a});
+      if(r&&r.error){msg(r.error.message,true);return;}
+    }catch(x){msg("Could not save the password. Try the link again.",true);return;}
+    REC=false;
+    try{history.replaceState(null,"",location.pathname);}catch(x){}
+    try{
+      var s=await sb.auth.getSession();
+      if(s&&s.data&&s.data.session&&s.data.session.user){msg("");onAuthed(s.data.session.user);return;}
+    }catch(x){}
+    showLogin();msg("Password updated. Sign in with it.");
+  };
+
+  document.getElementById("forgotlink").onclick=function(){window.doForgot();};
+  document.getElementById("setpassbtn").onclick=function(){window.doSetPass();};
+  document.getElementById("newpass2").onkeydown=function(ev){if(ev.key==="Enter")window.doSetPass();};
+
+  if(REC){
+    var orig=window.onAuthed;
+    window.onAuthed=function(u){ if(REC){gate();showReset();return;} return orig.apply(this,arguments); };
+    gate(); showReset();
+  }
+  try{ sb.auth.onAuthStateChange(function(ev){ if(ev==="PASSWORD_RECOVERY"){REC=true;gate();showReset();} }); }catch(x){}
+})();
+</script>
 </body>
 </html>
