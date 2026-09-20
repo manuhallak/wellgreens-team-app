@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — First 10 Visits · Punch Card Proposal</title>
+<style>
+:root{color-scheme:light;
+ --forest:#234436; --oxblood:#6E2A2E; --teal:#1C4A4A; --ochre:#B07A22; --gold:#E3BB5E; --plum:#4A2A44;
+ --ink:#161311; --ink2:#2A2620; --taupe:#6B6358; --line:#D8CEBF; --cream:#FBF6EB; --card:#FFF;
+ --green:#1E7A46; --amber:#C9930A; --red:#C02626;
+ --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:1.55;padding:26px 20px 70px}
+.wrap{max-width:1000px;margin:0 auto}
+
+.mast{background:var(--forest);color:#F6F1E7;border-bottom:7px solid var(--ochre);border-radius:4px;padding:30px 32px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#CBBFA8;font-weight:700}
+.mast h1{font-size:38px;font-weight:800;letter-spacing:-.015em;margin:9px 0 8px;color:#F6F1E7;line-height:1.1}
+.mast .sub{font-size:14.5px;color:#CBBFA8;font-weight:600;max-width:640px}
+.mast .meta{margin-top:16px;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#9FB0A4;font-weight:700}
+
+h2{font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--forest);
+ margin:40px 0 6px;padding-bottom:8px;border-bottom:2.5px solid var(--forest)}
+h2 .num{color:var(--ochre);margin-right:9px}
+.lede{font-size:14.5px;color:var(--ink2);margin:12px 0 16px;max-width:760px}
+h3{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--taupe);margin:26px 0 10px}
+
+.bigidea{background:var(--forest);color:#F6F1E7;border-radius:4px;padding:26px 30px;margin-top:16px;border-left:8px solid var(--gold)}
+.bigidea .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:800}
+.bigidea .big{font-size:27px;font-weight:800;margin:9px 0 10px;line-height:1.25}
+.bigidea p{font-size:14px;color:#D8D0C2;max-width:700px}
+
+.mockwrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:18px;margin-top:18px}
+.mockcol .cap{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800;margin-bottom:8px}
+.pcard{background:#F6F2E8;border:2.5px solid var(--ink);border-radius:9px;padding:15px 16px;
+ box-shadow:6px 6px 0 rgba(35,68,54,.16)}
+.pcard .brand{font-size:10px;letter-spacing:.42em;text-transform:uppercase;font-weight:800;color:var(--forest)}
+.pcard .title{font-family:var(--f);font-size:21px;font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:4px 0 2px}
+.pcard .tag{font-size:10.5px;font-weight:700;color:var(--taupe);letter-spacing:.04em}
+.pcard .rule{height:2.5px;background:var(--ochre);margin:11px 0}
+.punches{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.pz{aspect-ratio:1;border:2px dashed #B7AB99;border-radius:5px;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;background:#fff;position:relative}
+.pz .n{font-size:14px;font-weight:800;color:var(--taupe);line-height:1}
+.pz .w{font-size:7.5px;font-weight:800;letter-spacing:.03em;color:var(--ochre);text-transform:uppercase;margin-top:2px;text-align:center;padding:0 2px;line-height:1.15}
+.pz.reward{border:2.5px solid var(--forest);background:#F1F7F3}
+.pz.reward .n{color:var(--forest)}
+.pz.big{border-color:var(--oxblood);background:#FBF1F0}
+.pz.big .n{color:var(--oxblood)}
+.pz.big .w{color:var(--oxblood)}
+.pz.start{background:var(--forest);border:2.5px solid var(--forest)}
+.pz.start .n{color:#F6F1E7;font-size:10px}
+.pz.start .w{color:var(--gold)}
+.pcard .fine{font-size:8.5px;color:var(--taupe);margin-top:11px;line-height:1.5;font-weight:600}
+.pcard .idrow{display:flex;gap:8px;margin-top:11px}
+.pcard .idbox{flex:1;border-bottom:1.5px solid #B7AB99;font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--taupe);font-weight:800;padding-bottom:2px}
+.keytag{max-width:250px;border-radius:26px;position:relative;padding:15px 18px 15px 30px}
+.keytag::before{content:"";position:absolute;left:11px;top:50%;transform:translateY(-50%);width:11px;height:11px;border:2.5px solid var(--ink);border-radius:50%}
+.keytag .punches{grid-template-columns:repeat(5,1fr);gap:5px}
+.keytag .pz{border-radius:4px}
+.keytag .pz .n{font-size:11px}
+.keytag .pz .w{display:none}
+
+table{width:100%;border-collapse:collapse;background:var(--card);border:1.5px solid var(--line);border-radius:4px;overflow:hidden;margin-top:6px}
+th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:11px 12px;font-weight:800}
+td{padding:11px 12px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
+tr:nth-child(even) td{background:#FCFAF5}
+td.v{font-weight:800;color:var(--forest);white-space:nowrap;width:74px}
+td.r{font-weight:700;color:var(--ink)}
+.chip{display:inline-block;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+ padding:3px 7px;border-radius:3px;background:#F1EBDE;color:var(--taupe)}
+.chip.warn{background:#FDF4E0;color:#8A6508}
+.chip.hot{background:#FCEDEA;color:var(--red)}
+
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));gap:13px;margin-top:6px}
+.opt{background:var(--card);border:1.5px solid var(--line);border-top:6px solid var(--pc,var(--taupe));border-radius:4px;padding:15px 16px;display:flex;flex-direction:column}
+.opt.pick{border-color:var(--forest);box-shadow:0 3px 14px rgba(35,68,54,.13)}
+.opt .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800}
+.opt .nm{font-size:16px;font-weight:800;color:var(--ink);margin:6px 0 7px;line-height:1.25}
+.opt .dsc{font-size:12.5px;color:var(--ink2);line-height:1.5;flex:1}
+.opt ul{margin:8px 0 0 16px;font-size:12px;color:var(--taupe);font-weight:600}
+.opt ul li{margin-bottom:3px}
+.rec{display:inline-block;margin-top:11px;font-size:9.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+ background:var(--forest);color:#F6F1E7;padding:4px 9px;border-radius:3px;align-self:flex-start}
+.rec.alt{background:#EDE6DA;color:var(--taupe)}
+
+.scen{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--ochre);border-radius:4px;padding:15px 18px;margin-bottom:11px}
+.scen .q{font-size:14.5px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.scen .a{font-size:13.5px;color:var(--ink2)}
+.scen .a b{color:var(--forest)}
+
+.box{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--pc,var(--ochre));border-radius:4px;padding:15px 18px;margin-top:13px}
+.box b.h{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--pc,#8A6508);margin-bottom:8px}
+.box ul{margin:0 0 0 18px;font-size:13.5px}
+.box ul li{margin-bottom:6px}
+.box p{font-size:13.5px}
+
+.dec{background:#FFFBF0;border:1.5px solid #E8D9B4;border-radius:4px;padding:14px 17px;margin-bottom:10px}
+.dec .dq{font-size:14px;font-weight:800;color:var(--ink)}
+.dec .dopts{margin-top:7px;font-size:13px;color:var(--ink2)}
+.dec .dopts div{padding:3px 0}
+.dec .dopts b{color:var(--ochre)}
+
+.foot{margin-top:44px;padding-top:16px;border-top:1.5px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
+.foot a{color:var(--ochre);font-weight:700}
+@media(max-width:560px){.mast h1{font-size:28px}.pz .w{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Wellgreens Dispensary · 90-Day Plan · Phase 2 · Item 16</div>
+    <h1>First 10 Visits</h1>
+    <div class="sub">A physical punch card that drives app downloads, repeat visits and bigger baskets — built so a forgotten card never costs you a customer.</div>
+    <div class="meta">Proposal · Prepared for Manny · September 2026</div>
+  </div>
+
+  <h2><span class="num">01</span>The one decision that makes this work</h2>
+
+  <div class="bigidea">
+    <div class="k">Core principle</div>
+    <div class="big">The card is not the ledger. Your POS is.</div>
+    <p>Every qualifying purchase is already logged against the customer's phone number. <b>That count is the punch card.</b> The physical card is the trophy they carry — it's marketing, not the record. Accept this one thing and the forgotten-card problem disappears, fraud stops mattering, and you don't need anything built inside the app.</p>
+  </div>
+
+  <div class="box" style="--pc:var(--forest)">
+    <b class="h">What this buys you</b>
+    <ul>
+      <li><b>Nobody loses progress.</b> Card at home? Look up the phone number. Card in the washing machine? Reissue and punch it up to date.</li>
+      <li><b>Fraud stops paying.</b> A stolen or photocopied card is worthless, because rewards are redeemed against the profile, not the cardboard.</li>
+      <li><b>You get the data.</b> Visit frequency, basket size at each tier, which reward actually drives the return trip — none of which a punched card alone can tell you.</li>
+      <li><b>No app development.</b> You said you couldn't figure out how to make it digital. You don't have to.</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">02</span>The reward ladder</h2>
+  <p class="lede">Your rewards, as specified. Two items flagged below need a decision before anything goes to print.</p>
+
+  <table>
+    <thead><tr><th>Visit</th><th>Reward</th><th>Notes &amp; flags</th></tr></thead>
+    <tbody>
+      <tr><td class="v">1</td><td class="r">Card issued</td><td>App downloaded and open on their phone. This is the gate — see section 03.</td></tr>
+      <tr><td class="v">2</td><td class="r">$10 off your next order</td><td>$30 minimum, stackable. Note this is spent on <b>visit 3</b> — which is already 40% off. <span class="chip warn">stacking rule needed</span></td></tr>
+      <tr><td class="v">3</td><td class="r">40% off entire store</td><td>Your biggest giveaway lands early — that's deliberate and correct. It's the visit where a trial customer becomes a regular.</td></tr>
+      <tr><td class="v">4</td><td class="r">—</td><td>Quiet visit. Budtender says "two more to the grinder."</td></tr>
+      <tr><td class="v">5</td><td class="r">—</td><td>Quiet visit.</td></tr>
+      <tr><td class="v">6</td><td class="r">Free grinder, lighter or battery</td><td>Customer picks. <span class="chip hot">compliance check</span> Confirm vape batteries can be given free in WA before printing.</td></tr>
+      <tr><td class="v">7</td><td class="r">—</td><td>Quiet visit.</td></tr>
+      <tr><td class="v">8</td><td class="r">—</td><td>Quiet visit.</td></tr>
+      <tr><td class="v">9</td><td class="r">Free Wellgreens tumbler</td><td>Branded merch that walks around town. Best marketing spend on the card.</td></tr>
+      <tr><td class="v">10</td><td class="r">50% off entire store</td><td>Consider a dollar cap and "one transaction, in-stock only." <span class="chip warn">cap needed</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="box" style="--pc:var(--red)">
+    <b class="h">Worth pressure-testing before print</b>
+    <p>Visits 3 and 10 are unlimited-percentage-off the <i>entire store</i>. A customer who saves their biggest purchase of the year for visit 10 costs you half of it. Most chains cap this ("up to $100 off"). Your call — but decide it now, because it has to be printed on the card.</p>
+  </div>
+
+  <h2><span class="num">03</span>Making the app download real</h2>
+  <p class="lede">Three layers. Layer 1 is free and works on day one. Add the others as you go.</p>
+
+  <div class="opts">
+    <div class="opt pick" style="--pc:var(--forest)">
+      <div class="lbl">Layer 1 · Free</div>
+      <div class="nm">Issue only against an open app</div>
+      <div class="dsc">The card is handed over when the budtender <b>sees the app installed and logged in</b> on the customer's phone. No app, no card. That's the whole gate, and it costs nothing.</div>
+      <ul><li>Works on any POS, any app</li><li>Takes ten seconds</li><li>Needs one line in the SOP and one training session</li></ul>
+      <div class="rec">Start here</div>
+    </div>
+    <div class="opt pick" style="--pc:var(--forest)">
+      <div class="lbl">Layer 2 · Recommended</div>
+      <div class="nm">Bind the card serial to the profile</div>
+      <div class="dsc">Every card is serialized. At issue the budtender writes the customer's first name and last 4 of phone on the card, and drops the serial into their POS profile. <b>A card with no matching profile is void.</b></div>
+      <ul><li>Kills card sharing and "found" cards</li><li>Makes reissues clean</li><li>Gives you a real enrollment count</li></ul>
+      <div class="rec">Add at launch</div>
+    </div>
+    <div class="opt" style="--pc:var(--ochre)">
+      <div class="lbl">Layer 3 · Automatic</div>
+      <div class="nm">Platform app-install flag</div>
+      <div class="dsc">If you run a loyalty platform (springbig, Alpine IQ, Dutchie Loyalty), it already knows whether that phone number has the app installed. Check the flag at redemption and the honor system disappears.</div>
+      <ul><li>No budtender judgement needed</li><li>Also powers push notifications at visits 5 and 8</li><li>Requires the platform in section 04</li></ul>
+      <div class="rec alt">If you adopt a platform</div>
+    </div>
+  </div>
+
+  <h2><span class="num">04</span>Option set A — where the count actually lives</h2>
+  <p class="lede">Pick one. This is the ledger, so it has to be somewhere every store can see.</p>
+
+  <div class="opts">
+    <div class="opt pick" style="--pc:var(--forest)">
+      <div class="lbl">Option A1</div>
+      <div class="nm">POS loyalty points</div>
+      <div class="dsc">One point per qualifying visit. Rewards redeemed manually at each tier. If your POS has a loyalty module, this is free and already in the budtender's workflow.</div>
+      <ul><li>Cost: $0</li><li>Setup: an afternoon</li><li>Reporting: built in</li></ul>
+      <div class="rec">Recommended if available</div>
+    </div>
+    <div class="opt" style="--pc:var(--ochre)">
+      <div class="lbl">Option A2</div>
+      <div class="nm">Customer notes field</div>
+      <div class="dsc">Budtender types into the profile notes: <code>PUNCH: enrolled 9/20 · V4 10/1 · V5 10/8</code>. Ugly, manual, and it works on literally any POS.</div>
+      <ul><li>Cost: $0</li><li>Setup: same day</li><li>Reporting: none — you'd count by hand</li></ul>
+      <div class="rec alt">Fallback</div>
+    </div>
+    <div class="opt" style="--pc:var(--plum)">
+      <div class="lbl">Option A3</div>
+      <div class="nm">Loyalty platform</div>
+      <div class="dsc">springbig, Alpine IQ or similar. Automates tiers, texts customers at visit 5 and 8, and gives you the app-install flag from Layer 3.</div>
+      <ul><li>Cost: monthly per location</li><li>Setup: 2–4 weeks</li><li>Reporting: full</li></ul>
+      <div class="rec alt">Phase 2 upgrade</div>
+    </div>
+  </div>
+
+  <h2><span class="num">05</span>Option set B — the physical object</h2>
+  <p class="lede">People forget cards. Almost nobody forgets their keys. That difference is worth more than the print cost.</p>
+
+  <div class="opts">
+    <div class="opt" style="--pc:var(--taupe)">
+      <div class="lbl">Option B1</div>
+      <div class="nm">Wallet card</div>
+      <div class="dsc">Standard credit-card size, heavy stock. Cheapest per unit, familiar to customers — and the one most likely to be left at home.</div>
+      <ul><li>Cheapest</li><li>Most room for the rules</li><li>Highest forget rate</li></ul>
+      <div class="rec alt">Budget option</div>
+    </div>
+    <div class="opt pick" style="--pc:var(--forest)">
+      <div class="lbl">Option B2</div>
+      <div class="nm">Key tag</div>
+      <div class="dsc">Credit-card stock with a punched keyring hole, rounded corners, foil on the Wellgreens mark. <b>It lives on their keys, so it's in the store every time they are.</b></div>
+      <ul><li>Dramatically lower forget rate</li><li>Rules go on the back in small type</li><li>Doubles as a brand impression every time they drive</li></ul>
+      <div class="rec">Recommended</div>
+    </div>
+    <div class="opt" style="--pc:var(--oxblood)">
+      <div class="lbl">Option B3</div>
+      <div class="nm">Combo — snap-apart</div>
+      <div class="dsc">One perforated piece: a wallet card with a key tag that snaps out of it. Customer keeps whichever they'll actually carry, or the tag on keys and the card in the wallet as a spare.</div>
+      <ul><li>Highest perceived value</li><li>Best chance one of the two survives</li><li>Slightly higher die cost</li></ul>
+      <div class="rec alt">Best of both</div>
+    </div>
+  </div>
+
+  <h3>What the card looks like</h3>
+  <div class="mockwrap">
+    <div class="mockcol">
+      <div class="cap">Wallet card · front</div>
+      <div class="pcard">
+        <div class="brand">Wellgreens</div>
+        <div class="title">First 10 Visits</div>
+        <div class="tag">Download the app · Start collecting</div>
+        <div class="rule"></div>
+        <div class="punches">
+          <div class="pz start"><div class="n">START</div><div class="w">App on</div></div>
+          <div class="pz reward"><div class="n">2</div><div class="w">$10 off</div></div>
+          <div class="pz big"><div class="n">3</div><div class="w">40% off</div></div>
+          <div class="pz"><div class="n">4</div><div class="w"></div></div>
+          <div class="pz"><div class="n">5</div><div class="w"></div></div>
+          <div class="pz reward"><div class="n">6</div><div class="w">Grinder</div></div>
+          <div class="pz"><div class="n">7</div><div class="w"></div></div>
+          <div class="pz"><div class="n">8</div><div class="w"></div></div>
+          <div class="pz reward"><div class="n">9</div><div class="w">Tumbler</div></div>
+          <div class="pz big"><div class="n">10</div><div class="w">50% off</div></div>
+        </div>
+        <div class="idrow">
+          <div class="idbox">Name</div>
+          <div class="idbox">Phone · last 4</div>
+          <div class="idbox">Card no.</div>
+        </div>
+        <div class="fine">One punch per person per day · $25 minimum pre-tax · must be the enrolled customer · returns void the punch · rewards redeemed in-store through your account · 21+ · card is not required to keep your progress</div>
+      </div>
+    </div>
+    <div class="mockcol">
+      <div class="cap">Key tag · recommended</div>
+      <div class="pcard keytag">
+        <div class="brand">Wellgreens</div>
+        <div class="title" style="font-size:16px">First 10 Visits</div>
+        <div class="rule" style="margin:8px 0"></div>
+        <div class="punches">
+          <div class="pz start"><div class="n">1</div></div>
+          <div class="pz reward"><div class="n">2</div></div>
+          <div class="pz big"><div class="n">3</div></div>
+          <div class="pz"><div class="n">4</div></div>
+          <div class="pz"><div class="n">5</div></div>
+          <div class="pz reward"><div class="n">6</div></div>
+          <div class="pz"><div class="n">7</div></div>
+          <div class="pz"><div class="n">8</div></div>
+          <div class="pz reward"><div class="n">9</div></div>
+          <div class="pz big"><div class="n">10</div></div>
+        </div>
+        <div class="fine" style="margin-top:8px">Card no. ____________<br>Your progress is saved to your phone number.</div>
+      </div>
+      <div class="cap" style="margin-top:16px">Colour key</div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;line-height:1.9">
+        <span style="display:inline-block;width:11px;height:11px;background:var(--forest);border-radius:2px;vertical-align:-1px"></span> Start · app verified &nbsp;
+        <span style="display:inline-block;width:11px;height:11px;background:#F1F7F3;border:2px solid var(--forest);border-radius:2px;vertical-align:-1px"></span> Reward &nbsp;
+        <span style="display:inline-block;width:11px;height:11px;background:#FBF1F0;border:2px solid var(--oxblood);border-radius:2px;vertical-align:-1px"></span> Big one
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">06</span>Option set C — how you mark each visit</h2>
+  <p class="lede">The mark has to be hard to fake and easy to audit. Three ways, and you can run two together.</p>
+
+  <div class="opts">
+    <div class="opt" style="--pc:var(--ochre)">
+      <div class="lbl">Option C1</div>
+      <div class="nm">Custom die-cut punch</div>
+      <div class="dsc">A leaf-shaped hole punch — one per store, all identical. An office punch can't fake the shape, and the customer physically feels the reward being earned.</div>
+      <ul><li>One-time cost per store</li><li>Tactile and satisfying</li><li>Can't be undone or erased</li></ul>
+      <div class="rec alt">Classic</div>
+    </div>
+    <div class="opt pick" style="--pc:var(--forest)">
+      <div class="lbl">Option C2</div>
+      <div class="nm">Serialized holographic stickers</div>
+      <div class="dsc">A roll of numbered foil stickers kept in the register drawer. One per visit. <b>The roll is a controlled item — sticker count reconciles against POS punches at close.</b></div>
+      <ul><li>Every punch is auditable against the drawer</li><li>Cannot be reproduced at home</li><li>Looks premium, feels like a reward</li></ul>
+      <div class="rec">Recommended</div>
+    </div>
+    <div class="opt" style="--pc:var(--teal)">
+      <div class="lbl">Option C3</div>
+      <div class="nm">Rotating monthly stamp</div>
+      <div class="dsc">Ink stamp whose design changes each month. A card punched with October's stamp in September is obviously wrong — regional managers can spot it across a counter.</div>
+      <ul><li>Cheapest ongoing</li><li>Built-in date check</li><li>Twelve stamps per store to manage</li></ul>
+      <div class="rec alt">Low-cost audit</div>
+    </div>
+  </div>
+
+  <div class="box" style="--pc:var(--forest)">
+    <b class="h">Whatever you choose, add these two</b>
+    <ul>
+      <li><b>Budtender initials and date in every box.</b> Costs nothing, and it means every punch has a name attached to it.</li>
+      <li><b>Print the count on the receipt.</b> "VISIT 4 OF 10 — 2 more to your free grinder." Now there are two records that have to agree, and the customer gets reminded even when the card is at home.</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">07</span>Getting creative about collection</h2>
+  <p class="lede">Small things that lift completion rates more than the rewards do.</p>
+
+  <div class="box" style="--pc:var(--ochre)">
+    <b class="h">Tactics worth stealing</b>
+    <ul>
+      <li><b>"Leave it with us."</b> An alphabetical card box behind the counter for regulars who know they'll forget. The card lives at their home store like a bar tab. These are exactly the customers who reach visit 10.</li>
+      <li><b>Make the milestones loud.</b> Visits 6, 9 and 10 get a bell and a shout — the whole store hears "that's a free tumbler." Cheap theatre, and it sells the program to everyone else in line.</li>
+      <li><b>Head start.</b> Punch visit 1 <i>and</i> 2 at enrollment. Starting at 20% complete instead of zero measurably lifts completion — people finish what's already begun.</li>
+      <li><b>Name the near-miss.</b> Train one line: "You're on 4 — two more and the grinder's yours." Said at every single visit, it's the highest-leverage sentence in the program.</li>
+      <li><b>Stage the merch.</b> Grinders and tumblers visible behind the counter, not in a drawer. People work toward things they can see.</li>
+      <li><b>Text at 5 and 8.</b> One visit before a reward, not after. If you adopt a loyalty platform, this is automatic.</li>
+      <li><b>Give the budtenders a stake.</b> Track enrollments by staff member and post it weekly. It ties straight into the Top Sales Rep KPI already on your dashboard.</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">08</span>The forgotten card — your exact scenario</h2>
+  <p class="lede">You asked: I buy on visit 4 without my card, and now it's visit 6. Here's the whole playbook.</p>
+
+  <div class="scen">
+    <div class="q">Visit 4 — customer has no card</div>
+    <div class="a">Budtender looks up the phone number. POS shows 4 visits, logs it, says <b>"you're on 4 — bring the card next time and we'll catch it up."</b> Nothing is lost, because the POS was always the record.</div>
+  </div>
+  <div class="scen">
+    <div class="q">Visit 6 — card is back</div>
+    <div class="a">POS shows 6. Budtender punches boxes <b>4, 5 and 6 in one go</b>, hands over the grinder, marks the reward redeemed in the profile.</div>
+  </div>
+  <div class="scen">
+    <div class="q">Visit 6 — still no card</div>
+    <div class="a">POS shows 6. <b>The grinder goes out anyway.</b> Reward logged as redeemed in the profile. The card gets caught up whenever it next appears — and if it never does, nothing breaks.</div>
+  </div>
+  <div class="scen">
+    <div class="q">Card lost or destroyed</div>
+    <div class="a">Reissue on the spot. Old serial marked <b>void</b> in the profile, new serial written in, punched up to the current count. A caught-up card can never double-dip, because redeemed rewards are flagged in POS — not on cardboard.</div>
+  </div>
+  <div class="scen">
+    <div class="q">"I've been here loads of times, I just never got a card"</div>
+    <div class="a">Look up the phone number. Visits before the program started don't count — <b>enrollment date is the start line</b>, and the app has to be installed. Say it warmly, and punch visit 1 and 2 as a head start.</div>
+  </div>
+  <div class="scen">
+    <div class="q">Customer shows up at a different store</div>
+    <div class="a">Works everywhere. The profile is chain-wide, so all 11 stores see the same count. <b>Say this out loud in training</b> — it's a real selling point and staff won't assume it.</div>
+  </div>
+  <div class="scen">
+    <div class="q">Two people sharing one card</div>
+    <div class="a">The name and last 4 on the card have to match the profile at redemption. Mismatch means no reward. This is exactly why the card is bound to the profile at issue.</div>
+  </div>
+
+  <h2><span class="num">09</span>What counts as a visit</h2>
+  <p class="lede">Print this on the back. Put it in the SOP. Train it once and it stops being a conversation.</p>
+  <table>
+    <thead><tr><th>Rule</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td class="r">One punch per person per calendar day</td><td>Stops someone buying four times in an hour to sprint the card.</td></tr>
+      <tr><td class="r">$25 minimum, pre-tax</td><td>Without a floor, a $6 pre-roll is a punch and the 40% off costs you real money.</td></tr>
+      <tr><td class="r">Must be the enrolled customer, 21+</td><td>Name and last 4 on the card match the profile.</td></tr>
+      <tr><td class="r">Returns void the punch</td><td>Closes the buy-then-return loop.</td></tr>
+      <tr><td class="r">Rewards are one transaction, in-stock items only</td><td>Keeps visit 3 and 10 from becoming a special-order event.</td></tr>
+      <tr><td class="r">120 days to finish the card</td><td>Creates urgency, clears dead cards, and caps your liability. <span class="chip warn">your call</span></td></tr>
+      <tr><td class="r">Progress lives with your phone number</td><td>Say this on the card itself. It's the single best answer to "I forgot my card."</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="num">10</span>Decisions I need from you</h2>
+  <p class="lede">Everything above is ready to build. These six need your call before anything goes to print.</p>
+
+  <div class="dec">
+    <div class="dq">1. Does the $10 coupon stack with the 40% and 50% tiers?</div>
+    <div class="dopts">
+      <div><b>A.</b> Stacks with everything — most generous, and visit 3 becomes 40% off plus $10 off.</div>
+      <div><b>B.</b> Stacks with daily deals but not with the 40%/50% tiers. <b>← suggested</b></div>
+      <div><b>C.</b> Never stacks.</div>
+    </div>
+  </div>
+  <div class="dec">
+    <div class="dq">2. Cap on the 40% and 50% visits?</div>
+    <div class="dopts">
+      <div><b>A.</b> No cap — cleanest message, most expensive tail risk.</div>
+      <div><b>B.</b> Capped at a dollar figure, e.g. "up to $100 off." <b>← suggested</b></div>
+      <div><b>C.</b> Capped by category, e.g. excludes concentrates.</div>
+    </div>
+  </div>
+  <div class="dec">
+    <div class="dq">3. Completion window?</div>
+    <div class="dopts"><div><b>A.</b> No expiry &nbsp; <b>B.</b> 120 days <b>← suggested</b> &nbsp; <b>C.</b> 90 days</div></div>
+  </div>
+  <div class="dec">
+    <div class="dq">4. Which POS, and does it have a loyalty module?</div>
+    <div class="dopts"><div>This decides whether section 04 is a button or a budtender typing notes. It's the only thing blocking build.</div></div>
+  </div>
+  <div class="dec">
+    <div class="dq">5. Can vape batteries be given free in Washington?</div>
+    <div class="dopts"><div>Worth five minutes with whoever handles compliance before "battery" gets printed on 10,000 cards. Free non-cannabis merch is generally fine; the grinder and tumbler are clean either way.</div></div>
+  </div>
+  <div class="dec">
+    <div class="dq">6. Pilot or full rollout?</div>
+    <div class="dopts">
+      <div><b>A.</b> Two stores for 30 days, then chain-wide. <b>← suggested</b> — catches the SOP gaps cheaply.</div>
+      <div><b>B.</b> All 11 at once, timed to the holidays.</div>
+    </div>
+  </div>
+
+  <h2><span class="num">11</span>Fits the plan you already have</h2>
+  <div class="box" style="--pc:var(--forest)">
+    <ul>
+      <li><b>Plan 1 #16</b> — this is that workstream, Weeks 9–13, Regionals + Manny.</li>
+      <li><b>Plan 2 #2 and #3</b> — Sunny and Seattle Design Lab are already engaged for counter-top displays and shelf talkers. <b>Add the punch cards to those print runs</b> rather than sourcing separately.</li>
+      <li><b>Plan 2 #4</b> — the everyday-deals display standard should show the punch card at the counter, same placement in all 11 stores.</li>
+      <li><b>Plan 1 #17</b> — refer-a-friend shares the same enrollment mechanic. Build one, get the second nearly free.</li>
+      <li><b>Store visit checklist</b> — add "punch cards stocked, stickers reconciled, merch visible."</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Wellgreens Dispensary · Punch card proposal · September 2026 ·
+    <a href="https://wellgreens-team.netlify.app/start.html">Start Here</a> ·
+    <a href="https://wellgreens-team.netlify.app/ownership.html">Ownership &amp; Pipeline</a> ·
+    <a href="https://wellgreens-team.netlify.app/">Team Dashboard</a>
+    <br><br>
+    Reward economics and the compliance note are starting points, not legal or financial advice — have whoever handles your compliance review the free-merch tiers before print.
+  </div>
+</div>
+</body>
+</html>
