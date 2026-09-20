@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — First 10 Visits · Card Designs</title>
+<style>
+:root{color-scheme:light;
+ --forest:#234436; --forest2:#1A3428; --oxblood:#6E2A2E; --teal:#1C4A4A; --ochre:#B07A22;
+ --gold:#E3BB5E; --kraft:#C8A87C; --plum:#4A2A44;
+ --ink:#161311; --ink2:#2A2620; --taupe:#6B6358; --line:#D8CEBF; --cream:#FBF6EB; --paper:#F6F2E8;
+ --red:#C02626;
+ --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:1.55;padding:26px 20px 80px}
+.wrap{max-width:1080px;margin:0 auto}
+
+.mast{background:var(--forest);color:#F6F1E7;border-bottom:7px solid var(--ochre);border-radius:4px;padding:30px 32px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#CBBFA8;font-weight:700}
+.mast h1{font-size:36px;font-weight:800;letter-spacing:-.015em;margin:9px 0 8px;color:#F6F1E7;line-height:1.1}
+.mast .sub{font-size:14.5px;color:#CBBFA8;font-weight:600;max-width:660px}
+.mast .links{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.mast .links a{font-size:11.5px;font-weight:700;color:#F6F1E7;text-decoration:none;border:1.5px solid rgba(255,255,255,.35);
+ background:rgba(255,255,255,.1);padding:7px 12px;border-radius:3px}
+.mast .links a:hover{background:#fff;color:var(--forest)}
+
+h2{font-size:17px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--forest);
+ margin:44px 0 6px;padding-bottom:8px;border-bottom:2.5px solid var(--forest)}
+h2 .num{color:var(--ochre);margin-right:9px}
+.lede{font-size:14.5px;margin:12px 0 18px;max-width:770px}
+.caption{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800;margin-bottom:9px}
+.pairgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:22px;margin-top:4px}
+
+.cardbox{width:100%;max-width:392px}
+.card{width:100%;aspect-ratio:1.588;border-radius:13px;position:relative;overflow:hidden;
+ box-shadow:0 2px 3px rgba(0,0,0,.14),7px 9px 0 rgba(35,68,54,.13);padding:16px 17px;display:flex;flex-direction:column}
+.card *{position:relative}
+
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.slot{aspect-ratio:1;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+ text-align:center;line-height:1}
+.slot .n{font-size:13px;font-weight:800;letter-spacing:-.02em}
+.slot .w{font-size:6.2px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;margin-top:2px;padding:0 1px;line-height:1.2}
+
+.A{background:var(--paper);border:2px solid var(--forest)}
+.A .hdr{display:flex;justify-content:space-between;align-items:flex-start}
+.A .brand{font-size:9px;letter-spacing:.46em;text-transform:uppercase;font-weight:800;color:var(--forest)}
+.A .no{font-size:7px;letter-spacing:.12em;text-transform:uppercase;color:#A89880;font-weight:800}
+.A .ttl{font-size:23px;font-weight:800;color:var(--ink);letter-spacing:-.025em;margin-top:5px;line-height:1}
+.A .sub{font-size:8.5px;font-weight:700;color:var(--ochre);letter-spacing:.16em;text-transform:uppercase;margin-top:4px}
+.A .rule{height:2px;background:var(--ochre);margin:10px 0 11px}
+.A .slot{border:1.6px dashed #BCAE96;background:#fff}
+.A .slot .n{color:#A2957F}
+.A .slot .w{color:var(--ochre)}
+.A .slot.r{border:2px solid var(--forest);background:#EFF5F1}
+.A .slot.r .n{color:var(--forest)}
+.A .slot.r .w{color:var(--forest)}
+.A .slot.hero{border:2px solid var(--oxblood);background:#FAF0EF}
+.A .slot.hero .n{color:var(--oxblood)}
+.A .slot.hero .w{color:var(--oxblood)}
+.A .slot.one{background:var(--forest);border:2px solid var(--forest)}
+.A .slot.one .n{color:#F6F1E7}
+.A .slot.one .w{color:var(--gold)}
+.A .ft{margin-top:auto;padding-top:9px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.A .fline{flex:1;border-bottom:1.2px solid #C3B59D;font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:#A89880;font-weight:800;padding-bottom:2px}
+
+.B{background:var(--oxblood);border:2px solid var(--ink)}
+.B::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;
+ background:repeating-linear-gradient(90deg,var(--gold) 0 9px,transparent 9px 18px)}
+.B .brand{font-size:9px;letter-spacing:.46em;text-transform:uppercase;font-weight:800;color:var(--gold);margin-top:3px}
+.B .ttl{font-size:25px;font-weight:800;color:#F8F2E6;letter-spacing:-.03em;line-height:1;margin-top:4px}
+.B .sub{font-size:8px;font-weight:700;color:#D9B9AF;letter-spacing:.14em;text-transform:uppercase;margin-top:5px}
+.B .rule{height:1.5px;background:rgba(227,187,94,.45);margin:10px 0 11px}
+.B .slot{border:1.6px dashed rgba(248,242,230,.42);background:rgba(0,0,0,.14)}
+.B .slot .n{color:#E4CFC6}
+.B .slot .w{color:var(--gold)}
+.B .slot.r{border:2px solid var(--gold);background:rgba(227,187,94,.16)}
+.B .slot.r .n{color:var(--gold)}
+.B .slot.hero{background:var(--gold);border:2px solid var(--gold)}
+.B .slot.hero .n{color:#5A2024}
+.B .slot.hero .w{color:#5A2024}
+.B .slot.one{background:#F8F2E6;border:2px solid #F8F2E6}
+.B .slot.one .n{color:var(--oxblood);font-size:8px}
+.B .slot.one .w{color:var(--oxblood)}
+.B .ft{margin-top:auto;padding-top:9px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.B .fline{flex:1;border-bottom:1.2px solid rgba(248,242,230,.45);font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:#D9B9AF;font-weight:800;padding-bottom:2px}
+
+.C{background:#EFE6D2;border:2px solid #4A3C28}
+.C::after{content:"";position:absolute;inset:6px;border:1px solid rgba(74,60,40,.3);border-radius:8px;pointer-events:none}
+.C .hdr{display:flex;justify-content:space-between;align-items:baseline}
+.C .brand{font-size:8.5px;letter-spacing:.42em;text-transform:uppercase;font-weight:800;color:#4A3C28}
+.C .no{font-size:6.5px;letter-spacing:.14em;text-transform:uppercase;color:#8B7A5E;font-weight:800}
+.C .ttl{font-size:21px;font-weight:800;color:#2E2518;letter-spacing:-.02em;margin-top:6px;line-height:1}
+.C .sub{font-size:7.5px;font-weight:700;color:#8B7A5E;letter-spacing:.16em;text-transform:uppercase;margin-top:4px}
+.C .rule{height:1.5px;background:#4A3C28;margin:10px 0 11px;opacity:.5}
+.C .slot{border-radius:3px;border:1.4px solid #B6A585;background:rgba(255,255,255,.42)}
+.C .slot .n{color:#8B7A5E}
+.C .slot .w{color:#8B7A5E}
+.C .slot.r{border:1.8px solid var(--forest);background:rgba(35,68,54,.09)}
+.C .slot.r .n{color:var(--forest)}
+.C .slot.r .w{color:var(--forest)}
+.C .slot.hero{border:1.8px solid var(--oxblood);background:rgba(110,42,46,.1)}
+.C .slot.hero .n{color:var(--oxblood)}
+.C .slot.hero .w{color:var(--oxblood)}
+.C .slot.one{background:#4A3C28;border:1.8px solid #4A3C28}
+.C .slot.one .n{color:#EFE6D2;font-size:7.5px}
+.C .slot.one .w{color:var(--gold)}
+.C .ft{margin-top:auto;padding-top:9px;display:flex;justify-content:space-between;align-items:flex-end;gap:8px}
+.C .fline{flex:1;border-bottom:1.2px solid #B6A585;font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:#8B7A5E;font-weight:800;padding-bottom:2px}
+
+.back{padding:15px 17px}
+.back .bh{font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:800;margin-bottom:7px}
+.back .rules{font-size:7.2px;line-height:1.75;font-weight:600}
+.back .rules b{font-weight:800}
+.back .app{margin-top:auto;padding-top:9px;display:flex;align-items:center;gap:9px}
+.back .qr{width:40px;height:40px;border-radius:4px;flex-shrink:0;
+ background-image:linear-gradient(45deg,currentColor 25%,transparent 25%,transparent 75%,currentColor 75%),
+ linear-gradient(45deg,currentColor 25%,transparent 25%,transparent 75%,currentColor 75%);
+ background-size:9px 9px;background-position:0 0,4.5px 4.5px;border:2px solid currentColor}
+.back .appcopy{font-size:7.5px;font-weight:800;letter-spacing:.06em;line-height:1.5;text-transform:uppercase}
+.A.back{background:var(--paper);border:2px solid var(--forest);color:var(--forest)}
+.A.back .rules{color:#6A5E4A}
+.A.back .bh{color:var(--forest)}
+.B.back{background:var(--oxblood);border:2px solid var(--ink);color:var(--gold)}
+.B.back .rules{color:#E0CCC4}
+.B.back .bh{color:var(--gold)}
+.C.back{background:#EFE6D2;border:2px solid #4A3C28;color:#4A3C28}
+.C.back .rules{color:#6D5E44}
+.C.back .bh{color:#4A3C28}
+
+.tagbox{max-width:330px}
+.tag{width:100%;aspect-ratio:2.35;border-radius:999px;position:relative;overflow:hidden;
+ box-shadow:0 2px 3px rgba(0,0,0,.14),6px 7px 0 rgba(35,68,54,.13);
+ padding:11px 17px 11px 34px;display:flex;flex-direction:column;justify-content:center}
+.tag .hole{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:50%;
+ background:var(--cream);box-shadow:inset 0 0 0 1.6px rgba(0,0,0,.35)}
+.tag .brand{font-size:7px;letter-spacing:.42em;text-transform:uppercase;font-weight:800}
+.tag .ttl{font-size:14px;font-weight:800;letter-spacing:-.02em;line-height:1;margin:2px 0 7px}
+.tag .pgrid{gap:4px}
+.tag .slot .n{font-size:8.5px}
+.tag .slot .w{display:none}
+
+.combo{width:100%;max-width:430px;aspect-ratio:2.07;display:flex;border-radius:13px;overflow:hidden;
+ box-shadow:0 2px 3px rgba(0,0,0,.14),7px 9px 0 rgba(35,68,54,.13);border:2px solid var(--forest);background:var(--paper)}
+.combo .main{flex:1;padding:14px 15px;display:flex;flex-direction:column;min-width:0}
+.combo .perf{width:0;border-left:2px dashed #B7A98F;position:relative}
+.combo .stub{width:33%;padding:13px 11px;display:flex;flex-direction:column;justify-content:center;
+ background:var(--forest);color:#F6F1E7;position:relative}
+.combo .stub .hole{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:11px;height:11px;border-radius:50%;
+ background:var(--cream);box-shadow:inset 0 0 0 1.5px rgba(0,0,0,.3)}
+.combo .stub .brand{font-size:6.5px;letter-spacing:.34em;text-transform:uppercase;font-weight:800;color:var(--gold);margin-top:16px}
+.combo .stub .ttl{font-size:11.5px;font-weight:800;line-height:1.05;margin:3px 0 7px;letter-spacing:-.02em}
+.combo .stub .mini{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
+.combo .stub .ms{aspect-ratio:1;border-radius:50%;border:1.3px dashed rgba(246,241,231,.5)}
+.combo .stub .ms.r{border:1.5px solid var(--gold);background:rgba(227,187,94,.22)}
+
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px;margin-top:6px}
+.sp{background:#FFF;border:1.5px solid var(--line);border-top:6px solid var(--pc,var(--forest));border-radius:4px;padding:15px 16px}
+.sp .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800}
+.sp .nm{font-size:15.5px;font-weight:800;color:var(--ink);margin:5px 0 7px}
+.sp .dsc{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.sp ul{margin:8px 0 0 16px;font-size:12px;color:var(--taupe);font-weight:600}
+.sp ul li{margin-bottom:3px}
+.rec{display:inline-block;margin-top:10px;font-size:9.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;
+ background:var(--forest);color:#F6F1E7;padding:4px 9px;border-radius:3px}
+.rec.alt{background:#EDE6DA;color:var(--taupe)}
+.sw{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.sw div{width:30px;height:30px;border-radius:4px;border:1.5px solid rgba(0,0,0,.14)}
+
+table{width:100%;border-collapse:collapse;background:#FFF;border:1.5px solid var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:11px 12px;font-weight:800}
+td{padding:10px 12px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
+tr:nth-child(even) td{background:#FCFAF5}
+td.k{font-weight:800;color:var(--ink);white-space:nowrap}
+
+.box{background:#FFF;border:1.5px solid var(--line);border-left:6px solid var(--pc,var(--ochre));border-radius:4px;padding:15px 18px;margin-top:14px}
+.box b.h{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--pc,#8A6508);margin-bottom:8px}
+.box ul{margin:0 0 0 18px;font-size:13.5px}
+.box ul li{margin-bottom:6px}
+.foot{margin-top:46px;padding-top:16px;border-top:1.5px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
+.foot a{color:var(--ochre);font-weight:700}
+@media(max-width:560px){.mast h1{font-size:27px}.slot .w{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Wellgreens Dispensary · First 10 Visits</div>
+    <h1>Card Designs</h1>
+    <div class="sub">Three directions, rendered at true credit-card proportions — 3.375 × 2.125 in. Fronts, backs, key tags and the snap-apart combo. Pick a direction and it goes to Sunny or Seattle Design Lab as artwork.</div>
+    <div class="links">
+      <a href="https://wellgreens-team.netlify.app/punchcard.html">← Full proposal</a>
+      <a href="https://wellgreens-team.netlify.app/start.html">Start Here</a>
+    </div>
+  </div>
+
+  <h2><span class="num">A</span>Field Guide</h2>
+  <p class="lede">Cream stock, forest ink, ochre rule. Dashed circles read as "punch here" without instruction. This is the closest to the dashboard and the 90-day plan — it looks like it belongs to the same company. Quietest of the three and the easiest to keep clean after ten punches.</p>
+
+  <div class="pairgrid">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card A">
+        <div class="hdr">
+          <div class="brand">Wellgreens</div>
+          <div class="no">No. 0001</div>
+        </div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="sub">Download the app to start</div>
+        <div class="rule"></div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">1</div><div class="w">Start</div></div>
+          <div class="slot r"><div class="n">2</div><div class="w">$10 off</div></div>
+          <div class="slot hero"><div class="n">3</div><div class="w">40% off</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div><div class="w">Grinder</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div><div class="w">Tumbler</div></div>
+          <div class="slot hero"><div class="n">10</div><div class="w">50% off</div></div>
+        </div>
+        <div class="ft">
+          <div class="fline">Name</div>
+          <div class="fline">Phone · last 4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cardbox">
+      <div class="caption">Back</div>
+      <div class="card A back">
+        <div class="bh">How it works</div>
+        <div class="rules">
+          <b>Your progress is saved to your phone number.</b> Forgot the card? We'll look you up and catch it up next time.<br><br>
+          One punch per person per day · $25 minimum before tax · must be the enrolled customer, 21+ · returns void the punch · rewards are one transaction, in-stock items only · valid at all Wellgreens locations · 120 days to complete · card must match the account it was issued to · Wellgreens may end or change this program at any time.
+        </div>
+        <div class="app">
+          <div class="qr"></div>
+          <div class="appcopy">Scan to download<br>the Wellgreens app</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pairgrid" style="margin-top:22px">
+    <div class="tagbox">
+      <div class="caption">Key tag</div>
+      <div class="tag A">
+        <div class="hole"></div>
+        <div class="brand">Wellgreens</div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">1</div></div>
+          <div class="slot r"><div class="n">2</div></div>
+          <div class="slot hero"><div class="n">3</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div></div>
+          <div class="slot hero"><div class="n">10</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#F6F2E8"></div>
+        <div style="background:#234436"></div>
+        <div style="background:#B07A22"></div>
+        <div style="background:#6E2A2E"></div>
+        <div style="background:#E3BB5E"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Paper #F6F2E8 · Forest #234436 · Ochre #B07A22 · Oxblood #6E2A2E · Gold #E3BB5E<br>
+        Foil the Wellgreens wordmark in gold. Everything else prints flat — keeps unit cost down.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">B</span>Ticket</h2>
+  <p class="lede">Oxblood field, gold perforation strip across the top, numbered like a raffle stub. Loudest of the three — it looks like something you won, not something you were handed. Best if the card has to compete for attention at a busy counter, and the deep background hides handling marks.</p>
+
+  <div class="pairgrid">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card B">
+        <div class="brand">Wellgreens</div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="sub">App required · No. 0001</div>
+        <div class="rule"></div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">START</div><div class="w">App on</div></div>
+          <div class="slot r"><div class="n">2</div><div class="w">$10 off</div></div>
+          <div class="slot hero"><div class="n">3</div><div class="w">40% off</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div><div class="w">Grinder</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div><div class="w">Tumbler</div></div>
+          <div class="slot hero"><div class="n">10</div><div class="w">50% off</div></div>
+        </div>
+        <div class="ft">
+          <div class="fline">Name</div>
+          <div class="fline">Phone · last 4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cardbox">
+      <div class="caption">Back</div>
+      <div class="card B back">
+        <div class="bh">How it works</div>
+        <div class="rules">
+          <b>Your progress is saved to your phone number.</b> Forgot the card? We'll look you up and catch it up next time.<br><br>
+          One punch per person per day · $25 minimum before tax · must be the enrolled customer, 21+ · returns void the punch · rewards are one transaction, in-stock items only · valid at all Wellgreens locations · 120 days to complete · card must match the account it was issued to · Wellgreens may end or change this program at any time.
+        </div>
+        <div class="app">
+          <div class="qr"></div>
+          <div class="appcopy">Scan to download<br>the Wellgreens app</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pairgrid" style="margin-top:22px">
+    <div class="tagbox">
+      <div class="caption">Key tag</div>
+      <div class="tag B">
+        <div class="hole"></div>
+        <div class="brand">Wellgreens</div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">1</div></div>
+          <div class="slot r"><div class="n">2</div></div>
+          <div class="slot hero"><div class="n">3</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div></div>
+          <div class="slot hero"><div class="n">10</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#6E2A2E"></div>
+        <div style="background:#E3BB5E"></div>
+        <div style="background:#F8F2E6"></div>
+        <div style="background:#161311"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Oxblood #6E2A2E · Gold #E3BB5E · Bone #F8F2E6 · Ink #161311<br>
+        Heaviest ink coverage of the three — costs slightly more and shows a punch more clearly.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">C</span>Passport</h2>
+  <p class="lede">Kraft-toned board, inset keyline border, square stamp boxes instead of circles. Reads as a travel document you collect stamps in — which is exactly the behaviour you want. Pairs best with the rotating monthly ink stamp, and it's the most forgiving of an imperfect hand stamp.</p>
+
+  <div class="pairgrid">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card C">
+        <div class="hdr">
+          <div class="brand">Wellgreens</div>
+          <div class="no">No. 0001</div>
+        </div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="sub">App required to enroll</div>
+        <div class="rule"></div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">START</div><div class="w">App</div></div>
+          <div class="slot r"><div class="n">2</div><div class="w">$10 off</div></div>
+          <div class="slot hero"><div class="n">3</div><div class="w">40% off</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div><div class="w">Grinder</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div><div class="w">Tumbler</div></div>
+          <div class="slot hero"><div class="n">10</div><div class="w">50% off</div></div>
+        </div>
+        <div class="ft">
+          <div class="fline">Name</div>
+          <div class="fline">Phone · last 4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cardbox">
+      <div class="caption">Back</div>
+      <div class="card C back">
+        <div class="bh">How it works</div>
+        <div class="rules">
+          <b>Your progress is saved to your phone number.</b> Forgot the card? We'll look you up and catch it up next time.<br><br>
+          One punch per person per day · $25 minimum before tax · must be the enrolled customer, 21+ · returns void the punch · rewards are one transaction, in-stock items only · valid at all Wellgreens locations · 120 days to complete · card must match the account it was issued to · Wellgreens may end or change this program at any time.
+        </div>
+        <div class="app">
+          <div class="qr"></div>
+          <div class="appcopy">Scan to download<br>the Wellgreens app</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pairgrid" style="margin-top:22px">
+    <div class="tagbox">
+      <div class="caption">Key tag</div>
+      <div class="tag C">
+        <div class="hole"></div>
+        <div class="brand">Wellgreens</div>
+        <div class="ttl">First 10 Visits</div>
+        <div class="pgrid">
+          <div class="slot one"><div class="n">1</div></div>
+          <div class="slot r"><div class="n">2</div></div>
+          <div class="slot hero"><div class="n">3</div></div>
+          <div class="slot"><div class="n">4</div></div>
+          <div class="slot"><div class="n">5</div></div>
+          <div class="slot r"><div class="n">6</div></div>
+          <div class="slot"><div class="n">7</div></div>
+          <div class="slot"><div class="n">8</div></div>
+          <div class="slot r"><div class="n">9</div></div>
+          <div class="slot hero"><div class="n">10</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#EFE6D2"></div>
+        <div style="background:#4A3C28"></div>
+        <div style="background:#234436"></div>
+        <div style="background:#6E2A2E"></div>
+        <div style="background:#E3BB5E"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Kraft #EFE6D2 · Bark #4A3C28 · Forest #234436 · Oxblood #6E2A2E · Gold #E3BB5E<br>
+        Uncoated stock. Cheapest to print and the only one a ballpoint pen writes on cleanly.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">D</span>The snap-apart combo</h2>
+  <p class="lede">One printed piece, perforated. The customer snaps the key tag off and keeps it on their keys; the wallet half holds the punches and the rules. Highest perceived value, and it doubles your odds that at least one half survives to visit 10.</p>
+
+  <div class="caption">Field Guide direction, shown as a combo</div>
+  <div class="combo">
+    <div class="main A" style="border:none;box-shadow:none;border-radius:0">
+      <div class="hdr">
+        <div class="brand">Wellgreens</div>
+        <div class="no">No. 0001</div>
+      </div>
+      <div class="ttl" style="font-size:19px">First 10 Visits</div>
+      <div class="sub">Download the app to start</div>
+      <div class="rule"></div>
+      <div class="pgrid">
+        <div class="slot one"><div class="n">1</div><div class="w">Start</div></div>
+        <div class="slot r"><div class="n">2</div><div class="w">$10 off</div></div>
+        <div class="slot hero"><div class="n">3</div><div class="w">40% off</div></div>
+        <div class="slot"><div class="n">4</div></div>
+        <div class="slot"><div class="n">5</div></div>
+        <div class="slot r"><div class="n">6</div><div class="w">Grinder</div></div>
+        <div class="slot"><div class="n">7</div></div>
+        <div class="slot"><div class="n">8</div></div>
+        <div class="slot r"><div class="n">9</div><div class="w">Tumbler</div></div>
+        <div class="slot hero"><div class="n">10</div><div class="w">50% off</div></div>
+      </div>
+      <div class="ft">
+        <div class="fline">Name</div>
+        <div class="fline">Phone · last 4</div>
+      </div>
+    </div>
+    <div class="perf"></div>
+    <div class="stub">
+      <div class="hole"></div>
+      <div class="brand">Wellgreens</div>
+      <div class="ttl">First<br>10 Visits</div>
+      <div class="mini">
+        <div class="ms"></div><div class="ms r"></div><div class="ms r"></div><div class="ms"></div><div class="ms"></div>
+        <div class="ms r"></div><div class="ms"></div><div class="ms"></div><div class="ms r"></div><div class="ms r"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">E</span>Which one</h2>
+  <div class="spec">
+    <div class="sp" style="--pc:var(--forest)">
+      <div class="lbl">Direction A</div>
+      <div class="nm">Field Guide</div>
+      <div class="dsc">Matches the dashboard and the 90-day plan. Looks like one company, not a coupon.</div>
+      <ul><li>Cheapest ink coverage</li><li>Stays clean after 10 punches</li><li>Least attention-grabbing</li></ul>
+      <div class="rec">Recommended</div>
+    </div>
+    <div class="sp" style="--pc:var(--oxblood)">
+      <div class="lbl">Direction B</div>
+      <div class="nm">Ticket</div>
+      <div class="dsc">Loud, feels like a prize. Wins the counter, costs a little more to print.</div>
+      <ul><li>Highest impact</li><li>Hides handling marks</li><li>Hard to write on</li></ul>
+      <div class="rec alt">If you want noise</div>
+    </div>
+    <div class="sp" style="--pc:#4A3C28">
+      <div class="lbl">Direction C</div>
+      <div class="nm">Passport</div>
+      <div class="dsc">Collect-the-stamps behaviour, built in. Best match for an ink stamp.</div>
+      <ul><li>Cheapest to produce</li><li>Pen writes on it cleanly</li><li>Most forgiving of a sloppy stamp</li></ul>
+      <div class="rec alt">Best with stamps</div>
+    </div>
+  </div>
+
+  <h2><span class="num">F</span>Print specs for the vendor</h2>
+  <p class="lede">Hand this to Sunny or Seattle Design Lab with your chosen direction. It's already scoped inside Plan 2 items 2 and 3 — add it to those print runs rather than sourcing separately.</p>
+  <table>
+    <thead><tr><th>Spec</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Wallet card</td><td>3.375 × 2.125 in · 1/8 in corner radius · 1/8 in bleed all round</td></tr>
+      <tr><td class="k">Key tag</td><td>3.375 × 1.44 in · fully rounded ends · 1/4 in keyring hole, centred 0.28 in from the left edge</td></tr>
+      <tr><td class="k">Combo</td><td>4.25 × 2.125 in · vertical perforation at 2.85 in · key tag hole on the stub</td></tr>
+      <tr><td class="k">Stock</td><td>18–20 pt C1S for A and B · 18 pt uncoated kraft for C</td></tr>
+      <tr><td class="k">Finish</td><td>Matte on the front, uncoated strip on the back where staff write · never gloss, a pen won't take</td></tr>
+      <tr><td class="k">Colour</td><td>4/4 CMYK · optional gold foil on the wordmark only</td></tr>
+      <tr><td class="k">Numbering</td><td>Sequential serial printed on every card. Ask for a start number and a range per store.</td></tr>
+      <tr><td class="k">Punch clearance</td><td>Keep all artwork 3 mm clear of each circle so a punch never destroys a number</td></tr>
+      <tr><td class="k">First run</td><td>Quote 2,500 and 10,000 · pilot two stores before the full chain</td></tr>
+    </tbody>
+  </table>
+
+  <div class="box" style="--pc:var(--red)">
+    <b class="h">Before anything prints</b>
+    <ul>
+      <li><b>The six decisions in section 10 of the proposal</b> — stacking, caps and the expiry window all appear in the fine print on the back.</li>
+      <li><b>The battery at visit 6</b> — confirm with compliance. If it's out, the back copy changes.</li>
+      <li><b>The QR square is a placeholder.</b> Drop in the real app-store link before artwork goes out.</li>
+      <li><b>Serial ranges per store</b> so a card can be traced back to where it was issued.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Wellgreens Dispensary · Card designs · September 2026 ·
+    <a href="https://wellgreens-team.netlify.app/punchcard.html">Full proposal</a> ·
+    <a href="https://wellgreens-team.netlify.app/start.html">Start Here</a> ·
+    <a href="https://wellgreens-team.netlify.app/">Team Dashboard</a>
+    <br><br>
+    Rendered in the browser at true proportions. These are design directions for a vendor to build from, not press-ready files.
+  </div>
+</div>
+</body>
+</html>
