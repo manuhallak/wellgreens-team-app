@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — Start Here</title>
+<style>
+:root{color-scheme:light;
+ --forest:#234436; --oxblood:#6E2A2E; --ochre:#B07A22; --gold:#E3BB5E;
+ --ink:#161311; --ink2:#2A2620; --taupe:#6B6358; --line:#D8CEBF; --cream:#FBF6EB; --card:#FFF;
+ --green:#1E7A46; --amber:#C9930A; --red:#C02626;
+ --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:1.5;padding:28px 22px 60px}
+.wrap{max-width:900px;margin:0 auto}
+.mast{background:var(--forest);color:#F6F1E7;border-bottom:7px solid var(--ochre);border-radius:4px;padding:28px 30px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#CBBFA8;font-weight:700}
+.mast h1{font-size:36px;font-weight:800;letter-spacing:-.01em;margin:8px 0 6px;color:#F6F1E7}
+.mast .sub{font-size:14.5px;color:#CBBFA8;font-weight:600}
+h2{font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--forest);
+ margin:34px 0 12px;padding-bottom:8px;border-bottom:2.5px solid var(--forest)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:12px}
+.blink{display:block;background:var(--card);border:1.5px solid var(--line);border-top:6px solid var(--pc,var(--forest));
+ border-radius:4px;padding:16px 17px;text-decoration:none;color:var(--ink2)}
+.blink:hover{border-color:var(--ochre);box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.blink .t{font-size:16px;font-weight:800;color:var(--pc,var(--forest))}
+.blink .d{font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:5px;line-height:1.4}
+.blink .u{font-size:11.5px;color:var(--ochre);font-weight:700;margin-top:8px;word-break:break-all}
+ol.steps{list-style:none;counter-reset:s;margin-top:4px}
+ol.steps li{counter-increment:s;position:relative;padding:13px 0 13px 52px;border-bottom:1px solid #EFE8DC;font-size:14.5px}
+ol.steps li:last-child{border-bottom:none}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:11px;width:34px;height:34px;border-radius:50%;
+ background:var(--forest);color:#F6F1E7;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+ol.steps li b{color:var(--ink)}
+ol.steps li .note{display:block;font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:3px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1.5px solid var(--line);border-radius:4px;overflow:hidden}
+th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:10px 12px;font-weight:800}
+td{padding:10px 12px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
+tr:nth-child(even) td{background:#FCFAF5}
+td.k{font-weight:800;color:var(--ink);white-space:nowrap}
+td a{color:var(--ochre);font-weight:700}
+.box{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--pc,var(--ochre));border-radius:4px;padding:15px 17px;margin-top:12px}
+.box b.h{display:block;font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--pc,#8A6508);margin-bottom:7px}
+.box ul{margin:0 0 0 18px;font-size:13.5px}
+.box ul li{margin-bottom:5px}
+.foot{margin-top:36px;padding-top:14px;border-top:1.5px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Wellgreens Dispensary · Operations</div>
+    <h1>Start Here</h1>
+    <div class="sub">Everything lives on the internet, not on any one computer. Open this page from any Mac, PC or phone and you have the whole thing.</div>
+  </div>
+
+  <h2>The three links</h2>
+  <div class="big">
+    <a class="blink" style="--pc:var(--forest)" href="https://wellgreens-team.netlify.app/" target="_blank" rel="noopener">
+      <div class="t">Team Dashboard</div>
+      <div class="d">Checklists, calendar, weekly focus, KPIs, inventory dashboard, and both 90-day plans. Everyone signs in with their own wellgreens.store email.</div>
+      <div class="u">wellgreens-team.netlify.app</div>
+    </a>
+    <a class="blink" style="--pc:var(--oxblood)" href="https://wellgreens-team.netlify.app/ownership.html" target="_blank" rel="noopener">
+      <div class="t">Ownership &amp; Pipeline</div>
+      <div class="d">Who owns what across both plans, live status roll-up, and the full Plan 2 pipeline. No login — shareable with anyone.</div>
+      <div class="u">wellgreens-team.netlify.app/ownership.html</div>
+    </a>
+    <a class="blink" style="--pc:var(--ochre)" href="https://forix.io/wg-manager-kpi-1488fe4454e8/" target="_blank" rel="noopener">
+      <div class="t">Manager KPI Dashboard</div>
+      <div class="d">Forix. Updated weekly.</div>
+      <div class="u">forix.io/wg-manager-kpi-1488fe4454e8</div>
+    </a>
+  </div>
+
+  <h2>Working from the Mac mini (or any other computer)</h2>
+  <ol class="steps">
+    <li><b>Bookmark this page.</b>
+      <span class="note">wellgreens-team.netlify.app/start.html — that one link gets you back to everything, on any machine, with nothing installed.</span></li>
+    <li><b>Open the Team Dashboard and sign in</b> with your wellgreens.store email.
+      <span class="note">That's all you need for day-to-day work. The dashboard, the calendar and the ownership page are all live and shared — whatever you change on one computer shows up on the other.</span></li>
+    <li><b>Only if you want to change how the pages themselves are built</b>, sign in to these three in your browser:
+      <span class="note">GitHub (manuhallak) · Supabase (Wellgreens project) · Netlify (wellgreens-team). See the table below.</span></li>
+    <li><b>Install the Claude desktop app and sign in as manu@wellgreens.store</b> if you want to keep working with Claude there.
+      <span class="note">Your sessions follow your account across desktop, web and mobile. Anything that touches files on a specific computer needs the desktop app open on that computer.</span></li>
+  </ol>
+
+  <h2>Where everything actually lives</h2>
+  <table>
+    <thead><tr><th>Piece</th><th>Where</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td class="k">The pages</td><td><a href="https://github.com/manuhallak/wellgreens-team-app" target="_blank" rel="noopener">github.com/manuhallak/wellgreens-team-app</a></td><td>Source for the dashboard (index.html), ownership page (ownership.html) and this page (start.html).</td></tr>
+      <tr><td class="k">Publishing</td><td><a href="https://app.netlify.com/projects/wellgreens-team" target="_blank" rel="noopener">Netlify · wellgreens-team</a></td><td>Any change committed to GitHub goes live in about a minute. Nothing to press.</td></tr>
+      <tr><td class="k">The data</td><td><a href="https://supabase.com/dashboard/project/yswabuojaexpwdpoflrr" target="_blank" rel="noopener">Supabase · Wellgreens</a></td><td>Every tick, calendar entry, status and note. Shared live across all users.</td></tr>
+      <tr><td class="k">Logins</td><td><a href="https://supabase.com/dashboard/project/yswabuojaexpwdpoflrr/auth/users" target="_blank" rel="noopener">Supabase → Authentication → Users</a></td><td>Add people, resend invites, send a password reset. The app itself has no "forgot password" link yet.</td></tr>
+      <tr><td class="k">Calendar feed</td><td>/.netlify/functions/calendar</td><td>Subscribe in Google Calendar to see all store visits.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Still open</h2>
+
+  <div class="box" style="--pc:var(--red)">
+    <b class="h">Past due · Plan 1</b>
+    <ul>
+      <li><b>In-store pickup</b> — plan &amp; execute. Was due ~Sep 1.</li>
+      <li><b>Schedule monitoring with Carlo</b> — was due ~Sep 1.</li>
+    </ul>
+  </div>
+
+  <div class="box" style="--pc:var(--ochre)">
+    <b class="h">Waiting on someone else</b>
+    <ul>
+      <li><b>Sunny</b> — committed dates for the counter-top displays.</li>
+      <li><b>Seattle Design Lab</b> — dates for shelf talkers and displays.</li>
+      <li><b>Gift cards</b> — reward amounts, and whether they work across all 11 stores. Hard deadline: live by Nov 29.</li>
+      <li><b>Refer-a-friend</b> — what the reward actually is.</li>
+      <li><b>Manager promotion training</b> — nobody is named as the trainer yet.</li>
+      <li><b>Edge API</b> — access and endpoints, for the manager dashboard feed.</li>
+    </ul>
+  </div>
+
+  <div class="box" style="--pc:var(--forest)">
+    <b class="h">Housekeeping</b>
+    <ul>
+      <li><b>Three accounts never accepted their invite</b> — jocelyn@, luis@, and lunar@improvebs.com. They can't sign in until they do. Resend from Supabase → Authentication → Users.</li>
+      <li><b>The app has no "Forgot password" link.</b> Every reset has to be sent from Supabase by hand. Worth adding.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Nothing here is stored on one computer. The pages are published from GitHub, the data sits in Supabase, and both are reachable from anywhere you can open a browser.
+  </div>
+</div>
+</body>
+</html>
