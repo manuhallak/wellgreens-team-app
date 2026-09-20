@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — First 10 Visits · Card Designs v2</title>
+<style>
+:root{color-scheme:light;
+ --forest:#1E4030; --forest2:#152E22; --lime:#7FBF4D; --gold:#E3BB5E; --ochre:#B07A22;
+ --oxblood:#6E2A2E; --ink:#111110; --ink2:#2A2620; --taupe:#6B6358; --line:#D8CEBF;
+ --cream:#FBF6EB; --paper:#F4EFE2; --bone:#F8F4E9;
+ --red:#C02626;
+ --f:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--f);background:var(--cream);color:var(--ink2);line-height:1.55;padding:26px 20px 80px}
+.wrap{max-width:1080px;margin:0 auto}
+
+.mast{background:var(--forest);color:#F6F1E7;border-bottom:8px solid var(--lime);border-radius:4px;padding:30px 32px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#9FC9A8;font-weight:700}
+.mast h1{font-size:40px;font-weight:900;letter-spacing:-.025em;margin:9px 0 8px;color:#F6F1E7;line-height:1}
+.mast .sub{font-size:14.5px;color:#BFD6C4;font-weight:600;max-width:680px}
+.mast .links{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.mast .links a{font-size:11.5px;font-weight:800;color:#F6F1E7;text-decoration:none;border:2px solid rgba(255,255,255,.4);
+ background:rgba(255,255,255,.1);padding:7px 12px;border-radius:3px}
+.mast .links a:hover{background:#fff;color:var(--forest)}
+
+h2{font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--forest);
+ margin:46px 0 6px;padding-bottom:9px;border-bottom:3px solid var(--forest)}
+h2 .num{color:var(--lime);margin-right:10px}
+.lede{font-size:14.5px;margin:12px 0 18px;max-width:780px}
+.caption{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:800;margin-bottom:9px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:24px;margin-top:4px}
+
+.wm{width:100%;height:100%;display:block}
+.wm path{fill:none;stroke-width:21;stroke-linecap:butt;stroke-linejoin:miter}
+
+.cardbox{width:100%;max-width:400px}
+.card{width:100%;aspect-ratio:1.588;border-radius:12px;position:relative;overflow:hidden;
+ box-shadow:0 2px 4px rgba(0,0,0,.18),8px 10px 0 rgba(30,64,48,.14);
+ padding:15px 16px;display:flex;flex-direction:column;border:3px solid var(--ink)}
+
+.brandline{display:flex;justify-content:space-between;align-items:center}
+.wordmark{font-size:12px;font-weight:900;letter-spacing:.34em;text-transform:uppercase}
+.serial{font-size:7.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.75}
+.bigttl{font-size:33px;font-weight:900;letter-spacing:-.045em;line-height:.88;margin-top:6px;text-transform:uppercase}
+.kicker{font-size:8.5px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;margin-top:6px}
+.hr{height:3px;margin:10px 0 11px}
+
+.prow{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.pu{aspect-ratio:1;border-radius:8px;position:relative;display:flex;align-items:center;justify-content:center;padding:17% 15% 22%}
+.pu .num{position:absolute;bottom:5%;left:0;right:0;text-align:center;font-size:8px;font-weight:900;letter-spacing:.04em}
+
+.ftrow{margin-top:auto;padding-top:9px;display:flex;gap:9px;align-items:flex-end}
+.fl{flex:1;font-size:6px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;padding-bottom:2px}
+
+.D1{background:var(--forest)}
+.D1 .wordmark{color:var(--lime)}
+.D1 .serial{color:#8FB89A}
+.D1 .bigttl{color:#F8F4E9}
+.D1 .kicker{color:var(--gold)}
+.D1 .hr{background:var(--lime)}
+.D1 .pu{background:rgba(0,0,0,.26);border:2px solid rgba(248,244,233,.28)}
+.D1 .pu .wm path{stroke:rgba(248,244,233,.34)}
+.D1 .pu .num{color:#BFD6C4}
+.D1 .pu.r{border-color:var(--gold);background:rgba(227,187,94,.14)}
+.D1 .pu.r .wm path{stroke:rgba(227,187,94,.6)}
+.D1 .pu.r .num{color:var(--gold)}
+.D1 .pu.hero{border-color:var(--lime);background:rgba(127,191,77,.18)}
+.D1 .pu.hero .wm path{stroke:rgba(127,191,77,.75)}
+.D1 .pu.hero .num{color:var(--lime)}
+.D1 .fl{color:#8FB89A;border-bottom:1.5px solid rgba(143,184,154,.5)}
+
+.D2{background:var(--bone)}
+.D2 .wordmark{color:var(--forest)}
+.D2 .serial{color:#8B8272}
+.D2 .bigttl{color:var(--ink)}
+.D2 .kicker{color:var(--ochre)}
+.D2 .hr{background:var(--ink)}
+.D2 .pu{background:#fff;border:2.5px solid var(--ink)}
+.D2 .pu .wm path{stroke:#D3CBB9}
+.D2 .pu .num{color:var(--ink)}
+.D2 .pu.r{background:#EFF6E8;border-color:var(--forest)}
+.D2 .pu.r .wm path{stroke:#A9CE8C}
+.D2 .pu.r .num{color:var(--forest)}
+.D2 .pu.hero{background:var(--gold);border-color:var(--ink)}
+.D2 .pu.hero .wm path{stroke:rgba(17,17,16,.28)}
+.D2 .pu.hero .num{color:var(--ink)}
+.D2 .fl{color:#8B8272;border-bottom:1.5px solid #C6BCA6}
+
+.D3{background:#14150F;border-color:#14150F}
+.D3 .wordmark{color:var(--gold)}
+.D3 .serial{color:#7E7A66}
+.D3 .bigttl{color:#F4F0E2}
+.D3 .kicker{color:var(--lime)}
+.D3 .hr{background:linear-gradient(90deg,var(--gold),var(--lime))}
+.D3 .pu{background:rgba(255,255,255,.05);border:2px solid rgba(244,240,226,.22)}
+.D3 .pu .wm path{stroke:rgba(244,240,226,.3)}
+.D3 .pu .num{color:#A8A490}
+.D3 .pu.r{border-color:var(--lime);background:rgba(127,191,77,.12)}
+.D3 .pu.r .wm path{stroke:rgba(127,191,77,.65)}
+.D3 .pu.r .num{color:var(--lime)}
+.D3 .pu.hero{border-color:var(--gold);background:rgba(227,187,94,.16)}
+.D3 .pu.hero .wm path{stroke:rgba(227,187,94,.8)}
+.D3 .pu.hero .num{color:var(--gold)}
+.D3 .fl{color:#7E7A66;border-bottom:1.5px solid rgba(126,122,102,.55)}
+
+.pu.done{background:var(--cream)!important;border-style:solid!important;
+ box-shadow:inset 0 2px 3px rgba(0,0,0,.42), inset 0 -1px 0 rgba(255,255,255,.7)}
+.pu.done .wm path{stroke:var(--cream)!important}
+.pu.done .shadow path{stroke:rgba(0,0,0,.4)!important}
+.pu.done .num{color:var(--taupe)!important;opacity:.55}
+.wstack{position:relative;width:100%;height:100%}
+.wstack .shadow{position:absolute;inset:0;transform:translateY(1.5px)}
+.wstack .shadow path{stroke:transparent}
+.wstack .front{position:absolute;inset:0}
+
+.back{padding:14px 16px}
+.back .bh{font-size:9px;letter-spacing:.24em;text-transform:uppercase;font-weight:900;margin-bottom:7px}
+.back .rules{font-size:7.1px;line-height:1.75;font-weight:600}
+.back .rules b{font-weight:900}
+.back .app{margin-top:auto;padding-top:8px;display:flex;align-items:center;gap:10px}
+.back .qr{width:42px;height:42px;border-radius:4px;flex-shrink:0;border:2.5px solid currentColor;
+ background-image:linear-gradient(45deg,currentColor 25%,transparent 25%,transparent 75%,currentColor 75%),
+ linear-gradient(45deg,currentColor 25%,transparent 25%,transparent 75%,currentColor 75%);
+ background-size:9px 9px;background-position:0 0,4.5px 4.5px}
+.back .appcopy{font-size:8px;font-weight:900;letter-spacing:.07em;line-height:1.45;text-transform:uppercase}
+.D1.back{color:var(--lime)} .D1.back .rules{color:#C3D8C8} .D1.back .bh{color:var(--gold)}
+.D2.back{color:var(--forest)} .D2.back .rules{color:#6A6252} .D2.back .bh{color:var(--ink)}
+.D3.back{color:var(--gold)} .D3.back .rules{color:#B5B19E} .D3.back .bh{color:var(--lime)}
+
+.tagbox{max-width:340px}
+.tag{width:100%;aspect-ratio:2.35;border-radius:999px;position:relative;overflow:hidden;border:3px solid var(--ink);
+ box-shadow:0 2px 4px rgba(0,0,0,.18),7px 8px 0 rgba(30,64,48,.14);
+ padding:10px 16px 10px 36px;display:flex;flex-direction:column;justify-content:center}
+.tag .hole{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:13px;height:13px;border-radius:50%;
+ background:var(--cream);box-shadow:inset 0 1px 2px rgba(0,0,0,.45)}
+.tag .wordmark{font-size:7.5px;letter-spacing:.3em}
+.tag .bigttl{font-size:15px;margin:1px 0 6px}
+.tag .prow{gap:5px}
+.tag .pu{border-radius:5px;padding:16% 14% 16%}
+.tag .pu .num{display:none}
+
+.diebox{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px}
+.die{background:#fff;border:2px solid var(--line);border-radius:6px;padding:18px;text-align:center}
+.die .dw{width:78px;height:65px;margin:0 auto 11px}
+.die .dl{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--forest)}
+.die .dd{font-size:12px;color:var(--taupe);font-weight:600;margin-top:5px;line-height:1.5}
+
+.spec{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:13px;margin-top:6px}
+.sp{background:#FFF;border:2px solid var(--line);border-top:7px solid var(--pc,var(--forest));border-radius:4px;padding:15px 16px}
+.sp .lbl{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);font-weight:900}
+.sp .nm{font-size:16px;font-weight:900;color:var(--ink);margin:5px 0 7px}
+.sp .dsc{font-size:12.5px;color:var(--ink2);line-height:1.5}
+.sp ul{margin:8px 0 0 16px;font-size:12px;color:var(--taupe);font-weight:600}
+.sp ul li{margin-bottom:3px}
+.rec{display:inline-block;margin-top:10px;font-size:9.5px;font-weight:900;letter-spacing:.11em;text-transform:uppercase;
+ background:var(--forest);color:#F6F1E7;padding:5px 10px;border-radius:3px}
+.rec.alt{background:#EDE6DA;color:var(--taupe)}
+.sw{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.sw div{width:32px;height:32px;border-radius:4px;border:2px solid rgba(0,0,0,.16)}
+
+table{width:100%;border-collapse:collapse;background:#FFF;border:2px solid var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+th{background:var(--forest);color:#F6F1E7;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:11px 12px;font-weight:900}
+td{padding:10px 12px;border-top:1px solid #EFE8DC;font-size:13.5px;vertical-align:top}
+tr:nth-child(even) td{background:#FCFAF5}
+td.k{font-weight:900;color:var(--ink);white-space:nowrap}
+
+.box{background:#FFF;border:2px solid var(--line);border-left:7px solid var(--pc,var(--ochre));border-radius:4px;padding:15px 18px;margin-top:14px}
+.box b.h{display:block;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--pc,#8A6508);margin-bottom:8px}
+.box ul{margin:0 0 0 18px;font-size:13.5px}
+.box ul li{margin-bottom:6px}
+.foot{margin-top:48px;padding-top:16px;border-top:2px solid var(--line);font-size:12px;color:var(--taupe);font-weight:600}
+.foot a{color:var(--ochre);font-weight:800}
+@media(max-width:560px){.mast h1{font-size:29px}.bigttl{font-size:26px}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="wglyph" viewBox="0 0 120 96">
+    <path d="M13 9 L37 84 L60 32 L83 84 L107 9"/>
+  </symbol>
+</svg>
+
+<div class="wrap">
+
+  <div class="mast">
+    <div class="eyebrow">Wellgreens Dispensary · First 10 Visits · Version 2</div>
+    <h1>The W Punch</h1>
+    <div class="sub">Every visit knocks a Wellgreens W clean out of the card. By visit ten the customer is holding a row of W-shaped holes — nobody else's card looks like that, and nobody can fake the die.</div>
+    <div class="links">
+      <a href="https://wellgreens-team.netlify.app/punchcard.html">← Full proposal</a>
+      <a href="https://wellgreens-team.netlify.app/start.html">Start Here</a>
+    </div>
+  </div>
+
+  <h2><span class="num">01</span>The idea</h2>
+  <p class="lede">A round hole is a hole. A <b>W</b> is a signature. One custom die per store, every punch leaves the mark, and a counterfeit card is obvious from across the counter. Here's the same card before and after five visits.</p>
+
+  <div class="grid2">
+    <div class="cardbox">
+      <div class="caption">Fresh card · visit 1</div>
+      <div class="card D1">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Name</div><div class="fl">Phone · last 4</div></div>
+      </div>
+    </div>
+    <div class="cardbox">
+      <div class="caption">Same card · five visits in</div>
+      <div class="card D1">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Marcus</div><div class="fl">····4417</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box" style="--pc:var(--forest)">
+    <b class="h">Why the W beats a circle</b>
+    <ul>
+      <li><b>It can't be faked.</b> Anyone can buy a round office punch. Nobody has your W die.</li>
+      <li><b>It's a brand impression ten times over.</b> Every punch stamps your mark into the card, and the customer watches it happen.</li>
+      <li><b>It audits itself.</b> A regional manager can spot a wrong punch from across a counter — no serial lookup needed.</li>
+      <li><b>It gives the staff a line.</b> "Let's get you another W." Better than "let me punch that."</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">02</span>Direction 1 — Forest</h2>
+  <p class="lede">Deep forest field, lime rule, heavy black keyline, oversized condensed title. Loud enough to hold a counter, still unmistakably the same company as the dashboard. Punched W's read bright against the dark card.</p>
+
+  <div class="grid2">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card D1">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Name</div><div class="fl">Phone · last 4</div></div>
+      </div>
+    </div>
+    <div class="cardbox">
+      <div class="caption">Back</div>
+      <div class="card D1 back">
+        <div class="bh">How it works</div>
+        <div class="rules">
+          <b>Your progress lives with your phone number.</b> Forgot the card? We will look you up and catch it up next time.<br><br>
+          2nd visit $10 off your next order, $30 min · 3rd visit 40% off · 6th visit free grinder, lighter or battery · 9th visit free tumbler · 10th visit 50% off.<br><br>
+          One punch per person per day · $25 minimum before tax · enrolled customer only, 21+ · returns void the punch · rewards are one transaction, in-stock only · good at all Wellgreens · 120 days to finish.
+        </div>
+        <div class="app"><div class="qr"></div><div class="appcopy">Scan to get<br>the app</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:24px">
+    <div class="tagbox">
+      <div class="caption">Key tag · three visits in</div>
+      <div class="tag D1">
+        <div class="hole"></div>
+        <div class="wordmark">Wellgreens</div>
+        <div class="bigttl" style="font-size:15px;line-height:1">First 10 Visits</div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#1E4030"></div><div style="background:#7FBF4D"></div>
+        <div style="background:#E3BB5E"></div><div style="background:#F8F4E9"></div><div style="background:#111110"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Forest #1E4030 · Lime #7FBF4D · Gold #E3BB5E · Bone #F8F4E9 · Ink #111110<br>
+        Dark card, bright holes. The most dramatic as it fills up.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">03</span>Direction 2 — High Vis</h2>
+  <p class="lede">Bone card, fat black keylines on every slot, gold for the two big rewards. Reads like a ticket stub at arm's length, and it's the only one you can comfortably write on. Cheapest to print of the three.</p>
+
+  <div class="grid2">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card D2">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Name</div><div class="fl">Phone · last 4</div></div>
+      </div>
+    </div>
+    <div class="cardbox">
+      <div class="caption">Five visits in</div>
+      <div class="card D2">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Marcus</div><div class="fl">····4417</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:24px">
+    <div class="tagbox">
+      <div class="caption">Key tag</div>
+      <div class="tag D2">
+        <div class="hole"></div>
+        <div class="wordmark">Wellgreens</div>
+        <div class="bigttl" style="font-size:15px;line-height:1">First 10 Visits</div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#F8F4E9"></div><div style="background:#111110"></div>
+        <div style="background:#1E4030"></div><div style="background:#E3BB5E"></div><div style="background:#B07A22"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Bone #F8F4E9 · Ink #111110 · Forest #1E4030 · Gold #E3BB5E · Ochre #B07A22<br>
+        Lightest ink coverage and the only one a normal pen writes on.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">04</span>Direction 3 — Night</h2>
+  <p class="lede">Near-black board, gold wordmark, lime-to-gold rule. The most premium of the three and the one that photographs best for social. Punched W's glow against it.</p>
+
+  <div class="grid2">
+    <div class="cardbox">
+      <div class="caption">Front</div>
+      <div class="card D3">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Name</div><div class="fl">Phone · last 4</div></div>
+      </div>
+    </div>
+    <div class="cardbox">
+      <div class="caption">Five visits in</div>
+      <div class="card D3">
+        <div class="brandline"><div class="wordmark">Wellgreens</div><div class="serial">No. 0001</div></div>
+        <div class="bigttl">First 10<br>Visits</div>
+        <div class="kicker">App required · Punch every visit</div>
+        <div class="hr"></div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">1</div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">2 · $10</div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">3 · 40%</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">4</div></div><div class="pu done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">5</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">6 · GIFT</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">7</div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">8</div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">9 · CUP</div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div><div class="num">10 · 50%</div></div></div>
+        <div class="ftrow"><div class="fl">Marcus</div><div class="fl">····4417</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid2" style="margin-top:24px">
+    <div class="tagbox">
+      <div class="caption">Key tag</div>
+      <div class="tag D3">
+        <div class="hole"></div>
+        <div class="wordmark">Wellgreens</div>
+        <div class="bigttl" style="font-size:15px;line-height:1">First 10 Visits</div>
+        <div class="prow"><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero done"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu r"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div><div class="pu hero"><div class="wstack"><svg class="wm shadow"><use href="#wglyph"/></svg><svg class="wm front"><use href="#wglyph"/></svg></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="caption">Palette</div>
+      <div class="sw">
+        <div style="background:#14150F"></div><div style="background:#E3BB5E"></div>
+        <div style="background:#7FBF4D"></div><div style="background:#F4F0E2"></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--taupe);font-weight:600;margin-top:12px;line-height:1.7">
+        Near-black #14150F · Gold #E3BB5E · Lime #7FBF4D · Bone #F4F0E2<br>
+        Heaviest coverage, best on camera, scuffs show soonest.
+      </div>
+    </div>
+  </div>
+
+  <h2><span class="num">05</span>The W die</h2>
+  <p class="lede">One custom punch tool per store. This is the piece that makes the whole program un-fakeable, so it's worth ordering properly.</p>
+
+  <div class="diebox">
+    <div class="die">
+      <div class="dw" style="color:var(--forest)"><svg class="wm"><use href="#wglyph"/></svg></div>
+      <div class="dl">Standard</div>
+      <div class="dd">Four even strokes, flat cuts top and bottom. Still reads as a W at 8 mm.</div>
+    </div>
+    <div class="die">
+      <div class="dw" style="color:var(--lime)"><svg class="wm" style="transform:scaleX(.86)"><use href="#wglyph"/></svg></div>
+      <div class="dl">Condensed</div>
+      <div class="dd">Narrower footprint — fits more punches in a row if you ever extend past 10 visits.</div>
+    </div>
+    <div class="die">
+      <div class="dw" style="color:var(--ochre)"><svg class="wm" style="transform:rotate(-8deg)"><use href="#wglyph"/></svg></div>
+      <div class="dl">Angled</div>
+      <div class="dd">Tilted 8°. Hardest to reproduce, and the row of holes looks hand-made rather than machined.</div>
+    </div>
+  </div>
+
+  <div class="box" style="--pc:var(--forest)">
+    <b class="h">Die spec</b>
+    <ul>
+      <li><b>Size:</b> 8 mm wide × 6.5 mm tall. Big enough to read as a W, small enough that ten of them don't weaken the card.</li>
+      <li><b>Type:</b> long-reach lever punch, 25 mm throat minimum, so it reaches the middle of a card.</li>
+      <li><b>Quantity:</b> one per store plus two spares held regionally. Number each tool and log which store holds it.</li>
+      <li><b>Card clearance:</b> keep all artwork 3 mm clear of each slot so a punch never destroys a number.</li>
+      <li><b>Stock limit:</b> a lever punch handles up to about 20 pt cleanly. Heavier board needs a tabletop press.</li>
+    </ul>
+  </div>
+
+  <h2><span class="num">06</span>Which one</h2>
+  <div class="spec">
+    <div class="sp" style="--pc:var(--forest)">
+      <div class="lbl">Direction 1</div>
+      <div class="nm">Forest</div>
+      <div class="dsc">Dark card, bright holes. Most dramatic as it fills, and clearly the same company as everything else you run.</div>
+      <ul><li>Best punch visibility</li><li>Mid ink cost</li><li>Needs a white pen for the name line</li></ul>
+      <div class="rec">Recommended</div>
+    </div>
+    <div class="sp" style="--pc:var(--ink)">
+      <div class="lbl">Direction 2</div>
+      <div class="nm">High Vis</div>
+      <div class="dsc">Bone and black. Ticket-stub energy, cheapest to print, and the only one a budtender can write on with a normal pen.</div>
+      <ul><li>Cheapest</li><li>Pen-friendly</li><li>Shows dirt fastest</li></ul>
+      <div class="rec alt">Cheapest to run</div>
+    </div>
+    <div class="sp" style="--pc:#14150F">
+      <div class="lbl">Direction 3</div>
+      <div class="nm">Night</div>
+      <div class="dsc">Near-black and gold. The one customers photograph. Most expensive, highest perceived value.</div>
+      <ul><li>Best on camera</li><li>Heaviest coverage</li><li>Scuffs show on dark stock</li></ul>
+      <div class="rec alt">Most premium</div>
+    </div>
+  </div>
+
+  <h2><span class="num">07</span>Print spec</h2>
+  <table>
+    <thead><tr><th>Spec</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td class="k">Wallet card</td><td>3.375 × 2.125 in · 1/8 in corner radius · 1/8 in bleed</td></tr>
+      <tr><td class="k">Key tag</td><td>3.375 × 1.44 in · rounded ends · 1/4 in keyring hole</td></tr>
+      <tr><td class="k">Stock</td><td>18–20 pt C1S · matte front, uncoated strip on the back for the name line</td></tr>
+      <tr><td class="k">Colour</td><td>4/4 CMYK · optional gold foil on the wordmark only</td></tr>
+      <tr><td class="k">Numbering</td><td>Sequential serial on every card · a range assigned per store</td></tr>
+      <tr><td class="k">W slots</td><td>8 × 6.5 mm · 3 mm artwork clearance all round</td></tr>
+      <tr><td class="k">First run</td><td>Quote 2,500 and 10,000 · pilot two stores before the chain</td></tr>
+    </tbody>
+  </table>
+
+  <div class="box" style="--pc:var(--red)">
+    <b class="h">Still needed before print</b>
+    <ul>
+      <li><b>Your actual Wellgreens W.</b> The W here is drawn to the proportions of the die, not pulled from your brand files. Send me the logo and I'll match the real letterform.</li>
+      <li><b>The six decisions</b> in section 10 of the proposal — stacking, caps and the 120-day window all sit in the fine print on the back.</li>
+      <li><b>The battery at visit 6</b> — compliance check.</li>
+      <li><b>The QR square is a placeholder</b> until the real app-store link goes in.</li>
+    </ul>
+  </div>
+
+  <div class="foot">
+    Wellgreens Dispensary · Card designs v2 · September 2026 ·
+    <a href="https://wellgreens-team.netlify.app/punchcard.html">Full proposal</a> ·
+    <a href="https://wellgreens-team.netlify.app/start.html">Start Here</a> ·
+    <a href="https://wellgreens-team.netlify.app/">Team Dashboard</a>
+    <br><br>
+    Original artwork for Wellgreens. Rendered in the browser at true card proportions — design directions for a vendor to build from, not press-ready files.
+  </div>
+</div>
+</body>
+</html>
