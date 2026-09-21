@@ -1,4 +1,146 @@
-<!DOCTYPE html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Plan card notes: click a workstream title to open the full brief in a pop-up. -->
+<style>
+.ptitle.hasnote{cursor:pointer}
+.ptitle.hasnote:hover{color:#B07A22}
+.ptitle .nbadge{display:inline-block;margin-left:10px;font-family:'Jost',sans-serif;font-size:9px;letter-spacing:.16em;
+ text-transform:uppercase;background:#B07A22;color:#F6F2EB;padding:3px 8px;vertical-align:middle;font-weight:600}
+#pnote{position:fixed;inset:0;z-index:1200;background:rgba(16,24,19,.74);display:none;
+ align-items:flex-start;justify-content:center;padding:40px 18px 60px;overflow:auto}
+#pnote.on{display:flex}
+#pnote .nbox{background:#F6F2EB;border:3px solid #161311;box-shadow:10px 10px 0 rgba(0,0,0,.35);
+ max-width:780px;width:100%;font-family:'Jost',sans-serif;font-weight:300}
+#pnote .nhd{background:#234436;color:#F6F2EB;padding:24px 28px;position:relative}
+#pnote .nhd h3{font-family:'Anton',sans-serif;font-size:28px;font-weight:400;letter-spacing:.01em;
+ text-transform:uppercase;line-height:1.04;margin:0;padding-right:40px}
+#pnote .nhd .nsub{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#CBBFA8;margin-top:9px;font-weight:600}
+#pnote .nx{position:absolute;top:16px;right:20px;cursor:pointer;font-size:28px;line-height:1;color:#CBBFA8;font-weight:300}
+#pnote .nx:hover{color:#fff}
+#pnote .nbd{padding:26px 28px 30px}
+#pnote h4{font-family:'Anton',sans-serif;font-size:14px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;
+ color:#234436;margin:26px 0 10px;padding-bottom:7px;border-bottom:2px solid #234436}
+#pnote h4:first-child{margin-top:0}
+#pnote p{font-size:13.5px;color:#2A2620;line-height:1.7;margin-bottom:8px}
+#pnote ul{margin:0 0 0 19px}
+#pnote li{font-size:13.5px;color:#2A2620;line-height:1.65;margin-bottom:7px}
+#pnote b{font-weight:600;color:#161311}
+#pnote .lad{display:grid;grid-template-columns:auto 1fr;gap:7px 16px;font-size:13.5px;color:#2A2620}
+#pnote .lad .v{font-weight:600;color:#234436;white-space:nowrap;letter-spacing:.04em}
+#pnote .kk{background:#fff;border:1px solid #D8CEBF;border-left:4px solid #B07A22;padding:15px 17px;margin:12px 0 0}
+#pnote .kk.big{border-left-color:#234436;background:#F1F6F2}
+#pnote .cap{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8A8074;font-weight:600;margin:14px 0 7px}
+#pnote .nimg{width:100%;max-width:420px;border:2px solid #161311;display:block}
+#pnote .nft{margin-top:26px;padding-top:16px;border-top:1px solid #D8CEBF;display:flex;gap:9px;flex-wrap:wrap}
+#pnote .nft a{font-size:10px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;text-decoration:none;
+ padding:9px 14px;border:1px solid #234436;color:#234436}
+#pnote .nft a:hover{background:#234436;color:#F6F2EB}
+</style>
+<script>
+window.addEventListener("DOMContentLoaded",function(){
+  var H=[];
+  H.push('<h4>The offer</h4>');
+  H.push('<div class="lad">');
+  H.push('<div class="v">Visit 1</div><div>Card issued — only once the app is installed and open on their phone.</div>');
+  H.push('<div class="v">Visit 2</div><div>$10 off your next order. $30 minimum.</div>');
+  H.push('<div class="v">Visit 3</div><div>40% off the entire store.</div>');
+  H.push('<div class="v">Visit 6</div><div>Free grinder, lighter or battery — their pick.</div>');
+  H.push('<div class="v">Visit 9</div><div>Free Wellgreens tumbler.</div>');
+  H.push('<div class="v">Visit 10</div><div>50% off the entire store.</div>');
+  H.push('</div>');
+  H.push('<div class="kk big"><b>The one rule that makes it work: the card is not the ledger — the POS is.</b> Every qualifying visit is already logged against the customer\'s phone number, and that count is the punch card. The physical card is the trophy they carry. Accept that and the forgotten-card problem disappears, fraud stops paying, and nothing has to be built inside the app.</div>');
+
+  H.push('<h4>Forgot the card?</h4>');
+  H.push('<ul>');
+  H.push('<li><b>Visit 4, no card</b> — look up the phone number, log it, say "you are on 4, bring the card next time and we will catch it up."</li>');
+  H.push('<li><b>Visit 6, card is back</b> — punch boxes 4, 5 and 6 in one go, hand over the grinder.</li>');
+  H.push('<li><b>Visit 6, still no card</b> — the grinder goes out anyway. Reward marked redeemed in the profile.</li>');
+  H.push('<li><b>Card lost</b> — reissue on the spot, void the old serial, punch the new one up to date. It can never double-dip because redemptions live in the POS.</li>');
+  H.push('<li><b>Different store</b> — works everywhere. The profile is chain-wide across all 11.</li>');
+  H.push('<li><b>"I never got a card"</b> — enrollment date is the start line. Punch visits 1 and 2 as a head start.</li>');
+  H.push('</ul>');
+
+  H.push('<h4>Getting the app downloaded</h4>');
+  H.push('<ul>');
+  H.push('<li><b>Free, day one</b> — the card is only handed over when the budtender sees the app open on the customer phone. No app, no card.</li>');
+  H.push('<li><b>At launch</b> — write the card serial into the POS profile. A card with no matching profile is void, which kills card sharing.</li>');
+  H.push('<li><b>Later</b> — if you adopt a loyalty platform, check its app-installed flag at redemption and the honour system disappears.</li>');
+  H.push('</ul>');
+
+  H.push('<h4>What counts as a visit</h4>');
+  H.push('<p>One punch per person per calendar day · $25 minimum before tax · must be the enrolled customer, 21+ · returns void the punch · rewards are one transaction, in-stock items only · good at all 11 stores · 120 days to complete the card.</p>');
+
+  H.push('<h4>Collecting the punches</h4>');
+  H.push('<ul>');
+  H.push('<li>Custom <b>W-shaped die</b>, one per store — a round office punch cannot fake it, and every punch stamps the brand into the card.</li>');
+  H.push('<li>Budtender initials and date in every box; the receipt prints "visit 4 of 10."</li>');
+  H.push('<li>A card box behind the counter for regulars who know they will forget — it lives at their home store like a bar tab.</li>');
+  H.push('<li>Make visits 6, 9 and 10 loud. The whole store hearing "that is a free tumbler" sells the programme to everyone in line.</li>');
+  H.push('<li>Train one line: "you are on 4 — two more and the grinder is yours." Highest-leverage sentence in the programme.</li>');
+  H.push('</ul>');
+
+  H.push('<h4>Reference</h4>');
+  H.push('<div class="cap">The example card you liked</div>');
+  H.push('<img class="nimg" src="punchcard.png" alt="Punch card reference" loading="lazy">');
+
+  H.push('<h4>Still to decide</h4>');
+  H.push('<ul>');
+  H.push('<li>Does the $10 coupon stack with the 40% and 50% tiers? It is spent on visit 3, which is already 40% off.</li>');
+  H.push('<li>Cap on visits 3 and 10, or unlimited percent off the whole store?</li>');
+  H.push('<li>Completion window — 120 days, 90, or no expiry?</li>');
+  H.push('<li>Which POS, and does it have a loyalty module?</li>');
+  H.push('<li>Can vape batteries be given away free in Washington? Compliance check before print.</li>');
+  H.push('<li>Pilot two stores for 30 days, or all 11 at once for the holidays?</li>');
+  H.push('</ul>');
+  H.push('<div class="kk"><b>Waiting on:</b> print dates from Sunny and Seattle Design Lab, and the Wellgreens logo so the W die matches the real letterform.</div>');
+
+  H.push('<div class="nft">');
+  H.push('<a href="https://wellgreens-team.netlify.app/punchcard.html" target="_blank" rel="noopener">Full proposal</a>');
+  H.push('<a href="https://wellgreens-team.netlify.app/card-designs.html" target="_blank" rel="noopener">Card designs</a>');
+  H.push('</div>');
+
+  var NOTES={16:{t:"First 10 Visits — the punch card",s:"Plan 1 · Weeks 9–13 · Pilot · Regionals + Manny",h:H.join("")}};
+
+  var m=document.createElement("div");
+  m.id="pnote";
+  m.innerHTML='<div class="nbox"><div class="nhd"><span class="nx">&times;</span><h3 id="pnoteT"></h3><div class="nsub" id="pnoteS"></div></div><div class="nbd" id="pnoteB"></div></div>';
+  document.body.appendChild(m);
+  function close(){m.classList.remove("on");}
+  m.addEventListener("click",function(e){ if(e.target===m||e.target.className==="nx")close(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape")close(); });
+  function open(n){
+    var d=NOTES[n]; if(!d)return;
+    document.getElementById("pnoteT").textContent=d.t;
+    document.getElementById("pnoteS").textContent=d.s;
+    document.getElementById("pnoteB").innerHTML=d.h;
+    m.classList.add("on");
+  }
+  document.addEventListener("click",function(e){
+    var ti=e.target.closest?e.target.closest(".ptitle"):null; if(!ti)return;
+    var card=ti.closest(".pcard"); if(!card)return;
+    var nEl=card.querySelector(".pnum"); if(!nEl)return;
+    var n=parseInt(nEl.textContent,10);
+    if(NOTES[n]){e.preventDefault();open(n);}
+  });
+  function mark(){
+    var cards=document.querySelectorAll(".pcard");
+    for(var i=0;i<cards.length;i++){
+      var nEl=cards[i].querySelector(".pnum"), ti=cards[i].querySelector(".ptitle");
+      if(!nEl||!ti)continue;
+      var n=parseInt(nEl.textContent,10);
+      if(NOTES[n]&&!ti.classList.contains("hasnote")){
+        ti.classList.add("hasnote");
+        var b=document.createElement("span");b.className="nbadge";b.textContent="Open note";
+        ti.appendChild(b);
+      }
+    }
+  }
+  mark();
+  try{
+    var mo=new MutationObserver(function(){clearTimeout(window.__nt);window.__nt=setTimeout(mark,60);});
+    mo.observe(document.body,{childList:true,subtree:true});
+  }catch(e){}
+});
+</script><!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
