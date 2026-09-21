@@ -423,5 +423,35 @@ td.k{font-weight:600;color:var(--ink);white-space:nowrap}
     Original artwork for Wellgreens, rendered at true card proportions — design directions for a vendor to build from, not press-ready files.
   </div>
 </div>
+<style>
+/* Proportional sizing so a card never clips, whatever width it renders at. */
+.card,.tag{container-type:inline-size}
+.card{padding:3.6cqw 4.2cqw 3.2cqw}
+.card .wordmark{font-size:3.5cqw}
+.card .serial{font-size:1.9cqw;padding-top:1.2cqw}
+.card .bigttl{font-size:6.4cqw;margin-top:1.8cqw}
+.card .kicker{font-size:2.7cqw;margin-top:1cqw}
+.card .hair{margin-top:2cqw}
+.card .tray{margin-top:2cqw;padding:1.6cqw;border-radius:1.2cqw}
+.card .prow{gap:1.3cqw}
+.card .pu{aspect-ratio:1.7;border-radius:1cqw;padding:12% 15% 30%}
+.card .pu .num{font-size:1.65cqw;bottom:4%}
+.card .ftrow{padding-top:2cqw;gap:2.6cqw}
+.card .fl{font-size:1.45cqw;padding-bottom:.7cqw}
+.card.back{padding:4cqw 4.2cqw 3.4cqw}
+.card.back .bh{font-size:3.1cqw;margin-bottom:1.8cqw}
+.card.back .rules{font-size:1.78cqw;line-height:1.85}
+.card.back .ladder{font-size:1.85cqw;margin:1.8cqw 0;padding:1.6cqw 0}
+.card.back .app{padding-top:1.8cqw;gap:2.6cqw}
+.card.back .qr{width:10.5cqw;height:10.5cqw;padding:.8cqw;background-size:2cqw 2cqw;background-position:0 0,1cqw 1cqw}
+.card.back .appcqp,.card.back .appcopy{font-size:1.8cqw;line-height:1.6}
+.tag{padding:3.4cqw 5cqw 3.4cqw 12cqw}
+.tag .hole{left:4cqw;width:4cqw;height:4cqw}
+.tag .wordmark{font-size:2.3cqw;letter-spacing:.3em}
+.tag .bigttl{font-size:4.6cqw;margin:.6cqw 0 0}
+.tag .tray{margin-top:2cqw;padding:1.4cqw;border-radius:1cqw}
+.tag .prow{grid-template-columns:repeat(10,1fr);gap:1cqw}
+.tag .pu{aspect-ratio:1;padding:19%;border-radius:.8cqw}
+</style>
 </body>
 </html>
