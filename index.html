@@ -1539,5 +1539,25 @@ versionCheck();
   try{ sb.auth.onAuthStateChange(function(ev){ if(ev==="PASSWORD_RECOVERY"){REC=true;gate();showReset();} }); }catch(x){}
 })();
 </script>
+
+<!-- Plan 1 item 16 — current reward ladder plus links to the punch card proposal
+     and the card designs. Runs after the plan data is defined. -->
+<script>
+(function(){
+  try{
+    var BTN="padding:7px 13px;border-radius:2px;font-family:'Jost',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;display:inline-block";
+    for(var i=0;i<PLAN_P1.length;i++){
+      if(PLAN_P1[i].n!==16) continue;
+      PLAN_P1[i].t="First-10 visit punch card — the W punch";
+      PLAN_P1[i].done="A physical punch card covering a new customer's first 10 visits, handed over only once the app is installed and open on their phone. 2nd visit $10 off the next order ($30 min) · 3rd 40% off the store · 6th free grinder, lighter or battery · 9th free Wellgreens tumbler · 10th 50% off the store. Every visit knocks a Wellgreens W out of the card. The POS is the ledger, not the card, so a forgotten card never costs anyone their progress. Aimed at the 75% who never come back; tracked to repeat-customer rate."
+        +"<div style=\"margin-top:14px;display:flex;gap:8px;flex-wrap:wrap\">"
+        +"<a href=\"https://wellgreens-team.netlify.app/punchcard.html\" target=\"_blank\" rel=\"noopener\" style=\"background:#234436;color:#F6F1E7;"+BTN+"\">Full proposal</a>"
+        +"<a href=\"https://wellgreens-team.netlify.app/cards.html\" target=\"_blank\" rel=\"noopener\" style=\"background:#B07A22;color:#F6F1E7;"+BTN+"\">Card designs</a>"
+        +"</div>";
+    }
+    if(typeof renderPlan==="function") renderPlan();
+  }catch(e){}
+})();
+</script>
 </body>
 </html>
