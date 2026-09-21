@@ -1,15 +1,13 @@
-  try{
-    var ALL=[];
-    try{ALL=ALL.concat(PLAN_P1);}catch(e){}
-    try{ALL=ALL.concat(PLAN_P2);}catch(e){}
-    for(var q=0;q<ALL.length;q++){
-      if(ALL[q].n!==16) continue;
-      ALL[q].done="A physical punch card covering a new customer's first 10 visits, handed over only once the app is installed and open on their phone. 2nd visit $10 off the next order, $30 minimum · 3rd 40% off the store · 6th free grinder, lighter or battery · 9th free Wellgreens tumbler · 10th 50% off the store. Every visit knocks a Wellgreens W out of the card. The POS is the ledger, not the card, so a forgotten card never costs anyone their progress. Aimed at the 75% who never come back; tracked to repeat-customer rate.";
-    }
-    if(typeof renderPlan==="function") renderPlan();
-  }catch(e){}
-
-  var NOTES={16:{t:"First 10 Visits — the punch card",s:"Plan 1 · Weeks 9–13 · Pilot · Regionals + Manny",h:H.join("")}};<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wellgreens — Retail Rollout</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <!-- Plan card notes: click a workstream title to open the full brief in a pop-up. -->
 <style>
 .ptitle.hasnote{cursor:pointer}
@@ -109,6 +107,17 @@ window.addEventListener("DOMContentLoaded",function(){
   H.push('<a href="https://wellgreens-team.netlify.app/card-designs.html" target="_blank" rel="noopener">Card designs</a>');
   H.push('</div>');
 
+  /* Item 16 carried an older reward ladder. Correct it so the card and the note agree. */
+  try{
+    var ALL=[];
+    try{ALL=ALL.concat(PLAN_P1);}catch(e){}
+    try{ALL=ALL.concat(PLAN_P2);}catch(e){}
+    for(var q=0;q<ALL.length;q++){
+      if(ALL[q].n!==16) continue;
+      ALL[q].done="A physical punch card covering a new customer's first 10 visits, handed over only once the app is installed and open on their phone. 2nd visit $10 off the next order, $30 minimum · 3rd 40% off the store · 6th free grinder, lighter or battery · 9th free Wellgreens tumbler · 10th 50% off the store. Every visit knocks a Wellgreens W out of the card. The POS is the ledger, not the card, so a forgotten card never costs anyone their progress. Aimed at the 75% who never come back; tracked to repeat-customer rate.";
+    }
+    if(typeof renderPlan==="function") renderPlan();
+  }catch(e){}
   var NOTES={16:{t:"First 10 Visits — the punch card",s:"Plan 1 · Weeks 9–13 · Pilot · Regionals + Manny",h:H.join("")}};
 
   var m=document.createElement("div");
@@ -151,16 +160,7 @@ window.addEventListener("DOMContentLoaded",function(){
     mo.observe(document.body,{childList:true,subtree:true});
   }catch(e){}
 });
-</script><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wellgreens — Retail Rollout</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</script>
 <style>
   #authgate{position:fixed;inset:0;z-index:1000;background:#234436;display:flex;align-items:center;justify-content:center;padding:20px;font-family:'Jost',sans-serif}
   #authgate.hidden{display:none}
